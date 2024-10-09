@@ -1,5 +1,13 @@
 
+//Display functions
 
+
+
+//Gameplay logic
+
+
+
+//Event listeners
 
 
 
@@ -14,4 +22,13 @@ handleKeyPress = (key) => {
     }
 }
 
-createKeyboard();
+
+
+//Initialize game
+loadWords().then(() => {
+    createKeyboard();
+    //load game/start new game
+
+});
+
+
