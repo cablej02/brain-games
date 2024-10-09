@@ -1,8 +1,17 @@
 
+//Display functions
 
 
 
+//Gameplay logic
 
+
+
+//Event listeners
+
+currentGame = {
+
+}
 
 handleKeyPress = (key) => {
     if (key === 'DELETE') {
@@ -14,4 +23,13 @@ handleKeyPress = (key) => {
     }
 }
 
-createKeyboard();
+
+
+//Initialize game
+loadWords().then(() => {
+    createKeyboard();
+    //load game/start new game
+
+});
+
+
