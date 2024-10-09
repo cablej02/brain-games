@@ -27,7 +27,7 @@ handleKeyPress = (key) => {
 
 //Initialize game
 loadWords().then(() => {
-    createKeyboard();
+    //createKeyboard();
     //load game/start new game
 
 });
