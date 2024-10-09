@@ -10,34 +10,39 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>BRAIN GAMES</h1>
+    <header class="container-fluid">
+        <h1 class="text-center">BRAIN GAMES</h1>
         <!-- TODO: Add stats button -->
+        <div class="container">
+            <a href="#" class="btn btn-dark">Stats</a>
+        </div>
     </header>
-    <main class='container'>
-        <!-- TODO: Add buttons to push to individual games -->
-        <div class="card" style="width: 18rem;">
-            <img src="https://dictionary.cambridge.org/external/images/wordscramble-og-image.png" class="card-img-top" alt="word scramble">
-            <div class="card-body">
-              <h5 class="card-title">Scramble Word</h5>
-              <p class="card-text">Rearrange a jumbled set of letters to form the correct word.</p>
-              <a href="#" class="btn btn-primary">Start Game</a>
-            </div>
-          </div>
 
-          <div class="card" style="width: 18rem;">
-            <img src="" class="card-img-top" alt="wordle">
+    <main class='container container-home text-center'>
+        <!-- TODO: Add buttons to push to individual games -->
+        <div class="row justify-content-center mt-4 card bg-dark col-md-4">
+            <!-- <div class="col-md-4">
+            <div class="card"> -->
+            <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="word scramble">
             <div class="card-body">
+                <h5 class="card-title">Scramble Word</h5>
+                <p class="card-text">Rearrange a jumbled set of letters to form the correct word.</p>
+                <a href="scramble-game.html" class="btn btn-primary">Start Game</a>
+            </div>
+        </div>
+
+        <div class="card d-flex" style="display: inline-block; width:30%; margin: 1%;">  
+            <div class="card">
+            <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
               <h5 class="card-title">Wordle</h5>
               <p class="card-text">Attempt to guess a hidden five-letter word</p>
-              <a href="#" class="btn btn-primary">Start Game</a>
+              <a href="wordle.html" class="btn btn-primary">Start Game</a>
             </div>
-          </div>
+        </div>
 
     </main>
 
     <script src="./assets/js/main.js"></script>
-    <!-- TODO: remove word-game.js -->
-    <script src="./assets/js/word-game.js"></script>
+
 </body>
 </html>

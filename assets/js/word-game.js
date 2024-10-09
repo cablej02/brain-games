@@ -60,6 +60,7 @@ function createKeyboard() {
         keyButton.classList.add('btn', 'btn-secondary', 'm-1', 'btn-sm', 'flex-grow-0');
 
         if (key === 'ENTER') {
+            //TODO: fix this
             //keyButton.innerHTML = `<img src="assets/svg/enter-icon.svg" alt="enter" class="enter-icon">`;
             keyButton.classList.add('w-75','enter-btn');
             keyButton.style.flexBasis = '75px';
@@ -74,3 +75,20 @@ function createKeyboard() {
     keyboardContainer.appendChild(keyboardRow);
   });
 }
+
+
+
+//TODO: DELETE THIS EVENTUALLY
+/* IMPLEMENT THIS METHOD TO USE THE KEYBOARD */
+// handleKeyPress = (key) => {
+//     if (key === 'DELETE') {
+//         console.log('Delete key pressed');
+//     } else if (key === 'ENTER') {
+//         console.log('Enter key pressed');
+//     } else {
+//         console.log('Letter key pressed:', key);
+//     }
+// }
+
+
+
