@@ -9,8 +9,9 @@
 
 //Event listeners
 
+currentGame = {
 
-
+}
 
 handleKeyPress = (key) => {
     if (key === 'DELETE') {
