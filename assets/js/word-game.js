@@ -58,23 +58,25 @@ const keyboardLayout = [
 
 const keyboardContainer = document.createElement('div');
 keyboardContainer.id = 'keyboard-container';
-keyboardContainer.classList.add('container-fluid', 'text-center', 'px-2');
+keyboardContainer.classList.add('container-fluid','text-center','p-3','position-fixed','bottom-0','w-100', 'bg-dark');
+keyboardContainer.style.zIndex = '1050';
 document.body.appendChild(keyboardContainer);
 
 function initializeKeyboard() {
     keyboardLayout.forEach(row => {
     const keyboardRow = document.createElement('div');
-    keyboardRow.classList.add('d-flex', 'justify-content-center', 'flex-nowrap', 'mb-2');
+    keyboardRow.classList.add('d-flex','justify-content-center','flex-nowrap','mb-2');
 
     row.forEach(key => {
         const keyButton = document.createElement('button');
         keyButton.textContent = key;
-        keyButton.classList.add('btn', 'btn-secondary', 'm-1', 'btn-sm', 'flex-grow-0');
+        keyButton.classList.add('key-btn','btn','btn-secondary', 'm-1','btn-sm','flex-grow-0');
 
-        if (key === 'ENTER') {
+        if (key === 'ENTER' || key === 'DELETE') {
             //TODO: fix this
             //keyButton.innerHTML = `<img src="assets/svg/enter-icon.svg" alt="enter" class="enter-icon">`;
-            keyButton.classList.add('w-75','enter-btn');
+            keyButton.classList.add('w-75','big-key-btn');
+            keyButton.classList.remove('key-btn');
             keyButton.style.flexBasis = '75px';
             keyButton.style.alignSelf = 'stretch';
         }

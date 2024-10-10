@@ -17,7 +17,10 @@ const addNewEmptyGuessRow = () => {
 
     for(let i = 0; i < currentGame.solution.length; i++) {
         const letterBoxEl = document.createElement('div');
-        letterBoxEl.className = 'guess-letter col-1 border border-3 text-center rounded square m-1';
+        letterBoxEl.className = 'col-1 border border-3 text-center rounded square m-md-1 m-sm-0';
+        letterBoxEl.textContent = 'Z';
+        //letterBoxEl.style.minWidth = '30px';
+        //letterBoxEl.style.width = '60px';
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
@@ -36,7 +39,7 @@ const displayNumberReponse = (numCorrect) => {
 
 const startNewGame = () => {
     currentGame.guesses = [];
-    currentGame.solution = getRandomWord();
+    currentGame.solution = getRandomWord(10);
 
     //reset UI
     //TODO: probably put this in a separate function
