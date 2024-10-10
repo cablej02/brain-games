@@ -4,12 +4,9 @@ const isValidWord = (word) => {
     let lo = 0;
     let hi = validWords.length - 1;
 
-    let i = 0;
     while (lo <= hi) {
-        i++;
         const mid = Math.floor((lo + hi) / 2);
         if (validWords[mid] === word) {
-            console.log('Found in', i, 'iterations');
             return true;
         } else if (validWords[mid] < word) {
             lo = mid + 1;
@@ -17,7 +14,6 @@ const isValidWord = (word) => {
             hi = mid - 1;
         }
     }
-    console.log('Not found in', i, 'iterations');
     return false;
 }
 
@@ -80,7 +76,7 @@ function createKeyboard() {
 
 //TODO: DELETE THIS EVENTUALLY
 /* IMPLEMENT THIS METHOD TO USE THE KEYBOARD */
-// handleKeyPress = (key) => {
+// const handleKeyPress = (key) => {
 //     if (key === 'DELETE') {
 //         console.log('Delete key pressed');
 //     } else if (key === 'ENTER') {
