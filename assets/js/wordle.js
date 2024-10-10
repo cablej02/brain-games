@@ -73,7 +73,7 @@ bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 /* Game Initialization */
 loadWords();
-createKeyboard();
+initializeKeyboard();
 
 
 

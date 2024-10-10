@@ -1,14 +1,23 @@
-const validWords = [];
-const getRandomWord = () => validWords[Math.floor(Math.random() * validWords.length)];
+const validWords = {};
+const getRandomWord = (length = 5) => {
+    const validWordsByLength = validWords[length] || [];
+    if(validWordsByLength.length > 0){
+        return validWordsByLength[Math.floor(Math.random() * validWordsByLength.length)];
+    }else{
+        console.error(`No words of length ${length} found`)
+        return null;
+    }
+}
 const isValidWord = (word) => {
+    const validWordsByLength = validWords[word.length] || [];
     let lo = 0;
-    let hi = validWords.length - 1;
+    let hi = validWordsByLength.length - 1;
 
     while (lo <= hi) {
         const mid = Math.floor((lo + hi) / 2);
-        if (validWords[mid] === word) {
+        if (validWordsByLength[mid] === word) {
             return true;
-        } else if (validWords[mid] < word) {
+        } else if (validWordsByLength[mid] < word) {
             lo = mid + 1;
         } else {
             hi = mid - 1;
@@ -19,17 +28,24 @@ const isValidWord = (word) => {
 
 const loadWords = async () => {
     //clear validWords array
-    validWords.length = 0;
+    for (let i in validWords) {
+        validWords[i] = [];
+    }
 
     try{
         const response = await fetch('assets/word-list/words.csv');
         const text = await response.text();
-        // May be overkill, but cleaning up the words to remove any extra spaces
-        text.split(',').map(word => validWords.push(word.trim()));
-        console.log('Loaded words from file:', validWords.length);
+        let i = 0;
+        text.split(',').map(word => {
+            if (!validWords[word.length]) {
+                validWords[word.length] = [];
+            }
+            validWords[word.length].push(word);
+            i++;
+        });
+        console.log('Loaded words from file:', i);
     } catch (error){
         console.error('Error loading words:', error);
-        redirectPage('index.html');
     }
 }
 
@@ -45,7 +61,7 @@ keyboardContainer.id = 'keyboard-container';
 keyboardContainer.classList.add('container-fluid', 'text-center', 'px-2');
 document.body.appendChild(keyboardContainer);
 
-function createKeyboard() {
+function initializeKeyboard() {
     keyboardLayout.forEach(row => {
     const keyboardRow = document.createElement('div');
     keyboardRow.classList.add('d-flex', 'justify-content-center', 'flex-nowrap', 'mb-2');
