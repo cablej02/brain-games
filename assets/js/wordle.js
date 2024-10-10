@@ -1,3 +1,4 @@
+const newGameBtnEl = document.getElementById('new-game-btn');
 const guessContainerEl = document.getElementById('guess-container');
 const bodyEl = document.querySelector('body');
 
@@ -112,6 +113,10 @@ const handleGameOver = (winBool) => {
     }
 }
 
+const startNewGame = () => {
+
+}
+
 /* Data Functions */
 const saveCurrentGame = () => localStorage.setItem('wordleCurGame',JSON.stringify(currentGame));
 const loadCurrentGame = () => localStorage.getItem('wordleCurGame') || null;
@@ -119,7 +124,7 @@ const loadCurrentGame = () => localStorage.getItem('wordleCurGame') || null;
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-
+newGameBtnEl.addEventListener('click', startNewGame);
 
 /* Game Initialization */
 loadWords();
