@@ -4,7 +4,7 @@ const bodyEl = document.querySelector('body');
 const currentGame = {
     solution: 'banana',
     guesses: ['toggle'],
-    maxGuesses: 6
+    maxGuesses: 6,
 }
 
 /* UI Functions */
@@ -63,6 +63,7 @@ const handleGuess = (guess) => {
 }
 
 /* Data Functions */
+const saveCurrentGame = () => localStorage.setItem('wordleData',JSON.stringify(currentGame));
 
 
 
