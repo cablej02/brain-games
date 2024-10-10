@@ -49,7 +49,7 @@ const loadWords = async () => {
     }
 }
 
-/* Keyboard Creation */
+/* Keyboard Functions */
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
@@ -62,7 +62,7 @@ keyboardContainer.classList.add('container-fluid','text-center','p-3','position-
 keyboardContainer.style.zIndex = '1050';
 document.body.appendChild(keyboardContainer);
 
-function initializeKeyboard() {
+const initializeKeyboard = () => {
     keyboardLayout.forEach(row => {
     const keyboardRow = document.createElement('div');
     keyboardRow.classList.add('d-flex','justify-content-center','flex-nowrap','mb-2');
@@ -88,6 +88,28 @@ function initializeKeyboard() {
 
     keyboardContainer.appendChild(keyboardRow);
   });
+}
+
+const setKeyColorGreen = (key) => setKeyColor(key, 'success');
+const setKeyColorOrange = (key) => setKeyColor(key, 'warning');
+const setKeyColorGrey = (key) => setKeyColor(key, 'secondary');
+const setKeyColorRed = (key) => setKeyColor(key, 'danger');
+const setKeyColorTransparent = (key) => setKeyColor(key, 'transparent');
+const setKeyColorWhite = (key) => setKeyColor(key, 'light');
+const setKeyColorBlue = (key) => setKeyColor(key, 'primary');
+
+const setKeyColor = (key, color) => {
+    const keyButton = document.querySelector(`button:contains(${key})`);
+    if(keyButton){
+        keyButton.classList.add(`bg-${color}`);
+    }
+}
+
+const disableKey = (key) => {
+    const keyButton = document.querySelector(`button:contains(${key})`);
+    if(keyButton){
+        keyButton.classList.add('disabled','bg-transparent');
+    }
 }
 
 
