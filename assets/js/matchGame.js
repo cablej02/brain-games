@@ -30,5 +30,24 @@ for (let i = 0; i < tileValues.length; i++) {
     tiles.push(tile); 
     gameBoard.appendChild(tile); //puts in the gameBoard
 }
-// need to style CSS next to start to see this in action, dont even know if this will work yet
-// believe i have main stuff down but can not confirm until i see something
+
+
+// Flipping a tile
+function flipTile() {
+    if (flippedTiles.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) {
+        return;
+    } // check conditions 1. 2 tiles flipped, no actions 2. checks if tile is flipped ALREADY 
+    //3. does not allow matched tiles to "flip" again
+    
+    this.classList.add('flipped'); //adds class "flipped" 
+    this.querySelector('span').classList.remove('hidden'); //checks for "span" element (value) and removes "hidden" class
+    flippedTiles.push(this); //adding any flipped tile to "this" array
+
+    if (flippedTiles.length === 2) {
+        checkForMatch(); //if 2 tiles flipped then calls the checkForMatch function
+    }
+}
+// now need a checkForMatch function. try setting array to === with tile.dataset.value
+// DEBUG game allows you to flip only 2 tiles, need to be unflipped if not match
+// Game needs to allow further progression past two tiles. It is stuck on only flipping two and 
+// then it stops the loop. DEBUG
