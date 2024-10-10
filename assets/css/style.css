@@ -1,4 +1,6 @@
-/* Base style for buttons */
+
+
+/* Keyboard Styles */
 .key-btn {
     font-size: 1rem;
     padding: 0.5rem 0.75rem;
@@ -9,7 +11,6 @@
     padding: 0.5rem 0.5rem;
 }
 
-/* Larger screens: Increase button size by 50% */
 @media (min-width: 1200px) {
     .key-btn {
         font-size: 1.3rem;
@@ -22,8 +23,6 @@
         flex-basis: 100px;
     }
 }
-
-/* Smaller screens: Decrease button size by 50% */
 @media (max-width: 600px) {
     .key-btn {
         font-size: 0.8rem;
@@ -48,6 +47,10 @@
         padding: 0.2rem 0.5rem;
         /* flex-basis: 10px; */
     }
+}
+
+#keyboard-container {
+    font-family: monospace;
 }
 
 
