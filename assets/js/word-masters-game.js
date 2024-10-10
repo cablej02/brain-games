@@ -15,6 +15,22 @@ const currentGame = {
         this.guesses.push(guess);
         saveCurrentGame();
     },
+    addGreenLetter(letter) {
+        this.greenLetters.push(letter);
+        saveCurrentGame();
+    },
+    addOrangeLetter(letter) {
+        this.orangeLetters.push(letter);
+        saveCurrentGame();
+    },
+    addGreyLetter(letter) {
+        this.greyLetters.push(letter);
+        saveCurrentGame();
+    },
+    addDisabledLetter(letter) {
+        this.disabledLetters.push(letter);
+        saveCurrentGame();
+    }
 }
 
 /* UI Functions */
@@ -62,6 +78,10 @@ const setUI = () => {
 /* Game Logic */
 const startNewGame = (solutionLength) => {
     currentGame.guesses = [];
+    currentGame.greenLetters = [];
+    currentGame.orangeLetters = [];
+    currentGame.greyLetters = [];
+    currentGame.disabledLetters = [];
     currentGame.setSolution(getNewSolutionWord(solutionLength));
 
     //setUI();
@@ -71,17 +91,17 @@ const getNewSolutionWord = (solutionLength) => {
     // Solution word cannot have repeating letters
     let solution = '';
     let counter = 0;
-    console.log(`Generating Solution Word of length: ${solutionLength}`);
+    // console.log(`Generating Solution Word of length: ${solutionLength}`);
     while (solution === '' && counter < 1000) {
         counter++;
         let solutionHelper = getRandomWord(solutionLength);
-        console.log(solutionHelper);
+        // console.log(solutionHelper);
         // Search for repeating letters
         for(let i = 0; i < solutionHelper.length; i++) {
-            console.log(`checking ${solutionHelper[i]}`);
-            console.log(solutionHelper.indexOf(solutionHelper[i]), solutionHelper.lastIndexOf(solutionHelper[i]));
+            // console.log(`checking ${solutionHelper[i]}`);
+            // console.log(solutionHelper.indexOf(solutionHelper[i]), solutionHelper.lastIndexOf(solutionHelper[i]));
             if(solutionHelper.indexOf(solutionHelper[i]) !== solutionHelper.lastIndexOf(solutionHelper[i])){
-                console.log('Repeating letter found');
+                // console.log('Repeating letter found');
                 solutionHelper = '';
                 break;
             }
@@ -101,6 +121,6 @@ const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGam
 /* Game Initialization */
 loadWords().then(() => {
     initializeKeyboard();
-    startNewGame(Math.floor(Math.random() * 10));
+    startNewGame(Math.floor(Math.random() * 7)+4);
 
 });
