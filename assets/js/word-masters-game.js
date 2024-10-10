@@ -5,47 +5,91 @@ const currentGame = {
     guesses: [],
     greenLetters: [],
     orangeLetters: [],
-    greyletters: [],
+    greyLetters: [],
     disabledLetters: [],
+    setSolution(solution) {
+        this.solution = solution;
+        saveCurrentGame();
+    },
+    addGuess(guess) {
+        this.guesses.push(guess);
+        saveCurrentGame();
+    },
 }
 
 /* UI Functions */
 let currentGuessRowEl = null;
-const addNewEmptyGuessRow = () => {
+const displayNewEmptyRow = () => {
     currentGuessRowEl = document.createElement('div');
     currentGuessRowEl.className = 'd-flex justify-content-center flex-nowrap';
 
     for(let i = 0; i < currentGame.solution.length; i++) {
         const letterBoxEl = document.createElement('div');
-        letterBoxEl.className = 'border border-3 text-center rounded m-md-1 m-sm-0 flex-shrink-0 square';
-        letterBoxEl.textContent = 'Z';
+        letterBoxEl.className = 'border border-3 text-center m-md-1 m-sm-0 flex-shrink-0 square';
 
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
     const numResponseEl = document.createElement('div');
     numResponseEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
-    numResponseEl.textContent = '1';
     currentGuessRowEl.appendChild(numResponseEl);
 
     guessContainerEl.appendChild(currentGuessRowEl);
+}
+
+const displayLettersText = (letters) => {
+    if(currentGuessRowEl){
+        for(let i = 0; i < letters.length; i++) {
+            const letterBoxEl = currentGuessRowEl.children[i];
+            letterBoxEl.textContent = letters[i];
+        }
+    }else{
+        console.error('Cannot add letters to a null row element');
+    }
 }
 
 const displayNumberReponse = (numCorrect) => {
     currentGuessRowEl.textContent = numCorrect;
 }
 
-/* Game Logic */
 
-
-const startNewGame = () => {
-    currentGame.guesses = [];
-    currentGame.solution = getRandomWord(10);
-
-    //reset UI
-    //TODO: probably put this in a separate function
+const setUI = () => {
     guessContainerEl.innerHTML = '';
-    addNewEmptyGuessRow();
+    
+    displayNewEmptyRow();
+}
+
+/* Game Logic */
+const startNewGame = (solutionLength) => {
+    currentGame.guesses = [];
+    currentGame.setSolution(getNewSolutionWord(solutionLength));
+
+    //setUI();
+}
+
+const getNewSolutionWord = (solutionLength) => {
+    // Solution word cannot have repeating letters
+    let solution = '';
+    let counter = 0;
+    console.log(`Generating Solution Word of length: ${solutionLength}`);
+    while (solution === '' && counter < 1000) {
+        counter++;
+        let solutionHelper = getRandomWord(solutionLength);
+        console.log(solutionHelper);
+        // Search for repeating letters
+        for(let i = 0; i < solutionHelper.length; i++) {
+            console.log(`checking ${solutionHelper[i]}`);
+            console.log(solutionHelper.indexOf(solutionHelper[i]), solutionHelper.lastIndexOf(solutionHelper[i]));
+            if(solutionHelper.indexOf(solutionHelper[i]) !== solutionHelper.lastIndexOf(solutionHelper[i])){
+                console.log('Repeating letter found');
+                solutionHelper = '';
+                break;
+            }
+        }
+        solution = solutionHelper;
+    }
+    console.log(`Solution Word Found in ${counter} tries: ${solution}`);
+    return solution;
 }
 
 /* Data Functions */
@@ -55,12 +99,8 @@ const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGam
 /* Event Listeners */
 
 /* Game Initialization */
-const setUI = () => {
-    
-}
-
 loadWords().then(() => {
     initializeKeyboard();
-    startNewGame();
+    startNewGame(Math.floor(Math.random() * 10));
 
 });
