@@ -17,26 +17,16 @@ const addNewEmptyGuessRow = () => {
 
     for(let i = 0; i < currentGame.solution.length; i++) {
         const letterBoxEl = document.createElement('div');
-        letterBoxEl.className = 'border border-3 text-center rounded square m-md-1 m-sm-0 flex-shrink-1 ';
-        letterBoxEl.style.width = '60px';
-        letterBoxEl.style.minWidth = '20px';
-        letterBoxEl.style.maxWidth = '60px';
-        letterBoxEl.style.height = 'auto'; 
+        letterBoxEl.className = 'border border-3 text-center rounded m-md-1 m-sm-0 flex-shrink-0 square';
         letterBoxEl.textContent = 'Z';
 
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
     const numResponseEl = document.createElement('div');
-    numResponseEl.className = 'border border-3 text-center rounded-circle m-md-1 m-sm-0 flex-shrink-1';
-    numResponseEl.style.width = '60px';
-    numResponseEl.style.minWidth = '20px';
-    numResponseEl.style.maxWidth = '60px';
-    numResponseEl.style.height = 'auto';  
-    numResponseEl.style.aspectRatio = '1 / 1';
+    numResponseEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
     numResponseEl.textContent = '1';
     currentGuessRowEl.appendChild(numResponseEl);
-
 
     guessContainerEl.appendChild(currentGuessRowEl);
 }
@@ -50,7 +40,7 @@ const displayNumberReponse = (numCorrect) => {
 
 const startNewGame = () => {
     currentGame.guesses = [];
-    currentGame.solution = getRandomWord(5);
+    currentGame.solution = getRandomWord(10);
 
     //reset UI
     //TODO: probably put this in a separate function
