@@ -2,6 +2,7 @@
 //import {getRandomWord, loadWords, isValidWord, initializeKeyboard, changeKeyGreen, changeKeyOrange, changeKeyGrey, disableKey } from './word-game.js';
 
 const guessContainerEl = document.getElementById('guess-container');
+const bodyEl = document.querySelector('body');
 
 // Game Object as an immediately invoked function expression
 const currentGame = (() => {
@@ -88,12 +89,8 @@ const setUI = () => {
 }
 
 /* Game Logic */
-const startNewGame = (solutionLength) => {
-    currentGame.setNewGame(getNewSolutionWord(solutionLength));
-
-    //setUI();
-}
-
+let guess = '';
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     console.log('Key:', k);
@@ -117,24 +114,19 @@ const getNewSolutionWord = (solutionLength) => {
     // Solution word cannot have repeating letters
     let solution = '';
     let counter = 0;
-    // console.log(`Generating Solution Word of length: ${solutionLength}`);
     while (solution === '' && counter < 1000) {
         counter++;
         let solutionHelper = getRandomWord(solutionLength);
-        // console.log(solutionHelper);
-        // Search for repeating letters
+        // Search for repeated letters
         for(let i = 0; i < solutionHelper.length; i++) {
-            // console.log(`checking ${solutionHelper[i]}`);
-            // console.log(solutionHelper.indexOf(solutionHelper[i]), solutionHelper.lastIndexOf(solutionHelper[i]));
             if(solutionHelper.indexOf(solutionHelper[i]) !== solutionHelper.lastIndexOf(solutionHelper[i])){
-                // console.log('Repeating letter found');
                 solutionHelper = '';
                 break;
             }
         }
         solution = solutionHelper;
     }
-    
+
     if(counter === 1000){ 
         console.error(`Solution Word of length ${solutionLength} not found after ${counter} tries`);
         return null
@@ -144,11 +136,18 @@ const getNewSolutionWord = (solutionLength) => {
     }
 }
 
+const startNewGame = (solutionLength) => {
+    currentGame.setNewGame(getNewSolutionWord(solutionLength));
+
+    //setUI();
+}
+
 /* Data Functions */
 const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame));
 const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
 
 /* Event Listeners */
+bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 /* Game Initialization */
 loadWords().then(() => {

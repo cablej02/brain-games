@@ -71,6 +71,7 @@ const initializeKeyboard = () => {
         const keyButton = document.createElement('button');
         keyButton.textContent = key;
         keyButton.classList.add('key-btn','btn','btn-secondary', 'm-1','btn-sm','flex-grow-0');
+        keyButton.id = `key-${key.toLowerCase()}`;
 
         if (key === 'ENTER' || key === 'DELETE') {
             //TODO: fix this
@@ -99,16 +100,32 @@ const setKeyColorWhite = (key) => setKeyColor(key, 'light');
 const setKeyColorBlue = (key) => setKeyColor(key, 'primary');
 
 const setKeyColor = (key, color) => {
-    const keyButton = document.querySelector(`button:contains(${key})`);
-    if(keyButton){
-        keyButton.classList.add(`bg-${color}`);
+    if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
+        const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
+        if(keyButton){
+            //clear all bg- classes
+            keyButton.classList.forEach((className) => {
+                if (className.startsWith('bg-')) {
+                    keyButton.classList.remove(className);
+                }
+            });
+            keyButton.classList.add(`bg-${color}`);
+        }
     }
 }
 
 const disableKey = (key) => {
-    const keyButton = document.querySelector(`button:contains(${key})`);
-    if(keyButton){
-        keyButton.classList.add('disabled','bg-transparent');
+    if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
+        const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
+        if(keyButton){
+            keyButton.classList.forEach((className) => {
+                if (className.startsWith('bg-')) {
+                    keyButton.classList.remove(className);
+                }
+            });
+
+            keyButton.classList.add('disabled','bg-transparent');
+        }
     }
 }
 
