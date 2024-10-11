@@ -23,7 +23,7 @@ shuffle(tileValues);
 
 for (let i = 0; i < tileValues.length; i++) { 
     const tile = document.createElement('div'); // tiles
-    tile.classList.add('tile'); //add stlying
+    tile.classList.add('tile'); //add class
     tile.dataset.value = tileValues[i]; //assigns value to tile from the value of the tileValue duh 
     tile.innerHTML = '<span class="hidden">' + tileValues[i] + '</span>'; //hides tiles when palced
     tile.addEventListener('click', flipTile); //need to create a fliped tile function
@@ -47,7 +47,33 @@ function flipTile() {
         checkForMatch(); //if 2 tiles flipped then calls the checkForMatch function
     }
 }
-// now need a checkForMatch function. try setting array to === with tile.dataset.value
-// DEBUG game allows you to flip only 2 tiles, need to be unflipped if not match
-// Game needs to allow further progression past two tiles. It is stuck on only flipping two and 
-// then it stops the loop. DEBUG
+
+// Check if the flipped tiles match
+function checkForMatch() {
+    const [tile1, tile2] = flippedTiles; // taking the array flippedTiles and assigning tile1 and tile2
+
+    if (tile1.dataset.value === tile2.dataset.value) { // checks to see value of tile
+        tile1.classList.add('matched');
+        tile2.classList.add('matched');
+        matchedPairs++;
+        if (matchedPairs === 2) { //number of matches to win. needs to change with number of tiles/2
+            alert('You won! All pairs matched.'); //need new "alert" cant be alert or prompt
+        } //check bootstrap
+    } else {
+        setTimeout(() => {
+            tile1.classList.remove('flipped'); //takes away flipped class
+            tile2.classList.remove('flipped'); // for tile 2
+            tile1.querySelector('span').classList.add('hidden'); // adds back hidden to the span element
+            tile2.querySelector('span').classList.add('hidden'); // for tile 2
+        }, 1000); // length of timeout remember in ms
+    }
+
+    flippedTiles = [];// reseting flipped tiles. fixes bug
+}
+
+
+// need to add reset button
+// need to add new game
+// need to add tutorial button
+// need to add home button
+//maybe make a slide bar for how many squares you want. DO THIS LAST IF DECIDED
