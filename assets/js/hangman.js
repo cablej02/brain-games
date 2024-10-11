@@ -43,10 +43,11 @@ const handleKeyPress = (key) => {
         if (alphabet.includes(k)) {
             if (!currentGame.guesses.includes(k)) {
                 currentGame.addGuess(k);
-                if (currentGame.solution.includes(k)){                
+                if (currentGame.solution.includes(k)){  
+                   setKeyColorGreen(k);              
                     console.log(generateDisplayWord());
                 } else {
-
+                    disableKey(k);
                 }
             }
         }
