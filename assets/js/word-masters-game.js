@@ -68,9 +68,13 @@ const displayNewEmptyRow = () => {
 
 const displayLettersText = (letters) => {
     if(currentGuessRowEl){
-        for(let i = 0; i < letters.length; i++) {
+        for(let i = 0; i < currentGuessRowEl.children.length; i++) {
             const letterBoxEl = currentGuessRowEl.children[i];
-            letterBoxEl.textContent = letters[i];
+            if(i < letters.length){
+                letterBoxEl.textContent = letters[i].toUpperCase();
+            }else{
+                letterBoxEl.textContent = '';
+            }
         }
     }else{
         console.error('Cannot add letters to a null row element');
@@ -79,6 +83,28 @@ const displayLettersText = (letters) => {
 
 const displayNumberReponse = (numCorrect) => {
     currentGuessRowEl.textContent = numCorrect;
+}
+
+const setGuessTextRed = () => {
+    if(currentGuessRowEl){
+        for(let i = 0; i < currentGuessRowEl.children.length; i++) {
+            const letterBoxEl = currentGuessRowEl.children[i];
+            letterBoxEl.style.color = 'red';
+        }
+    }else{
+        console.error('Cannot add letters to a null row element');
+    }
+}
+
+const setCurGuessTextWhite = () => {
+    if(currentGuessRowEl){
+        for(let i = 0; i < currentGuessRowEl.children.length; i++) {
+            const letterBoxEl = currentGuessRowEl.children[i];
+            letterBoxEl.style.color = 'white';
+        }
+    }else{
+        console.error('Cannot add letters to a null row element');
+    }
 }
 
 
@@ -95,19 +121,27 @@ const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     console.log('Key:', k);
     if (k === 'delete' || k === 'backspace') {
-        if(guess.length !== 0) guess = guess.slice(0, -1);
+        guess = guess.slice(0, -1);
+        displayLettersText(guess);
+        setCurGuessTextWhite();
         console.log(guess);
     } else if (k === 'enter') {
         if(guess.length === currentGame.getSolution().length){
-            console.log('Guess:', guess);
-            currentGame.addGuess(guess);
-            displayGuess(guess);
-            guess = '';
+            handleGuess(guess);
         }
     } else if (alphabet.includes(k) && guess.length < currentGame.getSolution().length) {
         guess += k;
+        displayLettersText(guess);
+        if(guess.length === currentGame.getSolution().length) {
+            isValidWord(guess) ? setCurGuessTextWhite() : setGuessTextRed();
+        }
         console.log(guess);
     }
+}
+
+const handleGuess = (guess) => {
+    
+
 }
 
 const getNewSolutionWord = (solutionLength) => {
@@ -139,7 +173,7 @@ const getNewSolutionWord = (solutionLength) => {
 const startNewGame = (solutionLength) => {
     currentGame.setNewGame(getNewSolutionWord(solutionLength));
 
-    //setUI();
+    setUI();
 }
 
 /* Data Functions */
