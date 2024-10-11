@@ -40,17 +40,31 @@ const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     
     //TODO: Fill in logic of this function
-    if (key === 'delete' || key === 'backspace') {
-        console.log('Delete key pressed');
-    } else if (key === 'enter') {
-        console.log('Enter key pressed');
-    } else {
-        console.log('Letter key pressed:', key);
-    }
+        if (alphabet.includes(k)) {
+            if (!currentGame.guesses.includes(k)) {
+                currentGame.addGuess(k);
+                if (currentGame.solution.includes(k)){                
+                    console.log(generateDisplayWord());
+                } else {
+
+                }
+            }
+        }
 }
 
-const generateDisplayWord = () =>{
 
+const generateDisplayWord = () =>{
+    const solution = currentGame.solution;
+    const guesses = [...currentGame.guesses];
+    let displayWord = '';
+    for(let i = 0; i < solution.length; i++){
+        if(guesses.includes(solution[i])){
+            displayWord += solution[i];
+        }else{
+            displayWord += '_';
+        }
+    }
+    return displayWord;
 }
 
 const startNewGame = () =>{
