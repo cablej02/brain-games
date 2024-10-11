@@ -1,4 +1,6 @@
-
+:root{
+    --bs-warning-rgb: 250, 110, 0;
+}
 
 /* Keyboard Styles */
 .key-btn {
