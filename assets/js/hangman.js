@@ -1,11 +1,29 @@
 //element selectors
 const bodyEl = document.querySelector('body');
-
+const guessContainerEl = document.getElementById('guess-container');
 
 //game object
 const currentGame = {
     //TODO: fill in object with things needed for game
-
+    solution: null,
+    guesses: [],
+    maxGuesses: null,
+    addGuess(guess){
+        this.guesses.push(guess);
+        saveCurrentGame();
+    },
+    setNewGame(solution,maxGuesses){
+        this.solution = solution;
+        this.maxGuesses = maxGuesses;
+        this.guesses = [];
+        saveCurrentGame();
+    },
+    clearGame(){
+        this.solution = null;
+        this.maxGuesses = null;
+        this.guesses = [];
+        saveCurrentGame();
+    }
 }
 
 
