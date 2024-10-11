@@ -213,11 +213,10 @@ const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGam
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-newGameBtnEl.addEventListener('click', () => startNewGame(Math.floor(Math.random() * 7)+4));
+newGameBtnEl.addEventListener('click', () => startNewGame(5));
 
 /* Game Initialization */
 loadWords().then(() => {
     initializeKeyboard();
-    startNewGame(Math.floor(Math.random() * 7)+4);
-
+    startNewGame(5);
 });

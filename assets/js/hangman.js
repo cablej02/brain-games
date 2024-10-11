@@ -85,7 +85,7 @@ bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 //game initialization
 loadWords().then(() => {
-    initializeKeyboard();
+    initializeKeyboard(false);
 
     //TODO: Implement loading of saved game/starting a new game
     startNewGame();
