@@ -3,6 +3,7 @@
 
 const guessContainerEl = document.getElementById('guess-container');
 const bodyEl = document.querySelector('body');
+const newGameBtnEl = document.getElementById('new-game-btn');
 
 // Game Object as an immediately invoked function expression
 const currentGame = (() => {
@@ -59,9 +60,9 @@ const displayNewEmptyRow = () => {
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
-    const numResponseEl = document.createElement('div');
-    numResponseEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
-    currentGuessRowEl.appendChild(numResponseEl);
+    const numCorrectEl = document.createElement('div');
+    numCorrectEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
+    currentGuessRowEl.appendChild(numCorrectEl);
 
     guessContainerEl.appendChild(currentGuessRowEl);
 }
@@ -81,8 +82,10 @@ const displayLettersText = (letters) => {
     }
 }
 
-const displayNumberReponse = (numCorrect) => {
-    currentGuessRowEl.textContent = numCorrect;
+const displayNumCorrectLetters = (numCorrect) => {
+    const numCorrectEl = currentGuessRowEl.children[currentGuessRowEl.children.length -1];
+    numCorrectEl.textContent = numCorrect;
+    numCorrectEl.style.backgroundColor = 'darkgrey';
 }
 
 const setGuessTextRed = () => {
@@ -115,33 +118,61 @@ const setUI = () => {
 }
 
 /* Game Logic */
-let guess = '';
+let curGuess = '';
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
     let k = key.toLowerCase();
-    console.log('Key:', k);
     if (k === 'delete' || k === 'backspace') {
-        guess = guess.slice(0, -1);
-        displayLettersText(guess);
+        curGuess = curGuess.slice(0, -1);
+        displayLettersText(curGuess);
         setCurGuessTextWhite();
-        console.log(guess);
+        console.log(curGuess);
     } else if (k === 'enter') {
-        if(guess.length === currentGame.getSolution().length){
-            handleGuess(guess);
+        if(curGuess.length === currentGame.getSolution().length){
+            handleGuess(curGuess);
         }
-    } else if (alphabet.includes(k) && guess.length < currentGame.getSolution().length) {
-        guess += k;
-        displayLettersText(guess);
-        if(guess.length === currentGame.getSolution().length) {
-            isValidWord(guess) ? setCurGuessTextWhite() : setGuessTextRed();
+    } else if (alphabet.includes(k) && curGuess.length < currentGame.getSolution().length) {
+        curGuess += k;
+        displayLettersText(curGuess);
+        if(curGuess.length === currentGame.getSolution().length) {
+            isValidWord(curGuess) ? setCurGuessTextWhite() : setGuessTextRed();
         }
-        console.log(guess);
+        console.log(curGuess);
     }
 }
 
 const handleGuess = (guess) => {
-    
+    if(guess === currentGame.getSolution()){
+        console.log('Correct word:', guess);
+        currentGame.addGuess(guess);
+        displayNumCorrectLetters(guess.length);
+        curGuess = '';
+        handleGameOver(true);
+    }else if(isValidWord(guess)){
+        console.log(`Valid word: ${guess}`);
+        currentGame.addGuess(guess);
+        displayNumCorrectLetters(calcNumCorrectLetters(guess));
+        displayNewEmptyRow();
+        curGuess = '';
+    } else {
+        console.log(`Invalid word: ${guess}`);
+        //TODO: Display invalid word message/animation/something
+    }
 
+}
+
+const calcNumCorrectLetters = (guess) => {
+    let numCorrect = 0;
+    const guessedLets = [];
+    for(let i = 0; i < guess.length; i++){
+        if(!guessedLets.includes(guess[i])){
+            if(currentGame.getSolution().includes(guess[i])){
+            numCorrect++;
+            guessedLets.push(guess[i]);
+            }
+        }
+    }
+    return numCorrect;
 }
 
 const getNewSolutionWord = (solutionLength) => {
@@ -177,15 +208,16 @@ const startNewGame = (solutionLength) => {
 }
 
 /* Data Functions */
-const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame));
+//const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame));
 const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
+newGameBtnEl.addEventListener('click', () => startNewGame(Math.floor(Math.random() * 7)+4));
 
 /* Game Initialization */
 loadWords().then(() => {
-    initializeKeyboard(false);
+    initializeKeyboard();
     startNewGame(Math.floor(Math.random() * 7)+4);
 
 });
