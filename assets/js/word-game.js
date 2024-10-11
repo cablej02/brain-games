@@ -62,7 +62,7 @@ keyboardContainer.classList.add('container-fluid','text-center','p-3','position-
 keyboardContainer.style.zIndex = '1050';
 document.body.appendChild(keyboardContainer);
 
-const initializeKeyboard = () => {
+const initializeKeyboard = (displayEnterAndDeleteBool=true) => {
     keyboardLayout.forEach(row => {
     const keyboardRow = document.createElement('div');
     keyboardRow.classList.add('d-flex','justify-content-center','flex-nowrap','mb-2');
@@ -74,12 +74,16 @@ const initializeKeyboard = () => {
         keyButton.id = `key-${key.toLowerCase()}`;
 
         if (key === 'ENTER' || key === 'DELETE') {
-            //TODO: fix this
-            //keyButton.innerHTML = `<img src="assets/svg/enter-icon.svg" alt="enter" class="enter-icon">`;
-            keyButton.classList.add('w-75','big-key-btn');
-            keyButton.classList.remove('key-btn');
-            keyButton.style.flexBasis = '75px';
-            keyButton.style.alignSelf = 'stretch';
+            if(displayEnterAndDeleteBool){
+                //TODO: fix this
+                //keyButton.innerHTML = `<img src="assets/svg/enter-icon.svg" alt="enter" class="enter-icon">`;
+                keyButton.classList.add('w-75','big-key-btn');
+                keyButton.classList.remove('key-btn');
+                keyButton.style.flexBasis = '75px';
+                keyButton.style.alignSelf = 'stretch';
+            }else{
+                keyButton.style.display = 'none';
+            }
         }
 
         keyButton.addEventListener('click', () => handleKeyPress(key));

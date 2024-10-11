@@ -185,7 +185,7 @@ bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 /* Game Initialization */
 loadWords().then(() => {
-    initializeKeyboard();
+    initializeKeyboard(false);
     startNewGame(Math.floor(Math.random() * 7)+4);
 
 });
