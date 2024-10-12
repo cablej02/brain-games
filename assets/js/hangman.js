@@ -1,6 +1,11 @@
 //element selectors
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
+const guessesRemainingEl = document.getElementById('guesses-remaining'); // TODO with finding the way to show the guesses remaining
+
+//Anytime we start new game, we need to reset the keyboard
+//Create the spans for each letter in the alphabet of the word
+//When you start a new game, delete the old letter or word before it shows the new lines of guesses
 
 //game object
 const currentGame = {
@@ -67,6 +72,8 @@ const generateDisplayWord = () =>{
     }
     return displayWord;
 }
+
+// 
 
 const startNewGame = () =>{
     //TODO: Implement this function
