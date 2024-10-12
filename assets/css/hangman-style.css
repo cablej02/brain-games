@@ -1,0 +1,9 @@
+.letter{
+    border-bottom: 3px white solid;
+    font-size: 2em;
+    margin: 0 0.2em;
+    padding: 0 0.2em;
+    width: 1em;
+    height: 50px;
+
+}
