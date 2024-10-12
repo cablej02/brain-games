@@ -2,9 +2,25 @@
     --bs-warning-rgb: 250, 110, 0;
 }
 
+
+/* Header Styles */
+h1 {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .tooltip {
     --bs-tooltip-bg: #505050;
     --bs-tooltip-color: #ffffff;
+}
+
+.home-btn{
+    background-image: url('/assets/images/home-icon.png');
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
 }
 
 /* Keyboard Styles */
