@@ -2,6 +2,11 @@
     --bs-warning-rgb: 250, 110, 0;
 }
 
+.tooltip {
+    --bs-tooltip-bg: #505050;
+    --bs-tooltip-color: #ffffff;
+}
+
 /* Keyboard Styles */
 
 .key-btn {
