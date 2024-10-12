@@ -141,7 +141,13 @@ const setCurGuessTextWhite = () => {
 const setUI = () => {
     guessContainerEl.innerHTML = '';
 
-    //TODO: this function 
+    currentGame.getGuesses().forEach(guess => {
+        displayNewEmptyRow();
+        displayLettersText(guess);
+        displayNumCorrectLetters(calcNumCorrectLetters(guess));
+
+        //TODO: add color changes to letters
+    });
     
     displayNewEmptyRow();
 }
