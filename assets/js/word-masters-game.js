@@ -3,20 +3,36 @@
 
 const guessContainerEl = document.getElementById('guess-container');
 const bodyEl = document.querySelector('body');
+const gameOverTxtEl = document.getElementById('game-over-txt');
 const newGameBtnEl = document.getElementById('new-game-btn');
+const endlessGameBtnEl = document.getElementById('endless-game-btn');
 
 // Game Object as an immediately invoked function expression
 const currentGame = (() => {
     let solution = null;
-    let guesses = [];
-    let greenLetters = [];
-    let orangeLetters = []; 
-    let greyLetters = [];
-    let disabledLetters = [];
+    const guesses = [];
+    const greenLetters = [];
+    const orangeLetters = []; 
+    const greyLetters = [];
+    const disabledLetters = [];
     const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame)) && console.log('Game saved');
     return {
-        setNewGame: (newSolution) => {
-            solution = newSolution;
+        loadCurrentGame: function() {
+            const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
+            
+            if(data === null) this.setNewGame();
+            else{
+                solution= (data.solution);
+                guesses.push(...data.guesses);
+                greenLetters.push(...data.greenLetters);
+                orangeLetters.push(...data.orangeLetters);
+                greyLetters.push(...data.greyLetters);
+                disabledLetters.push(...data.disabledLetters);
+            }
+            saveCurrentGame();
+        },
+        setNewGame: (solWordLength) => {
+            solution = getNewSolutionWord(solWordLength);
             guesses.length = 0;
             greenLetters.length = 0;
             orangeLetters.length = 0;
@@ -24,7 +40,7 @@ const currentGame = (() => {
             disabledLetters.length = 0;
             saveCurrentGame();
         },
-        clearGame:() => {
+        setEmptyGame:() => {
             solution = null;
             guesses.length = 0;
             greenLetters.length = 0;
@@ -177,9 +193,9 @@ const calcNumCorrectLetters = (guess) => {
 
 const getNewSolutionWord = (solutionLength) => {
     // Solution word cannot have repeating letters
-    let solution = '';
+    let newSolution = '';
     let counter = 0;
-    while (solution === '' && counter < 1000) {
+    while (newSolution === '' && counter < 1000) {
         counter++;
         let solutionHelper = getRandomWord(solutionLength);
         // Search for repeated letters
@@ -189,15 +205,15 @@ const getNewSolutionWord = (solutionLength) => {
                 break;
             }
         }
-        solution = solutionHelper;
+        newSolution = solutionHelper;
     }
 
     if(counter === 1000){ 
         console.error(`Solution Word of length ${solutionLength} not found after ${counter} tries`);
         return null
     }else{
-        console.log(`Solution Word Found in ${counter} tries: ${solution}`);
-        return solution;
+        console.log(`Solution Word Found in ${counter} tries: ${newSolution}`);
+        return newSolution;
     }
 }
 
@@ -207,10 +223,6 @@ const startNewGame = (solutionLength) => {
     setUI();
 }
 
-/* Data Functions */
-//const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame));
-const loadCurrentGame = () => JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
-
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 newGameBtnEl.addEventListener('click', () => startNewGame(5));
@@ -218,5 +230,5 @@ newGameBtnEl.addEventListener('click', () => startNewGame(5));
 /* Game Initialization */
 loadWords().then(() => {
     initializeKeyboard();
-    startNewGame(5);
+    currentGame.loadCurrentGame()
 });
