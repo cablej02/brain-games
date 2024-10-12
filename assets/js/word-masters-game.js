@@ -12,7 +12,7 @@ const currentGame = (() => {
     let solution = null;
     const guesses = [];
     const greenLetters = [];
-    const orangeLetters = []; 
+    const orangeLetters = [];
     const greyLetters = [];
     const disabledLetters = [];
     const saveCurrentGame = () => {
@@ -30,7 +30,7 @@ const currentGame = (() => {
         loadCurrentGame: function() {
             const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
             
-            if(data === null) this.clearCurrentGame();
+            if(data === null) this.setEmptyGame();
             else{
                 solution= (data.solution);
                 guesses.push(...data.guesses);
@@ -60,17 +60,35 @@ const currentGame = (() => {
             disabledLetters.length = 0;
             saveCurrentGame();
         },
+        changeLetterColor:(letter) => {
+            if(greenLetters.includes(letter)){
+                greenLetters.splice(greenLetters.indexOf(letter), 1);
+                orangeLetters.push(letter);
+            }else if(orangeLetters.includes(letter)){
+                orangeLetters.splice(orangeLetters.indexOf(letter), 1);
+                greyLetters.push(letter);
+            }else if(greyLetters.includes(letter)){
+                greyLetters.splice(greyLetters.indexOf(letter), 1);
+            }else{
+                greenLetters.push(letter);
+            }
+            saveCurrentGame();
+        },
+
         addGuess: guess => (guesses.push(guess), saveCurrentGame()),
         addGreenLetter: letter => (greenLetters.push(letter), saveCurrentGame()),
         addOrangeLetter: letter => (orangeLetters.push(letter), saveCurrentGame()),
         addGreyLetter: letter => (greyLetters.push(letter), saveCurrentGame()),
-        addDisabledLetter: letter => (disabledLetters.push(letter), saveCurrentGame()),
+        addDisabledLetters: letters => (disabledLetters.push(...letters), saveCurrentGame()),
         getSolution: () => solution,
         getGuesses: () => [...guesses],
         getGreenLetters: () => [...greenLetters],
         getOrangeLetters: () => [...orangeLetters],
         getGreyLetters: () => [...greyLetters],
-        getDisabledLetters: () => [...disabledLetters]
+        getDisabledLetters: () => {
+            console.log('Disabled Letters:', disabledLetters);
+            return [...disabledLetters]
+        }
     };
 })();
 
@@ -94,20 +112,49 @@ const displayNewEmptyRow = () => {
     guessContainerEl.appendChild(currentGuessRowEl);
 }
 
-const displayLettersText = (letters) => {
+const displayLetters = (letters) => {
     if(currentGuessRowEl){
-        for(let i = 0; i < currentGuessRowEl.children.length; i++) {
+        for(let i = 0; i < currentGuessRowEl.children.length - 1; i++) {
             const letterBoxEl = currentGuessRowEl.children[i];
             if(i < letters.length){
                 letterBoxEl.textContent = letters[i].toUpperCase();
+                letterBoxEl.setAttribute('data-letter', letters[i].toLowerCase());
+                setLetterBgColor(letterBoxEl);
             }else{
                 letterBoxEl.textContent = '';
+                letterBoxEl.setAttribute('data-letter', '');
             }
         }
     }else{
         console.error('Cannot add letters to a null row element');
     }
 }
+const setCurrentGuessRowStateGuessed = () => {
+    if(currentGuessRowEl){
+        [...currentGuessRowEl.children].forEach(child => {
+            if(child.dataset.letter){
+                console.log(`Checking letter: ${child.dataset.letter} against disabled letters: ${currentGame.getDisabledLetters()}`);
+                if(!currentGame.getDisabledLetters().includes(child.dataset.letter)) {
+                    console.log('active');
+                    child.classList.add('guessed')
+                }else{
+                    console.log('disabled');
+                    child.classList.add('guessed-disabled');
+                }
+            }
+        });
+        //TODO: maybe change how this is working.  pretty hacky
+
+    }else{
+        console.error('Cannot add letters to a null row element');
+    }
+}
+
+const setLetterBgColor = (letterBoxEl) => {
+
+}
+
+
 
 const displayNumCorrectLetters = (numCorrect) => {
     const numCorrectEl = currentGuessRowEl.children[currentGuessRowEl.children.length -1];
@@ -137,14 +184,19 @@ const setCurGuessTextWhite = () => {
     }
 }
 
+const setLetterBgColorGreen = (letter) => {
+    [...guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`)].map(el => el.style.backgroundColor = 'green');
+}
+
 
 const setUI = () => {
     guessContainerEl.innerHTML = '';
 
     currentGame.getGuesses().forEach(guess => {
         displayNewEmptyRow();
-        displayLettersText(guess);
+        displayLetters(guess);
         displayNumCorrectLetters(calcNumCorrectLetters(guess));
+        setCurrentGuessRowStateGuessed();
 
         //TODO: add color changes to letters
     });
@@ -159,7 +211,7 @@ const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     if (k === 'delete' || k === 'backspace') {
         curGuess = curGuess.slice(0, -1);
-        displayLettersText(curGuess);
+        displayLetters(curGuess);
         setCurGuessTextWhite();
         console.log(curGuess);
     } else if (k === 'enter') {
@@ -168,7 +220,7 @@ const handleKeyPress = (key) => {
         }
     } else if (alphabet.includes(k) && curGuess.length < currentGame.getSolution().length) {
         curGuess += k;
-        displayLettersText(curGuess);
+        displayLetters(curGuess);
         if(curGuess.length === currentGame.getSolution().length) {
             isValidWord(curGuess) ? setCurGuessTextWhite() : setGuessTextRed();
         }
@@ -186,14 +238,22 @@ const handleGuess = (guess) => {
     }else if(isValidWord(guess)){
         console.log(`Valid word: ${guess}`);
         currentGame.addGuess(guess);
-        displayNumCorrectLetters(calcNumCorrectLetters(guess));
+        const numCorrect = calcNumCorrectLetters(guess);
+        if(numCorrect === 0) currentGame.addDisabledLetters(guess);
+        displayNumCorrectLetters(numCorrect);
         displayNewEmptyRow();
         curGuess = '';
     } else {
         console.log(`Invalid word: ${guess}`);
         //TODO: Display invalid word message/animation/something
     }
+}
 
+const handleLetterColorChange = (letter) => {
+    if(alphabet.includes(letter) && !currentGame.getDisabledLetters().includes(letter)){
+        currentGame.changeLetterColor(letter);
+        setLetterBgColor(letter);
+    }
 }
 
 const calcNumCorrectLetters = (guess) => {
@@ -245,6 +305,7 @@ const startNewGame = (solutionLength) => {
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 newGameBtnEl.addEventListener('click', () => startNewGame(5));
+guessContainerEl.addEventListener('click', (event) => handleLetterColorChange(event.target.dataset.letter));
 
 /* Game Initialization */
 loadWords().then(() => {
