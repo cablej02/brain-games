@@ -15,12 +15,22 @@ const currentGame = (() => {
     const orangeLetters = []; 
     const greyLetters = [];
     const disabledLetters = [];
-    const saveCurrentGame = () => localStorage.setItem('wordMastersCurGame', JSON.stringify(currentGame)) && console.log('Game saved');
+    const saveCurrentGame = () => {
+        const curGameHelper = {
+            solution,
+            guesses,
+            greenLetters,
+            orangeLetters,
+            greyLetters,
+            disabledLetters
+        }
+        localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameHelper)) && console.log('Game saved');
+    }
     return {
         loadCurrentGame: function() {
             const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
             
-            if(data === null) this.setNewGame();
+            if(data === null) this.clearCurrentGame();
             else{
                 solution= (data.solution);
                 guesses.push(...data.guesses);
@@ -32,6 +42,7 @@ const currentGame = (() => {
             saveCurrentGame();
         },
         setNewGame: (solWordLength) => {
+            console.log('New Game:', solWordLength);
             solution = getNewSolutionWord(solWordLength);
             guesses.length = 0;
             greenLetters.length = 0;
@@ -129,6 +140,8 @@ const setCurGuessTextWhite = () => {
 
 const setUI = () => {
     guessContainerEl.innerHTML = '';
+
+    //TODO: this function 
     
     displayNewEmptyRow();
 }
@@ -218,7 +231,7 @@ const getNewSolutionWord = (solutionLength) => {
 }
 
 const startNewGame = (solutionLength) => {
-    currentGame.setNewGame(getNewSolutionWord(solutionLength));
+    currentGame.setNewGame(solutionLength);
 
     setUI();
 }
@@ -230,5 +243,10 @@ newGameBtnEl.addEventListener('click', () => startNewGame(5));
 /* Game Initialization */
 loadWords().then(() => {
     initializeKeyboard();
-    currentGame.loadCurrentGame()
+    currentGame.loadCurrentGame();
+    if(currentGame.getSolution() === null){
+        //TODO: show modal to ask for new game
+    }else{
+        setUI();
+    }
 });
