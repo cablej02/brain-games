@@ -24,7 +24,7 @@ const currentGame = (() => {
         localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameHelper)) && console.log('Game saved');
     }
     return {
-        loadCurrentGame: function() {
+        loadCurrentGame: () => {
             const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
             
             if(data === null) this.setEmptyGame();
@@ -97,35 +97,34 @@ const displayNewEmptyRow = () => {
 
     for(let i = 0; i < currentGame.getSolution().length; i++) {
         const letterBoxEl = document.createElement('div');
+        letterBoxEl.setAttribute('id',`r${guessContainerEl.children.length}l${i}`);
         letterBoxEl.className = 'border border-3 text-center m-md-1 m-sm-0 flex-shrink-0 square';
+
 
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
     const numCorrectEl = document.createElement('div');
     numCorrectEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
-    currentGuessRowEl.appendChild(numCorrectEl);
+    currentGuessRowEl.insertBefore(numCorrectEl, currentGuessRowEl.firstChild);
+
+    const numMisplacedEl = document.createElement('div');
+    numMisplacedEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
+    currentGuessRowEl.appendChild(numMisplacedEl);
 
     guessContainerEl.appendChild(currentGuessRowEl);
+
 }
 
-const displayLetters = (letters) => {
-    if(currentGuessRowEl){
-        for(let i = 0; i < currentGuessRowEl.children.length - 1; i++) {
-            const letterBoxEl = currentGuessRowEl.children[i];
-            if(i < letters.length){
-                letterBoxEl.textContent = letters[i].toUpperCase();
-                letterBoxEl.setAttribute('data-letter', letters[i].toLowerCase());
-                setLetterBgColor(letterBoxEl);
-            }else{
-                letterBoxEl.textContent = '';
-                letterBoxEl.setAttribute('data-letter', '');
-            }
-        }
-    }else{
-        console.error('Cannot add letters to a null row element');
-    }
+//TODO: refactor this to not brute force every time
+const displayLetter = (id,letter) => {
+    const letterBoxEl = document.getElementById(id);
+    letterBoxEl.textContent = letter.toUpperCase();
+    letterBoxEl.setAttribute('data-letter', letter.toLowerCase());
+    setLetterBgColor(letterBoxEl);
 }
+
+//TODO: maybe change how this is working.  pretty hacky
 const setCurrentGuessRowStateGuessed = () => {
     if(currentGuessRowEl){
         [...currentGuessRowEl.children].forEach(child => {
@@ -133,15 +132,14 @@ const setCurrentGuessRowStateGuessed = () => {
                 console.log(`Checking letter: ${child.dataset.letter} against disabled letters: ${currentGame.getDisabledLetters()}`);
                 if(!currentGame.getDisabledLetters().includes(child.dataset.letter)) {
                     console.log('active');
-                    child.classList.add('guessed')
+                    child.classList.add('pointer');
+                    child.setAttribute('data-btn-state','active')
                 }else{
                     console.log('disabled');
-                    child.classList.add('guessed-disabled');
+                    child.setAttribute('data-btn-state','disabled');
                 }
             }
         });
-        //TODO: maybe change how this is working.  pretty hacky
-
     }else{
         console.error('Cannot add letters to a null row element');
     }
@@ -185,18 +183,18 @@ const setLetterBgColorGreen = (letter) => {
     [...guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`)].map(el => el.style.backgroundColor = 'green');
 }
 
-
 const setUI = () => {
     guessContainerEl.innerHTML = '';
 
-    currentGame.getGuesses().forEach(guess => {
+    const guesses = currentGame.getGuesses();
+    for(let i = 0; i < guesses.length; i++){
         displayNewEmptyRow();
-        displayLetters(guess);
-        displayNumCorrectLetters(calcNumCorrectLetters(guess));
-        setCurrentGuessRowStateGuessed();
-
-        //TODO: add color changes to letters
-    });
+        for(let j = 0; j < guesses[i].length; j++){
+            displayLetter(`r${i}l${j}`, guesses[i][j]);
+        }
+        displayNumCorrectLetters(calcNumCorrectLetters(guesses[i]));
+        setCurrentGuessRowStateGuessed
+    }
     
     displayNewEmptyRow();
 }
@@ -302,7 +300,9 @@ const startNewGame = (solutionLength) => {
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 newGameBtnEl.addEventListener('click', () => startNewGame(5)); //TODO: add slider to select word length
-guessContainerEl.addEventListener('click', (event) => handleLetterColorChange(event.target.dataset.letter));
+guessContainerEl.addEventListener('click', (event) => {
+    if(event.target.dataset.btnState === 'active') handleLetterColorChange(event.target.dataset.letter);
+});
 
 /* Game Initialization */
 wordList.loadWords().then(() => {
