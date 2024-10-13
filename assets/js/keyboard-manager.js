@@ -60,9 +60,7 @@ const keyboard = (() => {
                     const keyButton = document.createElement('button');
                     keyButton.textContent = key;
                     keyButton.classList.add('key-btn','btn','btn-secondary','m-1','btn-sm','flex-grow-0'); //TODO: what btn-sm and flex-grow-0 doing?
-                    keyButton.style.border = 0;
                     keyButton.id = `key-${key.toLowerCase()}`;
-
                     if (key === 'ENTER' || key === 'DELETE') {
                         if(displayEnterAndDeleteBool){
                             //TODO: change enter and delete keys to icons
