@@ -12,6 +12,12 @@ const keyboard = (() => {
     mainEl.appendChild(keyboardContainer);
 
     const setKeyColor = (key, color) => {
+        const colorHelper = {
+            green: 'success',
+            yellow: 'warning',
+            grey: 'secondary'
+        };
+        const bgColor = colorHelper[color] || color;
         if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
             const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
             if(keyButton){
@@ -21,7 +27,7 @@ const keyboard = (() => {
                         keyButton.classList.remove(className);
                     }
                 });
-                keyButton.classList.add(`bg-${color}`);
+                keyButton.classList.add(`bg-${bgColor}`);
             }
         }
     }
@@ -74,7 +80,6 @@ const keyboard = (() => {
                 }
             }
         },
-
         setKeyColorGreen: (key) => setKeyColor(key, 'success'),
         setKeyColorYellow: (key) => setKeyColor(key, 'warning'),
         setKeyColorGrey: (key) => setKeyColor(key, 'secondary'),
@@ -82,6 +87,7 @@ const keyboard = (() => {
         setKeyColorTransparent: (key) => setKeyColor(key, 'transparent'),
         setKeyColorWhite: (key) => setKeyColor(key, 'light'),
         setKeyColorBlue: (key) => setKeyColor(key, 'primary'),
+        setKeyColor
     }
 })();
 

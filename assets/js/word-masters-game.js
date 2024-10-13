@@ -9,7 +9,7 @@ const currentGame = (() => {
     let solution = null;
     const guesses = [];
     const greenLetters = [];
-    const orangeLetters = [];
+    const yellowLetters = [];
     const greyLetters = [];
     const disabledLetters = [];
     const saveCurrentGame = () => {
@@ -17,7 +17,7 @@ const currentGame = (() => {
             solution,
             guesses,
             greenLetters,
-            orangeLetters,
+            yellowLetters,
             greyLetters,
             disabledLetters
         }
@@ -32,7 +32,7 @@ const currentGame = (() => {
                 solution= (data.solution);
                 guesses.push(...data.guesses);
                 greenLetters.push(...data.greenLetters);
-                orangeLetters.push(...data.orangeLetters);
+                yellowLetters.push(...data.yellowLetters);
                 greyLetters.push(...data.greyLetters);
                 disabledLetters.push(...data.disabledLetters);
             }
@@ -43,7 +43,7 @@ const currentGame = (() => {
             solution = getNewSolutionWord(solWordLength);
             guesses.length = 0;
             greenLetters.length = 0;
-            orangeLetters.length = 0;
+            yellowLetters.length = 0;
             greyLetters.length = 0;
             disabledLetters.length = 0;
             saveCurrentGame();
@@ -52,35 +52,58 @@ const currentGame = (() => {
             solution = null;
             guesses.length = 0;
             greenLetters.length = 0;
-            orangeLetters.length = 0;
+            yellowLetters.length = 0;
             greyLetters.length = 0;
             disabledLetters.length = 0;
             saveCurrentGame();
         },
+        //TODO: This seems like it can be improved
         changeLetterColor:(letter) => {
             if(greenLetters.includes(letter)){
                 greenLetters.splice(greenLetters.indexOf(letter), 1);
-                orangeLetters.push(letter);
-            }else if(orangeLetters.includes(letter)){
-                orangeLetters.splice(orangeLetters.indexOf(letter), 1);
+                yellowLetters.push(letter);
+                saveCurrentGame();
+                return 'yellow';
+            }else if(yellowLetters.includes(letter)){
+                yellowLetters.splice(yellowLetters.indexOf(letter), 1);
                 greyLetters.push(letter);
+                saveCurrentGame();
+                return 'grey';
             }else if(greyLetters.includes(letter)){
                 greyLetters.splice(greyLetters.indexOf(letter), 1);
-            }else{
                 greenLetters.push(letter);
+                saveCurrentGame();
+                return 'green';
+            }else{
+                greyLetters.push(letter);
+                saveCurrentGame();
+                return 'grey';
             }
-            saveCurrentGame();
         },
-
+        getLetterColor:(letter) => {
+            if(greenLetters.includes(letter)) return 'green';
+            if(yellowLetters.includes(letter)) return 'yellow';
+            if(greyLetters.includes(letter)) return 'grey';
+            greyLetters.push(letter);
+            return 'grey';
+        },
+        getAllLetterColors:() => {
+            return {
+                greenLetters: [...greenLetters],
+                yellowLetters: [...yellowLetters],
+                greyLetters: [...greyLetters]
+            }
+        },
         addGuess: guess => (guesses.push(guess), saveCurrentGame()),
-        addGreenLetter: letter => (greenLetters.push(letter), saveCurrentGame()),
-        addOrangeLetter: letter => (orangeLetters.push(letter), saveCurrentGame()),
-        addGreyLetter: letter => (greyLetters.push(letter), saveCurrentGame()),
-        addDisabledLetters: letters => (disabledLetters.push(...letters), saveCurrentGame()),
+        // TODO: probably don't need these.  remove eventually
+        // addGreenLetter: letter => (greenLetters.push(letter), saveCurrentGame()),
+        // addOrangeLetter: letter => (yellowLetters.push(letter), saveCurrentGame()),
+        // addGreyLetter: letter => (greyLetters.push(letter), saveCurrentGame()),
+        // addDisabledLetters: letters => (disabledLetters.push(...letters), saveCurrentGame()),
         getSolution: () => solution,
         getGuesses: () => [...guesses],
         getGreenLetters: () => [...greenLetters],
-        getOrangeLetters: () => [...orangeLetters],
+        getyellowLetters: () => [...yellowLetters],
         getGreyLetters: () => [...greyLetters],
         getDisabledLetters: () => {
             console.log('Disabled Letters:', disabledLetters);
@@ -144,8 +167,22 @@ const setCurrentGuessRowStateGuessed = () => {
     }
 }
 
-const setLetterBgColor = (letterBoxEl) => {
+//TODO: maybe change how this is working. May not work well with a different theme
+const setLetterBgColor = (letter,color) => {
+    const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
+    const colorHelper = {
+        green: 'success',
+        yellow: 'warning',
+        grey: 'secondary'
+    };
+    const bsColor = colorHelper[color] || 'secondary';
 
+    letterEls.forEach(el => {
+        el.classList.forEach(className => {
+            if(className.startsWith('bg-')) el.classList.remove(className);
+        })
+        el.classList.add(`bg-${bsColor}`);
+    });
 }
 
 const displayNumCorrectAndMisplacedLetters = (numCorrect,numMisplaced) => {
@@ -182,10 +219,6 @@ const setCurGuessTextWhite = () => {
     }
 }
 
-const setLetterBgColorGreen = (letter) => {
-    [...guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`)].map(el => el.style.backgroundColor = 'green');
-}
-
 const setUI = () => {
     guessContainerEl.innerHTML = '';
 
@@ -197,8 +230,21 @@ const setUI = () => {
         }
         const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guesses[i]);
         displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
-        setCurrentGuessRowStateGuessed
+        setCurrentGuessRowStateGuessed();
+
     }
+    const {greenLetters,yellowLetters,greyLetters} = currentGame.getAllLetterColors();
+    greenLetters.forEach(letter => {
+        setLetterBgColor(letter,'green');
+        keyboard.setKeyColorGreen(letter);
+    });
+    yellowLetters.forEach(letter => {
+        setLetterBgColor(letter,'yellow');
+        keyboard.setKeyColorYellow(letter)});
+    greyLetters.forEach(letter => {
+        setLetterBgColor(letter,'grey');
+        keyboard.setKeyColorGrey(letter)
+    });
     
     displayNewEmptyRow();
 }
@@ -246,6 +292,7 @@ const handleGuess = (guess) => {
         const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guess);
         //if(numCorrect === 0) currentGame.addDisabledLetters(guess);
         displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
+        setCurrentGuessRowStateGuessed();
         displayNewEmptyRow();
         curGuess = '';
     } else {
@@ -255,9 +302,12 @@ const handleGuess = (guess) => {
 }
 
 const handleLetterColorChange = (letter) => {
-    if(alphabet.includes(letter) && !currentGame.getDisabledLetters().includes(letter)){
-        currentGame.changeLetterColor(letter);
-        setLetterBgColor(letter);
+    if(alphabet.includes(letter)){
+
+        const color = currentGame.changeLetterColor(letter);
+        console.log(`Changing letter color: ${letter} to ${color}`);
+        setLetterBgColor(letter,color);
+        keyboard.setKeyColor(letter,color);
     }
 }
 
