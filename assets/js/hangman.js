@@ -8,38 +8,61 @@ const guessesRemainingEl = document.getElementById('guesses-remaining'); // TODO
 //When you start a new game, delete the old letter or word before it shows the new lines of guesses
 
 //game object
-const currentGame = {
-    //TODO: fill in object with things needed for game
-    solution: null,
-    guesses: [],
-    maxGuesses: null,
-    addGuess(guess){
-        this.guesses.push(guess);
-        saveCurrentGame();
-    },
-    setNewGame(solution,maxGuesses){
-        this.solution = solution;
-        this.maxGuesses = maxGuesses;
-        this.guesses = [];
-        saveCurrentGame();
-    },
-    clearGame(){
-        this.solution = null;
-        this.maxGuesses = null;
-        this.guesses = [];
-        saveCurrentGame();
+const currentGame = (() => {
+    let solution = null;
+    const guesses = [];
+    let maxGuesses = null;
+    const save = () =>{
+        const curGameHelper = {solution,guesses,maxGuesses}
+        localStorage.setItem('hangmanCurrentGame', JSON.stringify(curGameHelper));
     }
-}
-
+    const load = () =>{
+        const data = JSON.parse(localStorage.getItem('hangmanCurrentGame') || null);
+        if(data){
+            solution = data.solution;
+            guesses.push(...data.guesses);
+            maxGuesses = data.maxGuesses;
+        }else{
+            clearGame();
+        }
+    }
+    const addGuess = (guess) => {
+        guesses.push(guess);
+        save();
+    }
+    const setNewGame = (newSolution,newMaxGuesses) => {
+        solution = newSolution;
+        maxGuesses = newMaxGuesses;
+        guesses.length = 0;
+        save();
+    }
+    const clearGame = () => {
+        solution = null;
+        maxGuesses = null;
+        guesses.length = 0;
+        save();
+    }
+    return{
+        addGuess,
+        setNewGame,
+        clearGame,
+        load
+    }
+})();
 
 //UI functions
-const displayRevealedLetter = (letter) =>{
+const displayRevealedLetter = (letter) => {
     const span = document.createElement('span');
     span.textContent = letter;
     guessContainerEl.appendChild(span);
+    currentGame.guesses
 
 }
 
+
+const setUI = () => {
+    //TODO: set full ui for new/loaded game
+}
 
 //Game Logic
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -64,24 +87,17 @@ const handleKeyPress = (key) => {
 const generateDisplayWord = () =>{
     const solution = currentGame.solution;
     const guesses = [...currentGame.guesses];
-    let displayWord = '';
-    for(let i = 0; i < solution.length; i++){
-        if(guesses.includes(solution[i])){
-            displayWord += solution[i];
-        }else{
-            displayWord += '_';
-        }
-    }
+    let displayWord = solution.split('').map(letter => guesses.includes(letter) ? letter : '_').join('');
+
     return displayWord;
 }
 
-// 
-
 const startNewGame = () =>{
-    let solution = wordList.getRandomWord();
-    currentGame.setNewGame(solution, 6);
+    let solution = wordList.getRandomWord(Math.floor(Math.random)*6 + 5); //TODO: make this a user input to choose word length, or randomize
+    currentGame.setNewGame(solution, 5); //TODO: maybe put this in a static variable
     console.log(solution);
-    console.log(generateDisplayWord());
+
+    setUI();
 }
 
 const handleGameOver = (winBool) =>{
@@ -89,15 +105,7 @@ const handleGameOver = (winBool) =>{
 }
 
 //data functions
-const saveCurrentGame = () =>{
-    localStorage.setItem('currentGame', JSON.stringify(currentGame));
-}
-const loadCurrentGame = () =>{
-    const game = localStorage.getItem('currentGame');
-    if(game){
-        currentGame = JSON.parse(game);
-    }
-}
+
 
 //Event Listeners
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
