@@ -91,7 +91,7 @@ const loadCurrentGame = () =>{}//TODO: Implement this function
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 //game initialization
-loadWords().then(() => {
+wordList.loadWords().then(() => {
     keyboard.initialize(false);
 
     //TODO: Implement loading of saved game/starting a new game

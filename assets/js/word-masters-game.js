@@ -1,6 +1,3 @@
-//TODO: uncomment this and change script to type="module" in html
-//import {getRandomWord, loadWords, isValidWord, initializeKeyboard, changeKeyGreen, changeKeyOrange, changeKeyGrey, disableKey } from './word-game.js';
-
 const guessContainerEl = document.getElementById('guess-container');
 const bodyEl = document.querySelector('body');
 const gameOverTxtEl = document.getElementById('game-over-txt');
@@ -222,7 +219,7 @@ const handleKeyPress = (key) => {
         curGuess += k;
         displayLetters(curGuess);
         if(curGuess.length === currentGame.getSolution().length) {
-            isValidWord(curGuess) ? setCurGuessTextWhite() : setGuessTextRed();
+            wordList.isValidWord(curGuess) ? setCurGuessTextWhite() : setGuessTextRed();
         }
         console.log(curGuess);
     }
@@ -235,7 +232,7 @@ const handleGuess = (guess) => {
         displayNumCorrectLetters(guess.length);
         curGuess = '';
         handleGameOver(true);
-    }else if(isValidWord(guess)){
+    }else if(wordList.isValidWord(guess)){
         console.log(`Valid word: ${guess}`);
         currentGame.addGuess(guess);
         const numCorrect = calcNumCorrectLetters(guess);
@@ -276,7 +273,7 @@ const getNewSolutionWord = (solutionLength) => {
     let counter = 0;
     while (newSolution === '' && counter < 1000) {
         counter++;
-        let solutionHelper = getRandomWord(solutionLength);
+        let solutionHelper = wordList.getRandomWord(solutionLength);
         // Search for repeated letters
         for(let i = 0; i < solutionHelper.length; i++) {
             if(solutionHelper.indexOf(solutionHelper[i]) !== solutionHelper.lastIndexOf(solutionHelper[i])){
@@ -304,11 +301,11 @@ const startNewGame = (solutionLength) => {
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-newGameBtnEl.addEventListener('click', () => startNewGame(5));
+newGameBtnEl.addEventListener('click', () => startNewGame(5)); //TODO: add slider to select word length
 guessContainerEl.addEventListener('click', (event) => handleLetterColorChange(event.target.dataset.letter));
 
 /* Game Initialization */
-loadWords().then(() => {
+wordList.loadWords().then(() => {
     keyboard.initialize();
     currentGame.loadCurrentGame();
     if(currentGame.getSolution() === null){

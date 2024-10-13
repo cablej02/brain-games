@@ -90,7 +90,7 @@ handleKeyPress = (key) => {
 
 
 //Initialize game
-loadWords().then(() => {
+wordList.loadWords().then(() => {
     //createKeyboard();
     //load game/start new game
 
