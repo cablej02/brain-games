@@ -14,6 +14,10 @@
     cursor: pointer;
 }
 
+.no-select {
+    user-select: none;
+}
+
 .custom-body-color {
     color: var(--bs-body-color);
 }
