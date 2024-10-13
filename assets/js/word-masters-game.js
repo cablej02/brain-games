@@ -83,7 +83,7 @@ const currentGame = (() => {
         getLetterColor:(letter) => {
             if(greenLetters.includes(letter)) return 'green';
             if(yellowLetters.includes(letter)) return 'yellow';
-            if(transparentLetters.includes(letter)) return 'transparent';
+            if(transparentLetters.includes(letter)|| letter === '') return 'transparent';
             if(greyLetters.includes(letter)) return 'grey';
             greyLetters.push(letter);
             return 'grey';
@@ -169,7 +169,8 @@ const setLetterElementBgColor = (letterEl,color) => {
     const colorHelper = {
         green: 'success',
         yellow: 'warning',
-        grey: 'secondary'
+        grey: 'secondary',
+        transparent: 'transparent'
     };
     const bsColor = colorHelper[color] || 'secondary';
     letterEl.classList.forEach(className => {
