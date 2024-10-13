@@ -32,6 +32,24 @@ const keyboard = (() => {
         }
     }
 
+    const resetKeys = () => {
+        keyboardLayout.forEach(row => {
+            row.forEach(key => {
+                if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
+                    const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
+                    if(keyButton){
+                        keyButton.classList.forEach((className) => {
+                            if (className.startsWith('bg-')) {
+                                keyButton.classList.remove(className);
+                            }
+                        });
+                        keyButton.classList.add('bg-secondary');
+                    }
+                }
+            });
+        });
+    }  
+
     return {
         initialize: (displayEnterAndDeleteBool=true) => {
             keyboardLayout.forEach(row => {
@@ -87,7 +105,8 @@ const keyboard = (() => {
         setKeyColorTransparent: (key) => setKeyColor(key, 'transparent'),
         setKeyColorWhite: (key) => setKeyColor(key, 'light'),
         setKeyColorBlue: (key) => setKeyColor(key, 'primary'),
-        setKeyColor
+        setKeyColor,
+        resetKeys
     }
 })();
 

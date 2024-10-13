@@ -79,6 +79,13 @@ const currentGame = (() => {
                 saveCurrentGame();
                 return 'grey';
             }
+        },        
+        setLetterColorTransparent: (letter) => {
+            if(greenLetters.includes(letter)) greenLetters.splice(greenLetters.indexOf(letter), 1);
+            if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
+            if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
+            transparentLetters.push(letter);
+            saveCurrentGame()
         },
         getLetterColor:(letter) => {
             if(greenLetters.includes(letter)) return 'green';
@@ -127,11 +134,11 @@ const displayNewEmptyRow = () => {
     };
 
     const numCorrectEl = document.createElement('div');
-    numCorrectEl.className = 'border border-3 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
+    numCorrectEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
     currentGuessRowEl.insertBefore(numCorrectEl, currentGuessRowEl.firstChild);
 
     const numMisplacedEl = document.createElement('div');
-    numMisplacedEl.className = 'border border-3 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
+    numMisplacedEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
     currentGuessRowEl.appendChild(numMisplacedEl);
 
     guessContainerEl.appendChild(currentGuessRowEl);
@@ -217,6 +224,7 @@ const setCurGuessTextWhite = () => {
 
 const setUI = () => {
     guessContainerEl.innerHTML = '';
+    keyboard.resetKeys();
 
     const guesses = currentGame.getGuesses();
     for(let i = 0; i < guesses.length; i++){
@@ -277,7 +285,7 @@ const handleGuess = (guess) => {
     if(guess === currentGame.getSolution()){
         console.log('Correct word:', guess);
         currentGame.addGuess(guess);
-        displayNumCorrectLetters(guess.length);
+        displayNumCorrectAndMisplacedLetters(guess.length,0);
         curGuess = '';
         handleGameOver(true);
     }else if(currentGame.getGuesses().includes(guess)){
@@ -305,6 +313,14 @@ const handleLetterColorChange = (letter) => {
     }
 }
 
+const handleLetterColorChangeTransparent = (letter) => {
+    if(alphabet.includes(letter)){
+        const color = currentGame.setLetterColorTransparent(letter);
+        setLetterBgColor(letter,color);
+        keyboard.setKeyColorTransparent(letter);
+    }
+}
+
 const calcNumCorrectAndMisplacedLetters = (guess) => {
     let numCorrect = 0;
     let numMisplaced = 0;
@@ -321,6 +337,10 @@ const calcNumCorrectAndMisplacedLetters = (guess) => {
         }
     }
     return [numCorrect,numMisplaced];
+}
+
+const getSolutionLetter = () => {
+    //TODO: add this as a hint to give a letter and make it always green
 }
 
 const getNewSolutionWord = (solutionLength) => {
@@ -349,6 +369,21 @@ const getNewSolutionWord = (solutionLength) => {
     }
 }
 
+const handleGameOver = (isWin) => {
+    //make letters unclickable
+
+    //maybe change solution to all green and have board react like wordle would display
+
+    //TODO: add modal to ask for new game
+    if(isWin){
+        gameOverTxtEl.textContent = 'Congratulations! You Win!';
+        gameOverTxtEl.classList.add('text-success');
+    }else{
+        gameOverTxtEl.textContent = 'Game Over! You Lose!';
+        gameOverTxtEl.classList.add('text-danger');
+    }
+}
+
 const startNewGame = (solutionLength) => {
     currentGame.setNewGame(solutionLength);
 
@@ -360,6 +395,10 @@ bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 newGameBtnEl.addEventListener('click', () => startNewGame(5)); //TODO: add slider to select word length
 guessContainerEl.addEventListener('click', (event) => {
     if(event.target.dataset.btnState === 'active') handleLetterColorChange(event.target.dataset.letter);
+});
+guessContainerEl.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    if(event.target.dataset.btnState === 'active') handleLetterColorChangeTransparent(event.target.dataset.letter);
 });
 
 /* Game Initialization */
