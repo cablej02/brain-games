@@ -128,7 +128,7 @@ newGameBtnEl.addEventListener('click', startNewGame);
 
 /* Game Initialization */
 loadWords();
-initializeKeyboard();
+keyboard.initialize();
 
 
 

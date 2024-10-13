@@ -309,7 +309,7 @@ guessContainerEl.addEventListener('click', (event) => handleLetterColorChange(ev
 
 /* Game Initialization */
 loadWords().then(() => {
-    initializeKeyboard();
+    keyboard.initialize();
     currentGame.loadCurrentGame();
     if(currentGame.getSolution() === null){
         //TODO: show modal to ask for new game

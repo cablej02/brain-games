@@ -45,17 +45,17 @@ const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     
     //TODO: Fill in logic of this function
-        if (alphabet.includes(k)) {
-            if (!currentGame.guesses.includes(k)) {
-                currentGame.addGuess(k);
-                if (currentGame.solution.includes(k)){  
-                   setKeyColorGreen(k);              
-                    console.log(generateDisplayWord());
-                } else {
-                    disableKey(k);
-                }
+    if (alphabet.includes(k)) {
+        if (!currentGame.guesses.includes(k)) {
+            currentGame.addGuess(k);
+            if (currentGame.solution.includes(k)){  
+                keyboard.setKeyColorGreen(k);              
+                console.log(generateDisplayWord());
+            } else {
+                keyboard.disableKey(k);
             }
         }
+    }
 }
 
 
@@ -92,7 +92,7 @@ bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 
 //game initialization
 loadWords().then(() => {
-    initializeKeyboard(false);
+    keyboard.initialize(false);
 
     //TODO: Implement loading of saved game/starting a new game
     startNewGame();
