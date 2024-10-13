@@ -14,6 +14,10 @@
     cursor: pointer;
 }
 
+.custom-body-color {
+    color: var(--bs-body-color);
+}
+
 @media screen and (max-width: 600px) {
     .square, .circle {
         font-size: 1.5rem;

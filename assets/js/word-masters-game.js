@@ -152,16 +152,17 @@ const setLetterBgColor = (letterBoxEl) => {
 
 
 const displayNumCorrectLetters = (numCorrect) => {
-    const numCorrectEl = currentGuessRowEl.children[currentGuessRowEl.children.length -1];
+    const numCorrectEl = currentGuessRowEl.children[0];
     numCorrectEl.textContent = numCorrect;
-    numCorrectEl.style.backgroundColor = 'darkgrey';
+    numCorrectEl.classList.add('bg-success');
 }
 
 const setGuessTextRed = () => {
     if(currentGuessRowEl){
         for(let i = 0; i < currentGuessRowEl.children.length; i++) {
             const letterBoxEl = currentGuessRowEl.children[i];
-            letterBoxEl.style.color = 'red';
+            letterBoxEl.classList.remove('custom-body-color');
+            letterBoxEl.classList.add('text-danger');
         }
     }else{
         console.error('Cannot add letters to a null row element');
@@ -172,7 +173,8 @@ const setCurGuessTextWhite = () => {
     if(currentGuessRowEl){
         for(let i = 0; i < currentGuessRowEl.children.length; i++) {
             const letterBoxEl = currentGuessRowEl.children[i];
-            letterBoxEl.style.color = 'white';
+            letterBoxEl.classList.remove('text-danger');
+            letterBoxEl.classList.add('custom-body-color');
         }
     }else{
         console.error('Cannot add letters to a null row element');
