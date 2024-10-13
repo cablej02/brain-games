@@ -34,7 +34,9 @@ const currentGame = {
 
 //UI functions
 const displayRevealedLetter = (letter) =>{
-    //TODO: Implement this function
+    const span = document.createElement('span');
+    span.textContent = letter;
+    guessContainerEl.appendChild(span);
 
 }
 
@@ -76,16 +78,26 @@ const generateDisplayWord = () =>{
 // 
 
 const startNewGame = () =>{
-    //TODO: Implement this function
+    let solution = wordList.getRandomWord();
+    currentGame.setNewGame(solution, 6);
+    console.log(solution);
+    console.log(generateDisplayWord());
 }
 
 const handleGameOver = (winBool) =>{
-    //TODO: Implement this function
+    
 }
 
 //data functions
-const saveCurrentGame = () =>{}//TODO: Implement this function
-const loadCurrentGame = () =>{}//TODO: Implement this function
+const saveCurrentGame = () =>{
+    localStorage.setItem('currentGame', JSON.stringify(currentGame));
+}
+const loadCurrentGame = () =>{
+    const game = localStorage.getItem('currentGame');
+    if(game){
+        currentGame = JSON.parse(game);
+    }
+}
 
 //Event Listeners
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
