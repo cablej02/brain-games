@@ -98,18 +98,18 @@ const displayNewEmptyRow = () => {
     for(let i = 0; i < currentGame.getSolution().length; i++) {
         const letterBoxEl = document.createElement('div');
         letterBoxEl.setAttribute('id',`r${guessContainerEl.children.length}l${i}`);
-        letterBoxEl.className = 'border border-3 text-center m-md-1 m-sm-0 flex-shrink-0 square';
+        letterBoxEl.className = 'border border-3 fw-bold text-center m-md-1 m-sm-0 flex-shrink-0 square';
 
 
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
     const numCorrectEl = document.createElement('div');
-    numCorrectEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
+    numCorrectEl.className = 'border border-3 fw-bold text-center rounded-circle flex-shrink-0 circle';
     currentGuessRowEl.insertBefore(numCorrectEl, currentGuessRowEl.firstChild);
 
     const numMisplacedEl = document.createElement('div');
-    numMisplacedEl.className = 'border border-3 text-center rounded-circle flex-shrink-0 circle';
+    numMisplacedEl.className = 'border border-3 fw-bold text-center rounded-circle flex-shrink-0 circle';
     currentGuessRowEl.appendChild(numMisplacedEl);
 
     guessContainerEl.appendChild(currentGuessRowEl);
@@ -151,10 +151,14 @@ const setLetterBgColor = (letterBoxEl) => {
 
 
 
-const displayNumCorrectLetters = (numCorrect) => {
+const displayNumCorrectAndMisplacedLetters = (numCorrect,numMisplaced) => {
     const numCorrectEl = currentGuessRowEl.children[0];
     numCorrectEl.textContent = numCorrect;
     numCorrectEl.classList.add('bg-success');
+
+    const numMisplacedEl = currentGuessRowEl.children[currentGuessRowEl.children.length - 1];
+    numMisplacedEl.textContent = numMisplaced;
+    numMisplacedEl.classList.add('bg-warning');
 }
 
 const setGuessTextRed = () => {
@@ -194,7 +198,8 @@ const setUI = () => {
         for(let j = 0; j < guesses[i].length; j++){
             displayLetter(`r${i}l${j}`, guesses[i][j]);
         }
-        displayNumCorrectLetters(calcNumCorrectLetters(guesses[i]));
+        const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guesses[i]);
+        displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed
     }
     
@@ -257,18 +262,22 @@ const handleLetterColorChange = (letter) => {
     }
 }
 
-const calcNumCorrectLetters = (guess) => {
+const calcNumCorrectAndMisplacedLetters = (guess) => {
     let numCorrect = 0;
+    let numMisplaced = 0;
     const guessedLets = [];
     for(let i = 0; i < guess.length; i++){
         if(!guessedLets.includes(guess[i])){
-            if(currentGame.getSolution().includes(guess[i])){
-            numCorrect++;
+            if(currentGame.getSolution()[i] === guess[i]){
+                numCorrect++;
+                guessedLets.push(guess[i]);
+            }else if(currentGame.getSolution().includes(guess[i])){
+            numMisplaced++;
             guessedLets.push(guess[i]);
             }
         }
     }
-    return numCorrect;
+    return [numCorrect,numMisplaced];
 }
 
 const getNewSolutionWord = (solutionLength) => {

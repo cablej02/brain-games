@@ -76,7 +76,7 @@ const keyboard = (() => {
         },
 
         setKeyColorGreen: (key) => setKeyColor(key, 'success'),
-        setKeyColorOrange: (key) => setKeyColor(key, 'warning'),
+        setKeyColorYellow: (key) => setKeyColor(key, 'warning'),
         setKeyColorGrey: (key) => setKeyColor(key, 'secondary'),
         setKeyColorRed: (key) => setKeyColor(key, 'danger'),
         setKeyColorTransparent: (key) => setKeyColor(key, 'transparent'),
