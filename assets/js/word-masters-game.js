@@ -116,7 +116,6 @@ const displayNewEmptyRow = () => {
 
 }
 
-//TODO: refactor this to not brute force every time
 const displayLetter = (id,letter) => {
     const letterBoxEl = document.getElementById(id);
     letterBoxEl.textContent = letter.toUpperCase();
@@ -148,8 +147,6 @@ const setCurrentGuessRowStateGuessed = () => {
 const setLetterBgColor = (letterBoxEl) => {
 
 }
-
-
 
 const displayNumCorrectAndMisplacedLetters = (numCorrect,numMisplaced) => {
     const numCorrectEl = currentGuessRowEl.children[0];
@@ -241,12 +238,14 @@ const handleGuess = (guess) => {
         displayNumCorrectLetters(guess.length);
         curGuess = '';
         handleGameOver(true);
+    }else if(currentGame.getGuesses().includes(guess)){
+        console.log('Duplicate guess:', guess);
     }else if(wordList.isValidWord(guess)){
         console.log(`Valid word: ${guess}`);
         currentGame.addGuess(guess);
-        const numCorrect = calcNumCorrectLetters(guess);
-        if(numCorrect === 0) currentGame.addDisabledLetters(guess);
-        displayNumCorrectLetters(numCorrect);
+        const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guess);
+        //if(numCorrect === 0) currentGame.addDisabledLetters(guess);
+        displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
         displayNewEmptyRow();
         curGuess = '';
     } else {
