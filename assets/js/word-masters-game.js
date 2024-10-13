@@ -201,13 +201,15 @@ const setUI = () => {
 
 /* Game Logic */
 let curGuess = '';
-const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'; //TODO: move to global constants
 const handleKeyPress = (key) => {
     let k = key.toLowerCase();
     if (k === 'delete' || k === 'backspace') {
+        const rowId = currentGame.getGuesses().length;
+        const letId = curGuess.length - 1;
         curGuess = curGuess.slice(0, -1);
-        displayLetters(curGuess);
-        setCurGuessTextWhite();
+        displayLetter(`r${rowId}l${letId}`, '');
+        setCurGuessTextWhite(rowId);
         console.log(curGuess);
     } else if (k === 'enter') {
         if(curGuess.length === currentGame.getSolution().length){
@@ -215,7 +217,9 @@ const handleKeyPress = (key) => {
         }
     } else if (alphabet.includes(k) && curGuess.length < currentGame.getSolution().length) {
         curGuess += k;
-        displayLetters(curGuess);
+        const rowId = currentGame.getGuesses().length;
+        const letId = curGuess.length - 1;
+        displayLetter(`r${rowId}l${letId}`, k);
         if(curGuess.length === currentGame.getSolution().length) {
             wordList.isValidWord(curGuess) ? setCurGuessTextWhite() : setGuessTextRed();
         }
