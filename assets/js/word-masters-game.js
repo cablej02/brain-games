@@ -195,7 +195,7 @@ const setLetterElementBgColor = (letterEl,color) => {
     letterEl.classList.add(`bg-${bsColor}`);
 }
 
-const displayNumCorrectAndMisplacedLetters = (numCorrect,numMisplaced) => {
+const displayNumCnMLetters = (numCorrect,numMisplaced) => {
     const numCorrectEl = currentGuessRowEl.children[0];
     numCorrectEl.textContent = numCorrect;
     numCorrectEl.classList.add('bg-success');
@@ -239,8 +239,8 @@ const setUI = () => {
         for(let j = 0; j < guesses[i].length; j++){
             displayLetter(`r${i}l${j}`, guesses[i][j]);
         }
-        const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guesses[i]);
-        displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
+        const [numCorrect,numMisplaced] = calcNumCnMLetters(guesses[i]);
+        displayNumCnMLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed();
 
     }
@@ -304,7 +304,7 @@ const handleGuess = (guess) => {
     }else if(wordList.isValidWord(guess)){
         console.log(`Valid word: ${guess}`);
         currentGame.addGuess(guess);
-        const [numCorrect,numMisplaced] = calcNumCorrectAndMisplacedLetters(guess);
+        const [numCorrect,numMisplaced] = calcNumCnMLetters(guess);
         //if(numCorrect === 0) currentGame.addDisabledLetters(guess);
         displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed();
@@ -332,22 +332,32 @@ const handleLetterColorChangeTransparent = (letter) => {
     }
 }
 
-const calcNumCorrectAndMisplacedLetters = (guess) => {
+// Calculate number of correct and misplaced letters
+const calcNumCnMLetters = (guess) => {
     let numCorrect = 0;
     let numMisplaced = 0;
-    const guessedLets = [];
-    for(let i = 0; i < guess.length; i++){
-        if(!guessedLets.includes(guess[i])){
-            if(currentGame.getSolution()[i] === guess[i]){
-                numCorrect++;
-                guessedLets.push(guess[i]);
-            }else if(currentGame.getSolution().includes(guess[i])){
-            numMisplaced++;
-            guessedLets.push(guess[i]);
-            }
+    
+    const solution = currentGame.getSolution();
+    const guessedLetsRemainder = [];
+    const solutionLetsRemainder = [];
+
+    // count correct letters and store remaining letters
+    for (let i = 0; i < guess.length; i++) {
+        if (solution[i] === guess[i]) {
+            numCorrect++;
+        } else {
+            solutionLetsRemainder.push(solution[i]);
+            guessedLetsRemainder.push(guess[i]);
         }
     }
-    return [numCorrect,numMisplaced];
+
+    // count misplaced letters from remaining guess letters
+    guessedLetsRemainder.forEach((letter) => {
+        const index = solutionLetsRemainder.indexOf(letter);
+        if (index !== -1) numMisplaced++;
+    });
+
+    return [numCorrect, numMisplaced];
 }
 
 const getSolutionLetter = () => {
