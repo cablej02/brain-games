@@ -23,11 +23,15 @@ const keyboard = (() => {
             if(keyButton){
                 //clear all bg- classes
                 keyButton.classList.forEach((className) => {
-                    if (className.startsWith('bg-')) {
+                    if (className.startsWith('bg-') || className === 'border-success' || className === 'border-warning' || className === 'border-secondary') {
                         keyButton.classList.remove(className);
                     }
                 });
-                keyButton.classList.add(`bg-${bgColor}`);
+                if(color === 'transparent'){
+                    keyButton.classList.add(`bg-${bgColor}`,'border-secondary');
+                }else{
+                    keyButton.classList.add(`bg-${bgColor}`,`border-${bgColor}`);
+                }
             }
         }
     }
