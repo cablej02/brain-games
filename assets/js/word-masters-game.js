@@ -61,9 +61,9 @@ const currentGame = (() => {
         changeLetterColor:(letter) => {
             if(greenLetters.includes(letter)){
                 greenLetters.splice(greenLetters.indexOf(letter), 1);
-                greyLetters.push(letter);
+                transparentLetters.push(letter);
                 saveCurrentGame();
-                return 'grey';
+                return 'transparent';
             }else if(yellowLetters.includes(letter)){
                 yellowLetters.splice(yellowLetters.indexOf(letter), 1);
                 greenLetters.push(letter);
@@ -74,6 +74,11 @@ const currentGame = (() => {
                 yellowLetters.push(letter);
                 saveCurrentGame();
                 return 'yellow';
+            }else if(transparentLetters.includes(letter)){
+                transparentLetters.splice(transparentLetters.indexOf(letter), 1);
+                greyLetters.push(letter);
+                saveCurrentGame();
+                return 'grey';
             }else{
                 greyLetters.push(letter);
                 saveCurrentGame();
@@ -84,8 +89,10 @@ const currentGame = (() => {
             if(greenLetters.includes(letter)) greenLetters.splice(greenLetters.indexOf(letter), 1);
             if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
             if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
+            if(transparentLetters.includes(letter)) return 'transparent';
             transparentLetters.push(letter);
             saveCurrentGame()
+            return 'transparent';
         },
         getLetterColor:(letter) => {
             if(greenLetters.includes(letter)) return 'green';
@@ -237,7 +244,7 @@ const setUI = () => {
         setCurrentGuessRowStateGuessed();
 
     }
-    const {greenLetters,yellowLetters,greyLetters} = currentGame.getAllLetterColors();
+    const {greenLetters,yellowLetters,greyLetters,transparentLetters} = currentGame.getAllLetterColors();
     greenLetters.forEach(letter => {
         setLetterBgColor(letter,'green');
         keyboard.setKeyColorGreen(letter);
@@ -248,6 +255,10 @@ const setUI = () => {
     greyLetters.forEach(letter => {
         setLetterBgColor(letter,'grey');
         keyboard.setKeyColorGrey(letter)
+    });
+    transparentLetters.forEach(letter => {
+        setLetterBgColor(letter,'transparent');
+        keyboard.setKeyColorTransparent(letter)
     });
     
     displayNewEmptyRow();
@@ -370,6 +381,7 @@ const getNewSolutionWord = (solutionLength) => {
 }
 
 const handleGameOver = (isWin) => {
+    currentGame.setEmptyGame();
     //make letters unclickable
 
     //maybe change solution to all green and have board react like wordle would display
