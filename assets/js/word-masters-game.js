@@ -135,8 +135,7 @@ const displayNewEmptyRow = () => {
         const letterBoxEl = document.createElement('div');
         letterBoxEl.setAttribute('id',`r${guessContainerEl.children.length}l${i}`);
         letterBoxEl.className = 'border border-3 fw-bold no-select text-center m-md-1 m-sm-0 flex-shrink-0 square';
-
-
+        
         currentGuessRowEl.appendChild(letterBoxEl);
     };
 
@@ -148,7 +147,7 @@ const displayNewEmptyRow = () => {
     numMisplacedEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
     currentGuessRowEl.appendChild(numMisplacedEl);
 
-    guessContainerEl.appendChild(currentGuessRowEl);
+    guessContainerEl.insertBefore(currentGuessRowEl, guessContainerEl.firstChild);
 
 }
 
@@ -296,7 +295,7 @@ const handleGuess = (guess) => {
     if(guess === currentGame.getSolution()){
         console.log('Correct word:', guess);
         currentGame.addGuess(guess);
-        displayNumCorrectAndMisplacedLetters(guess.length,0);
+        displayNumCnMLetters(guess.length,0);
         curGuess = '';
         handleGameOver(true);
     }else if(currentGame.getGuesses().includes(guess)){
@@ -306,7 +305,7 @@ const handleGuess = (guess) => {
         currentGame.addGuess(guess);
         const [numCorrect,numMisplaced] = calcNumCnMLetters(guess);
         //if(numCorrect === 0) currentGame.addDisabledLetters(guess);
-        displayNumCorrectAndMisplacedLetters(numCorrect,numMisplaced);
+        displayNumCnMLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed();
         displayNewEmptyRow();
         curGuess = '';
