@@ -10,36 +10,40 @@ const guessesRemainingEl = document.getElementById('guesses-remaining'); // TODO
 //game object
 const currentGame = (() => {
     let solution = null;
-    const guesses = [];
+    const correctGuesses = [];
+    const wrongGuesses = [];
     let maxGuesses = null;
     const saveData = () =>{
-        const curGameHelper = {solution,guesses,maxGuesses}
+        const curGameHelper = {solution,correctGuesses,wrongGuesses,maxGuesses}
         localStorage.setItem('hangmanCurrentGame', JSON.stringify(curGameHelper));
     }
     const loadData = () =>{
         const data = JSON.parse(localStorage.getItem('hangmanCurrentGame') || null);
         if(data){
             solution = data.solution;
-            guesses.push(...data.guesses);
+            correctGuesses.push(...data.correctGuesses);
+            wrongGuesses.push(...data.wrongGuesses);
             maxGuesses = data.maxGuesses;
         }else{
             clearGame();
         }
     }
     const addGuess = (guess) => {
-        guesses.push(guess);
+        solution.includes(guess) ? correctGuesses.push(guess) : wrongGuesses.push(guess);
         saveData();
     }
     const setNewGame = (newSolution,newMaxGuesses) => {
         solution = newSolution;
         maxGuesses = newMaxGuesses;
-        guesses.length = 0;
+        correctGuesses.length = 0;
+        wrongGuesses.length = 0;
         saveData();
     }
     const clearGame = () => {
         solution = null;
         maxGuesses = null;
-        guesses.length = 0;
+        correctGuesses.length = 0;
+        wrongGuesses.length = 0;
         saveData();
     }
     return{
@@ -48,25 +52,33 @@ const currentGame = (() => {
         clearGame,
         loadData,
         getSolution: () => solution,
-        getGuesses: () => [...guesses],
+        getWrongGuesses: () => [...wrongGuesses],
+        getCorrectGuesses: () => [...correctGuesses],
+        getGuesses: () => [...correctGuesses, ...wrongGuesses],
         getMaxGuesses: () => maxGuesses
     }
 })();
 
-//UI functions
-const displayRevealedLetter = (letter) => {
+//UI functions at the end
+//TODO: make sure this is working properly
+const displayCorrectLetter = (letter) => {
     const span = document.createElement('span');
     span.textContent = letter;
     guessContainerEl.appendChild(span);
 }
 
+const displayGuessesRemaining = (guessesRemaining) => {
+    //TODO: update UI for guesses remaining
+}
+
 
 const setUI = () => {
-    //TODO: set full ui for new/loaded game
+    //TODO: set full ui for new/loaded game at the end
+
 }
 
 //Game Logic  STILL NEED WORK
-// HOW DO I CHECK IF I HAVE GUESSES LEFT
+// TODO: HOW DO I CHECK IF I HAVE GUESSES LEFT
 // CHECK IF WON OR LOST
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
@@ -74,18 +86,42 @@ const handleKeyPress = (key) => {
     
     //TODO: Fill in logic of this function
     if (alphabet.includes(k)) {
-        if (!currentGame.getGuesses().includes(k)) {
+        const guesses = currentGame.getGuesses();
+        const solution = currentGame.getSolution();
+        if (!guesses.includes(k)) {
             currentGame.addGuess(k);
-            if (currentGame.getSolution().includes(k)){  
-                keyboard.setKeyColorGreen(k);              
+            if (solution.includes(k)){
+                keyboard.setKeyColorGreen(k);
+                displayCorrectLetter(k);
+                
+                //check if game is won
+                const correctGuesses = currentGame.getCorrectGuesses();
+                let winBool = true;
+                for(let i = 0; i < solution.length; i++){
+                    if(!correctGuesses.includes(solution[i])){
+                        winBool = false;
+                        break;
+                    }
+                }
                 console.log(generateDisplayWord());
+
+                if (winBool) handleGameOver(true);
             } else {
                 keyboard.disableKey(k);
+                
+                // calc guesses remaining
+                const guessesRemaning = currentGame.getMaxGuesses() - currentGame.getWrongGuesses().length;
+
+                //TODO: update UI for guesses remaining
+                displayGuessesRemaining(guessesRemaning);
+
+                if(guessesRemaning === 0){
+                    handleGameOver(false);
+                }
             }
         }
     }
 }
-
 
 const generateDisplayWord = () =>{
     const solution = currentGame.getSolution();
@@ -95,7 +131,8 @@ const generateDisplayWord = () =>{
 }
 
 const startNewGame = () =>{
-    let solution = wordList.getRandomWord(Math.floor(Math.random)*6 + 5);
+    console.log(Math.floor(Math.random()*6 + 5))
+    let solution = wordList.getRandomWord(Math.floor(Math.random()*6 + 5));
     currentGame.setNewGame(solution, 5); //TODO: maybe put this in a static variable
     console.log(solution); //TODO: remove this eventually maybe MONDAY
 
