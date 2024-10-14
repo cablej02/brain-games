@@ -15,19 +15,22 @@ const keyboard = (() => {
         const colorHelper = {
             green: 'success',
             yellow: 'warning',
-            grey: 'secondary'
+            grey: 'secondary',
+            transparent: 'transparent',
         };
         const bgColor = colorHelper[color] || color;
         if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
             const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
+            
             if(keyButton){
-                //clear all bg- classes
+                const classesToRemove = [];
                 keyButton.classList.forEach((className) => {
-                    if (className.startsWith('bg-') || className === 'border-success' || className === 'border-warning' || className === 'border-secondary') {
-                        keyButton.classList.remove(className);
+                    if (className.startsWith('bg-') || className.startsWith('border-')) {
+                        classesToRemove.push(className);
                     }
                 });
-                if(color === 'transparent'){
+                classesToRemove.forEach((className) => keyButton.classList.remove(className));
+                if(bgColor === 'transparent'){
                     keyButton.classList.add(`bg-${bgColor}`,'border-secondary');
                 }else{
                     keyButton.classList.add(`bg-${bgColor}`,`border-${bgColor}`);
@@ -100,10 +103,10 @@ const keyboard = (() => {
                 }
             }
         },
-        setKeyColorGreen: (key) => setKeyColor(key, 'success'),
-        setKeyColorYellow: (key) => setKeyColor(key, 'warning'),
-        setKeyColorGrey: (key) => setKeyColor(key, 'secondary'),
-        setKeyColorRed: (key) => setKeyColor(key, 'danger'),
+        setKeyColorGreen: (key) => setKeyColor(key, 'green'),
+        setKeyColorYellow: (key) => setKeyColor(key, 'yellow'),
+        setKeyColorGrey: (key) => setKeyColor(key, 'grey'),
+        setKeyColorRed: (key) => setKeyColor(key, 'red'),
         setKeyColorTransparent: (key) => setKeyColor(key, 'transparent'),
         setKeyColorWhite: (key) => setKeyColor(key, 'light'),
         setKeyColorBlue: (key) => setKeyColor(key, 'primary'),

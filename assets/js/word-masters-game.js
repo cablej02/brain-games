@@ -151,7 +151,7 @@ const displayNewEmptyRow = () => {
         targets: existingRows[0],
         translateY: [-50,0], // Move down
         translateX: 0, // Move down
-        duration: 750, // Duration of animation
+        duration: 500, // Duration of animation
         easing: 'easeOutCubic', // Easing function
     });
 
