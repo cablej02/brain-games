@@ -4,11 +4,13 @@ const bodyEl = document.querySelector('body');
 //modal elements
 const showModalBtnEl = document.getElementById('modal-button');
 
-const cancelGameModalEl = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModal = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModalEl = document.getElementById('cancel-game-modal');
 const cancelGameModalTextEl = document.getElementById('cancel-game-txt');
 const cancelGameModalBtnEl = document.getElementById('cancel-game-btn');
 
-const newGameModalEl = new bootstrap.Modal(document.getElementById('new-game-modal'));
+const newGameModal = new bootstrap.Modal(document.getElementById('new-game-modal'));
+const newGameModalEl = document.getElementById('new-game-modal');
 const newGameModalTextEl = document.getElementById('game-over-txt');
 const newGameModalBtnEl = document.getElementById('new-game-btn');
 
@@ -427,7 +429,7 @@ const handleModalBtnClick = () => {
         startNewGame(SOLUTION_LENGTH)
     }else{
         cancelGameModalTextEl.textContent = `Are you sure you want to end the current game?`;
-        cancelGameModalEl.show();
+        cancelGameModal.show();
     }
 }
 
@@ -447,7 +449,7 @@ const handleGameOver = (isWin) => {
  
     if(isWin){
         //make letters green
-        solution.forEach(letter => setLetterBgColor(letter,'green'));
+        [...solution].forEach(letter => setLetterBgColor(letter,'green'));
 
         newGameModalTextEl.innerHTML = `Congratulations!<br>You Win!<br>Guesses: ${numGuesses}`
         
@@ -455,7 +457,7 @@ const handleGameOver = (isWin) => {
         newGameModalTextEl.innerHTML = `Nice try!<br>The word was:<br>${solution.toUpperCase()}<br>Guesses: ${numGuesses}`;
     }
 
-    newGameModalEl.show();
+    newGameModal.show();
 }
 
 const startNewGame = (solutionLength) => {
@@ -467,7 +469,6 @@ const startNewGame = (solutionLength) => {
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-newGameModalBtnEl.addEventListener('click', () => {startNewGame(SOLUTION_LENGTH),newGameModalEl.hide()}); //TODO: add slider to select word length
 guessContainerEl.addEventListener('click', (event) => {
     if(event.target.dataset.btnState === 'active') handleLetterColorChange(event.target.dataset.letter);
 });
@@ -475,8 +476,12 @@ guessContainerEl.addEventListener('contextmenu', (event) => {
     event.preventDefault();
     if(event.target.dataset.btnState === 'active') handleLetterColorChangeTransparent(event.target.dataset.letter);
 });
+
 showModalBtnEl.addEventListener('click', () => handleModalBtnClick());
-cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModalEl.hide(),handleGameOver(false)});
+cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});
+cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
+newGameModalBtnEl.addEventListener('click', () => {startNewGame(SOLUTION_LENGTH),newGameModal.hide()}); //TODO: add slider to select word length
+newGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
 
 
 /* Game Initialization */
