@@ -1,8 +1,19 @@
 const guessContainerEl = document.getElementById('guess-container');
 const bodyEl = document.querySelector('body');
-const gameOverTxtEl = document.getElementById('game-over-txt');
-const newGameBtnEl = document.getElementById('new-game-btn');
-const endlessGameBtnEl = document.getElementById('endless-game-btn');
+
+//modal elements
+const showModalBtnEl = document.getElementById('modal-button');
+
+const cancelGameModalEl = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModalTextEl = document.getElementById('cancel-game-txt');
+const cancelGameModalBtnEl = document.getElementById('cancel-game-btn');
+
+const newGameModalEl = new bootstrap.Modal(document.getElementById('new-game-modal'));
+const newGameModalTextEl = document.getElementById('game-over-txt');
+const newGameModalBtnEl = document.getElementById('new-game-btn');
+
+// static variables
+const SOLUTION_LENGTH = 5;
 
 // Game Object as an immediately invoked function expression
 const currentGame = (() => {
@@ -283,6 +294,7 @@ const setUI = () => {
 let curGuess = '';
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'; //TODO: move to global constants
 const handleKeyPress = (key) => {
+    if(currentGame.getSolution() === null) return;
     let k = key.toLowerCase();
     if (k === 'delete' || k === 'backspace') {
         const rowId = currentGame.getGuesses().length;
@@ -409,20 +421,41 @@ const getNewSolutionWord = (solutionLength) => {
     }
 }
 
-const handleGameOver = (isWin) => {
-    currentGame.setEmptyGame();
-    //make letters unclickable
-
-    //maybe change solution to all green and have board react like wordle would display
-
-    //TODO: add modal to ask for new game
-    if(isWin){
-        gameOverTxtEl.textContent = 'Congratulations! You Win!';
-        gameOverTxtEl.classList.add('text-success');
+const handleModalBtnClick = () => {
+    const solution = currentGame.getSolution();
+    if(solution === null){
+        startNewGame(SOLUTION_LENGTH)
     }else{
-        gameOverTxtEl.textContent = 'Game Over! You Lose!';
-        gameOverTxtEl.classList.add('text-danger');
+        cancelGameModalTextEl.textContent = `Are you sure you want to end the current game?`;
+        cancelGameModalEl.show();
     }
+}
+
+const handleGameOver = (isWin) => {
+    console.log('Game Over');
+    const numGuesses = currentGame.getGuesses().length;
+    const solution = currentGame.getSolution();
+    currentGame.setEmptyGame();
+
+    //make letters unclickable
+    guessContainerEl.querySelectorAll('.guess-row').forEach(row => {
+        [...row.children].forEach(child => {
+            child.classList.remove('pointer');
+            child.setAttribute('data-btn-state','disabled');
+        })
+    });
+ 
+    if(isWin){
+        //make letters green
+        solution.forEach(letter => setLetterBgColor(letter,'green'));
+
+        newGameModalTextEl.innerHTML = `Congratulations!<br>You Win!<br>Guesses: ${numGuesses}`
+        
+    }else{
+        newGameModalTextEl.innerHTML = `Nice try!<br>The word was:<br>${solution.toUpperCase()}<br>Guesses: ${numGuesses}`;
+    }
+
+    newGameModalEl.show();
 }
 
 const startNewGame = (solutionLength) => {
@@ -434,7 +467,7 @@ const startNewGame = (solutionLength) => {
 
 /* Event Listeners */
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-newGameBtnEl.addEventListener('click', () => startNewGame(5)); //TODO: add slider to select word length
+newGameModalBtnEl.addEventListener('click', () => {startNewGame(SOLUTION_LENGTH),newGameModalEl.hide()}); //TODO: add slider to select word length
 guessContainerEl.addEventListener('click', (event) => {
     if(event.target.dataset.btnState === 'active') handleLetterColorChange(event.target.dataset.letter);
 });
@@ -442,13 +475,16 @@ guessContainerEl.addEventListener('contextmenu', (event) => {
     event.preventDefault();
     if(event.target.dataset.btnState === 'active') handleLetterColorChangeTransparent(event.target.dataset.letter);
 });
+showModalBtnEl.addEventListener('click', () => handleModalBtnClick());
+cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModalEl.hide(),handleGameOver(false)});
+
 
 /* Game Initialization */
 wordList.loadWords().then(() => {
     keyboard.initialize();
     currentGame.loadGame();
     if(currentGame.getSolution() === null){
-        //TODO: show modal to ask for new game
+        startNewGame(SOLUTION_LENGTH);
     }else{
         setUI();
     }

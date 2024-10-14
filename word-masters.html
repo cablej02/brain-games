@@ -12,22 +12,29 @@
   </head>
   <body>
     <header class="container d-flex justify-content-between align-items-center p-3">
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal"><strong>New</strong></button>
+        <button id="modal-button" type="button" class="btn btn-success fw-bold">New</button> <!--data-bs-toggle="modal" data-bs-target="#new-game-modal"-->
         <h1 class="mx-auto position-absolute display-5">Word Masters</h1>
         <div class="d-flex gap-md-5 gap-sm-1">
           <button class="btn btn-transparent border border-3 rounded-circle py-0" style="font-size: 1.5em;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Find the solution word! When you enter a word, you will get the number of correct letters in green and the number of misplaced letters in yellow! You can click on guessed letters to change their color. Use this to take notes and help you find to the solution word!">?</button>
           <a href="index.html" class="btn btn-transparent border border-3 rounded-circle home-btn"></a>
         </div>
     </header>
-    <!-- The Modal -->
-    <div class="modal" id="myModal">
-      <div class="modal-dialog modal-sm">
+    <div class="modal" id="new-game-modal">
+      <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-          <!-- Modal body -->
-          <div class="modal-body d-inline-flex justify-content-center flex-column">
-            <p id="game-over-txt" class="text-center">You win!</p>
-            <button id="new-game-btn" type="button" class="btn btn-success">Single Game</button>
-            <button id="endless-game-btn" type="button" class="btn btn-primary">Endless Game</button>
+          <div class="modal-body d-inline-flex justify-content-center align-items-center flex-column">
+            <p id="game-over-txt" class="text-center fw-bold fs-5">Congratulations!<br> You win!<br>Guesses: 60</p>
+            <button id="new-game-btn" type="button" class="btn btn-success fw-bold" style="width: 40%">New Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="cancel-game-modal">
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body d-inline-flex justify-content-center align-items-center flex-column">
+            <p id="cancel-game-txt" class="text-center fw-bold fs-5">Are you sure you want to end the game?</p>
+            <button id="cancel-game-btn" type="button" class="btn btn-danger fw-bold" style="width: 40%">End Game</button>
           </div>
         </div>
       </div>
