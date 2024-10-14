@@ -17,6 +17,12 @@ const keyboard = (() => {
             yellow: 'warning',
             grey: 'secondary',
             transparent: 'transparent',
+            red: 'danger',
+            primary: 'primary',
+            secondary: 'secondary',
+            warnining: 'warning',
+            danger: 'danger',
+            success: 'success',
         };
         const bgColor = colorHelper[color] || color;
         if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
@@ -41,21 +47,9 @@ const keyboard = (() => {
 
     const resetKeys = () => {
         keyboardLayout.forEach(row => {
-            row.forEach(key => {
-                if(key.toLowerCase() !== 'delete' && key.toLowerCase() !== 'enter' && key.toLowerCase() !== 'backspace'){
-                    const keyButton = document.getElementById(`key-${key.toLowerCase()}`);
-                    if(keyButton){
-                        keyButton.classList.forEach((className) => {
-                            if (className.startsWith('bg-')) {
-                                keyButton.classList.remove(className);
-                            }
-                        });
-                        keyButton.classList.add('bg-secondary');
-                    }
-                }
-            });
+            row.forEach(key => setKeyColor(key, 'grey'));
         });
-    }  
+    }
 
     return {
         initialize: (displayEnterAndDeleteBool=true) => {
