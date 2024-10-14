@@ -2,7 +2,6 @@
     --bs-warning-rgb: 153, 134, 45;
 }
 
-
 /* Header Styles */
 h1 {
     left: 50%;
@@ -15,7 +14,7 @@ h1 {
 }
 
 .home-btn{
-    background-image: url('/assets/images/home-icon.png');
+    background-image: url('../images/home-icon.png');
     background-size: 70%;
     background-repeat: no-repeat;
     background-position: center;
@@ -28,12 +27,14 @@ h1 {
 .key-btn {
     font-size: 1.3rem;
     padding: 0.4rem 0.9rem;
+    touch-action: manipulation;
 }
 
 .big-key-btn {
     font-size: 1.3rem;
     padding: 0.4rem 1rem;
     flex-basis: 100px;
+    touch-action: manipulation;
 }
 
 @media (max-width: 1200px) {
