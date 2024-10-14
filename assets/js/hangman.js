@@ -65,7 +65,9 @@ const setUI = () => {
     //TODO: set full ui for new/loaded game
 }
 
-//Game Logic
+//Game Logic  STILL NEED WORK
+// HOW DO I CHECK IF I HAVE GUESSES LEFT
+// CHECK IF WON OR LOST
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
     let k = key.toLowerCase();
@@ -95,13 +97,13 @@ const generateDisplayWord = () =>{
 const startNewGame = () =>{
     let solution = wordList.getRandomWord(Math.floor(Math.random)*6 + 5);
     currentGame.setNewGame(solution, 5); //TODO: maybe put this in a static variable
-    console.log(solution); //TODO: remove this eventually maybe
+    console.log(solution); //TODO: remove this eventually maybe MONDAY
 
     setUI();
 }
 
 const handleGameOver = (winBool) =>{
-    //TODO: this function
+    //TODO: this function 
 }
 
 //Event Listeners
