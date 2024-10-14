@@ -12,7 +12,7 @@ const currentGame = (() => {
     const yellowLetters = [];
     const greyLetters = [];
     const transparentLetters = [];
-    const saveCurrentGame = () => {
+    const saveGame = () => {
         const curGameHelper = {
             solution,
             guesses,
@@ -24,10 +24,10 @@ const currentGame = (() => {
         localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameHelper)) && console.log('Game saved');
     }
     return {
-        loadCurrentGame: () => {
+        loadGame: () => {
             const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
             
-            if(data === null) this.setEmptyGame();
+            if(data === null) currentGame.setEmptyGame();
             else{
                 solution= (data.solution);
                 guesses.push(...data.guesses);
@@ -36,7 +36,7 @@ const currentGame = (() => {
                 greyLetters.push(...data.greyLetters);
                 transparentLetters.push(...data.transparentLetters);
             }
-            saveCurrentGame();
+            saveGame();
         },
         setNewGame: (solWordLength) => {
             console.log('New Game:', solWordLength);
@@ -46,7 +46,7 @@ const currentGame = (() => {
             yellowLetters.length = 0;
             greyLetters.length = 0;
             transparentLetters.length = 0;
-            saveCurrentGame();
+            saveGame();
         },
         setEmptyGame:() => {
             solution = null;
@@ -55,33 +55,33 @@ const currentGame = (() => {
             yellowLetters.length = 0;
             greyLetters.length = 0;
             transparentLetters.length = 0;
-            saveCurrentGame();
+            saveGame();
         },
         //TODO: This seems like it can be improved
         changeLetterColor:(letter) => {
             if(greenLetters.includes(letter)){
                 greenLetters.splice(greenLetters.indexOf(letter), 1);
                 transparentLetters.push(letter);
-                saveCurrentGame();
+                saveGame();
                 return 'transparent';
             }else if(yellowLetters.includes(letter)){
                 yellowLetters.splice(yellowLetters.indexOf(letter), 1);
                 greenLetters.push(letter);
-                saveCurrentGame();
+                saveGame();
                 return 'green';
             }else if(greyLetters.includes(letter)){
                 greyLetters.splice(greyLetters.indexOf(letter), 1);
                 yellowLetters.push(letter);
-                saveCurrentGame();
+                saveGame();
                 return 'yellow';
             }else if(transparentLetters.includes(letter)){
                 transparentLetters.splice(transparentLetters.indexOf(letter), 1);
                 greyLetters.push(letter);
-                saveCurrentGame();
+                saveGame();
                 return 'grey';
             }else{
                 greyLetters.push(letter);
-                saveCurrentGame();
+                saveGame();
                 return 'grey';
             }
         },        
@@ -91,7 +91,7 @@ const currentGame = (() => {
             if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
             if(transparentLetters.includes(letter)) return 'transparent';
             transparentLetters.push(letter);
-            saveCurrentGame()
+            saveGame()
             return 'transparent';
         },
         getLetterColor:(letter) => {
@@ -110,12 +110,7 @@ const currentGame = (() => {
                 transparentLetters: [...transparentLetters]
             }
         },
-        addGuess: guess => (guesses.push(guess), saveCurrentGame()),
-        // TODO: probably don't need these.  remove eventually
-        // addGreenLetter: letter => (greenLetters.push(letter), saveCurrentGame()),
-        // addOrangeLetter: letter => (yellowLetters.push(letter), saveCurrentGame()),
-        // addGreyLetter: letter => (greyLetters.push(letter), saveCurrentGame()),
-        // addDisabledLetters: letters => (disabledLetters.push(...letters), saveCurrentGame()),
+        addGuess: guess => (guesses.push(guess), saveGame()),
         getSolution: () => solution,
         getGuesses: () => [...guesses],
         getGreenLetters: () => [...greenLetters],
@@ -425,7 +420,7 @@ guessContainerEl.addEventListener('contextmenu', (event) => {
 /* Game Initialization */
 wordList.loadWords().then(() => {
     keyboard.initialize();
-    currentGame.loadCurrentGame();
+    currentGame.loadGame();
     if(currentGame.getSolution() === null){
         //TODO: show modal to ask for new game
     }else{
