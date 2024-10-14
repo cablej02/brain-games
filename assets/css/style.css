@@ -23,59 +23,61 @@ h1 {
 }
 
 /* Keyboard Styles */
+#keyboard-container{
+    margin-bottom: 10px;
+}
+.keyboard-row {
+    gap: 0.3rem;
+    margin-top: 0.3rem;
+}   
 
 .key-btn {
     font-size: 1.3rem;
-    padding: 0.4rem 0.9rem;
+    /* padding: 0.4rem 0.9rem; */
     touch-action: manipulation;
+    font-family: monospace;
 }
 
 .big-key-btn {
-    font-size: 1.3rem;
-    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    /* padding: 0.2rem 1rem; */
     flex-basis: 100px;
     touch-action: manipulation;
+    font-family: monospace;
 }
-
-@media (max-width: 1200px) {
+@media (max-width: 576px) {
+    .keyboard-row {
+        gap: 0.3rem;
+        margin-top: 0.3rem;
+        
+    }   
     .key-btn {
-        font-size: 1.2rem;
-        padding: 0.5rem 0.75rem;
-    }
-    
-    .big-key-btn {
-        font-size: 1.2rem;
-        padding: 0.5rem 0.5rem;
-    }
-}
-@media (max-width: 600px) {
-    .key-btn {
-        font-size: 1.2em;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .big-key-btn {
-        font-size: 1.2rem;
-        padding: 0.3rem 0.6rem;
-        flex-basis: 50px;
-    }
-}
-
-@media (max-width: 450px) {
-    .key-btn {
-        font-size: 1.2rem;
-        padding: 0.2rem 0.5rem;
+        font-size: 1.1em;
+        padding: 0.9rem 0.7rem;
     }
     
     .big-key-btn {
         font-size: 0.7rem;
-        padding: 0.2rem 0.5rem;
-        /* flex-basis: 10px; */
+        padding: 0.3rem 0.7rem;
+        flex-basis: 50px;
     }
 }
 
-#keyboard-container {
-    font-family: monospace;
+@media (max-width: 400px) {
+    .keyboard-row {
+        gap: 0.2rem;
+        margin-top: 0.2rem;
+        
+    }   
+    .key-btn {
+        font-size: 1.1rem;
+        padding: 0.8rem 0.6rem;
+    }
+    
+    .big-key-btn {
+        font-size: 0.7rem;
+        padding: 0.8rem 0.6rem;
+        /* flex-basis: 10px; */
+    }
 }
-
 

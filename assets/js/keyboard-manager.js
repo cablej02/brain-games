@@ -61,12 +61,12 @@ const keyboard = (() => {
         initialize: (displayEnterAndDeleteBool=true) => {
             keyboardLayout.forEach(row => {
             const keyboardRow = document.createElement('div');
-                keyboardRow.classList.add('d-flex','justify-content-center','flex-nowrap','mb-2');
+                keyboardRow.classList.add('keyboard-row','d-flex','justify-content-center','flex-nowrap');
 
                 row.forEach(key => {
                     const keyButton = document.createElement('button');
                     keyButton.textContent = key;
-                    keyButton.classList.add('key-btn','btn','btn-secondary','m-1','btn-sm','flex-grow-0'); //TODO: what btn-sm and flex-grow-0 doing?
+                    keyButton.classList.add('key-btn','btn','btn-secondary','flex-grow-0'); //TODO: what btn-sm and flex-grow-0 doing?
                     keyButton.id = `key-${key.toLowerCase()}`;
                     if (key === 'ENTER' || key === 'DELETE') {
                         if(displayEnterAndDeleteBool){
