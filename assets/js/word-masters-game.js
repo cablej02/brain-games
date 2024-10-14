@@ -123,8 +123,10 @@ const currentGame = (() => {
 /* UI Functions */
 let currentGuessRowEl = null;
 const displayNewEmptyRow = () => {
+    const existingRows = guessContainerEl.querySelectorAll('.guess-row');
+
     currentGuessRowEl = document.createElement('div');
-    currentGuessRowEl.className = 'd-flex justify-content-center flex-nowrap';
+    currentGuessRowEl.className = 'guess-row d-flex justify-content-center flex-nowrap';
 
     for(let i = 0; i < currentGame.getSolution().length; i++) {
         const letterBoxEl = document.createElement('div');
@@ -144,13 +146,34 @@ const displayNewEmptyRow = () => {
 
     guessContainerEl.insertBefore(currentGuessRowEl, guessContainerEl.firstChild);
 
+    // Animate existing rows down
+    existingRows.forEach(row => {
+        anime({
+            targets: row,
+            translateY: 50, // Move down
+            duration: 500, // Duration of animation
+            easing: 'easeOutCubic', // Easing function
+        });
+    });
+
+    // Animate the new row sliding in from the top
+    anime({
+        targets: currentGuessRowEl,
+        translateY: [-100, 0], // Move from above to original position
+        opacity: [0, 1], // Fade in
+        duration: 500, // Duration of animation
+        easing: 'easeOutCubic', // Easing function
+    });
+
 }
 
 const displayLetter = (id,letter) => {
     const letterBoxEl = document.getElementById(id);
-    letterBoxEl.textContent = letter.toUpperCase();
-    letterBoxEl.setAttribute('data-letter', letter.toLowerCase());
-    setLetterElementBgColor(letterBoxEl,currentGame.getLetterColor(letter.toLowerCase()));
+    if(letterBoxEl){
+        letterBoxEl.textContent = letter.toUpperCase();
+        letterBoxEl.setAttribute('data-letter', letter.toLowerCase());
+        setLetterElementBgColor(letterBoxEl,currentGame.getLetterColor(letter.toLowerCase()));
+    }
 }
 
 //TODO: maybe change how this is working.  pretty hacky
@@ -346,10 +369,14 @@ const calcNumCnMLetters = (guess) => {
     }
 
     // count misplaced letters from remaining guess letters
-    guessedLetsRemainder.forEach((letter) => {
-        const index = solutionLetsRemainder.indexOf(letter);
-        if (index !== -1) numMisplaced++;
-    });
+    for (let i = 0; i < guessedLetsRemainder.length; i++) {
+        const letter = guessedLetsRemainder[i];
+        const pos = solutionLetsRemainder.indexOf(letter);
+        if (pos !== -1) {
+            numMisplaced++;
+            solutionLetsRemainder.splice(pos, 1);
+        }
+    }
 
     return [numCorrect, numMisplaced];
 }
@@ -402,6 +429,7 @@ const handleGameOver = (isWin) => {
 
 const startNewGame = (solutionLength) => {
     currentGame.setNewGame(solutionLength);
+    curGuess = '';
 
     setUI();
 }
