@@ -147,24 +147,22 @@ const displayNewEmptyRow = () => {
     guessContainerEl.insertBefore(currentGuessRowEl, guessContainerEl.firstChild);
 
     // Animate existing rows down
-    existingRows.forEach(row => {
-        anime({
-            targets: row,
-            translateY: 50, // Move down
-            duration: 500, // Duration of animation
-            easing: 'easeOutCubic', // Easing function
-        });
+    anime({
+        targets: existingRows[0],
+        translateY: [-50,0], // Move down
+        translateX: 0, // Move down
+        duration: 750, // Duration of animation
+        easing: 'easeOutCubic', // Easing function
     });
 
     // Animate the new row sliding in from the top
     anime({
         targets: currentGuessRowEl,
-        translateY: [-100, 0], // Move from above to original position
+        translateX: [-1000, 0], // Move from above to original position
         opacity: [0, 1], // Fade in
         duration: 500, // Duration of animation
         easing: 'easeOutCubic', // Easing function
     });
-
 }
 
 const displayLetter = (id,letter) => {
