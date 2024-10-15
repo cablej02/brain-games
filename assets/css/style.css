@@ -24,7 +24,7 @@ h1 {
 
 /* Keyboard Styles */
 #keyboard-container{
-    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 .keyboard-row {
     gap: 0.3rem;
