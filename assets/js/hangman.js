@@ -68,7 +68,8 @@ const displayCorrectLetter = (letter) => {
 }
 
 const displayGuessesRemaining = (guessesRemaining) => {
-    //TODO: update UI for guesses remaining
+    //TODO: update UI for guesses remaining =======
+    guessesRemainingEl.textContent = guessesRemaining;
 }
 
 
