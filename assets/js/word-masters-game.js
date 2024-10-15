@@ -14,6 +14,12 @@ const newGameModalEl = document.getElementById('new-game-modal');
 const newGameModalTextEl = document.getElementById('game-over-txt');
 const newGameModalBtnEl = document.getElementById('new-game-btn');
 
+// Bootstrap colors
+const rootStyles = getComputedStyle(document.documentElement);
+const successColor = rootStyles.getPropertyValue('--bs-success').trim();
+const warningColor = rootStyles.getPropertyValue('--bs-warning').trim();
+const secondaryColor = rootStyles.getPropertyValue('--bs-secondary').trim();
+
 // static variables
 const SOLUTION_LENGTH = 5;
 
@@ -150,11 +156,11 @@ const displayNewEmptyRow = () => {
     };
 
     const numCorrectEl = document.createElement('div');
-    numCorrectEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
+    numCorrectEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle invisible';
     currentGuessRowEl.insertBefore(numCorrectEl, currentGuessRowEl.firstChild);
 
     const numMisplacedEl = document.createElement('div');
-    numMisplacedEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle';
+    numMisplacedEl.className = 'border border-3 m-md-1 m-sm-0 fw-bold no-select text-center rounded-circle flex-shrink-0 circle invisible';
     currentGuessRowEl.appendChild(numMisplacedEl);
 
     guessContainerEl.insertBefore(currentGuessRowEl, guessContainerEl.firstChild);
@@ -201,6 +207,14 @@ const setCurrentGuessRowStateGuessed = () => {
     }
 }
 
+const disableLetter = (letter) => {
+    const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
+    letterEls.forEach(el => {
+        el.setAttribute('data-btn-state','disabled');
+        el.classList.remove('pointer');
+    });
+}
+
 //TODO: maybe change how this is working. May not work well with a different theme
 const setLetterBgColor = (letter,color) => {
     const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
@@ -209,28 +223,61 @@ const setLetterBgColor = (letter,color) => {
 
 const setLetterElementBgColor = (letterEl,color) => {
     const colorHelper = {
-        green: 'success',
-        yellow: 'warning',
-        grey: 'secondary',
-        transparent: 'transparent'
+        green: successColor,
+        yellow: warningColor,
+        grey: secondaryColor,
+        transparent: 'rgba(0, 0, 0, 0)'
     };
-    const bsColor = colorHelper[color] || 'secondary';
-    letterEl.classList.forEach(className => {
-        if(className.startsWith('bg-')){
-            letterEl.classList.remove(className);
-        }
-    })
-    letterEl.classList.add(`bg-${bsColor}`);
+    const bsColor = colorHelper[color] || secondaryColor;
+
+    const animationProps = {
+        targets: letterEl,
+        duration: 300,
+        easing: 'easeInOutQuad'
+    };
+
+    if (color === 'transparent') {
+        animationProps.backgroundColor = [letterEl.style.backgroundColor, colorHelper.transparent];
+    } else {
+        animationProps.backgroundColor = [letterEl.style.backgroundColor, bsColor];
+    }
+
+    anime(animationProps);
+
+
+    // TODO: Remove the old way
+    // const colorHelper = {
+    //     green: 'success',
+    //     yellow: 'warning',
+    //     grey: 'secondary',
+    //     transparent: 'transparent'
+    // };
+    // const bsColor = colorHelper[color] || 'secondary';
+    // letterEl.classList.forEach(className => {
+    //     if(className.startsWith('bg-')){
+    //         letterEl.classList.remove(className);
+    //     }
+    // })
+    // letterEl.classList.add(`bg-${bsColor}`);
 }
 
 const displayNumCnMLetters = (numCorrect,numMisplaced) => {
     const numCorrectEl = currentGuessRowEl.children[0];
+    numCorrectEl.classList.remove('invisible');
     numCorrectEl.textContent = numCorrect;
     numCorrectEl.classList.add('bg-success');
 
     const numMisplacedEl = currentGuessRowEl.children[currentGuessRowEl.children.length - 1];
+    numMisplacedEl.classList.remove('invisible');
     numMisplacedEl.textContent = numMisplaced;
     numMisplacedEl.classList.add('bg-warning');
+
+    anime({
+        targets: [numCorrectEl, numMisplacedEl],
+        scale: [0, 1],
+        duration: 700,
+        easing: 'easeOutCubic',
+    });
 }
 
 const setGuessTextRed = () => {
@@ -334,12 +381,17 @@ const handleGuess = (guess) => {
         console.log(`Valid word: ${guess}`);
         currentGame.addGuess(guess);
         const [numCorrect,numMisplaced] = calcNumCnMLetters(guess);
-        //if(numCorrect === 0) currentGame.addDisabledLetters(guess);
+        if(numCorrect === 0 && numMisplaced === 0){
+            //change all letters to grey and disable them
+            [...guess].forEach(letter => {
+                handleLetterColorChangeTransparent(letter);
+                disableLetter(letter);
+        })};
         displayNumCnMLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed();
         displayNewEmptyRow();
         curGuess = '';
-    } else {
+    }else{
         console.log(`Invalid word: ${guess}`);
         //TODO: Display invalid word message/animation/something
     }
