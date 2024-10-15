@@ -36,8 +36,10 @@ const currentGame = (() => {
         saveGame();
     }
     const addMatchedPair = (pairNum) => {
-        matchedPairs.push(pairNum);
-        saveGame();
+        if(!matchedPairs.includes(pairNum)){
+            matchedPairs.push(pairNum);
+            saveGame();
+        }
     }
     return {
         getTileValues: () => [...tileValues], 
@@ -66,21 +68,24 @@ const setTilesHidden = (tiles) => {
 }
 
 const setUI = (tileValues,matchedTiles) => {
-    console.log('before: ', gameBoard.innerHTML);
     gameBoard.innerHTML = '';
     tiles.length = 0;
-    console.log('after: ', gameBoard.innerHTML);
-
+    
     for (let i = 0; i < tileValues.length; i++) {
         const tile = document.createElement('div');
         tile.classList.add('tile');
         tile.dataset.value = tileValues[i];
-        tile.innerHTML = '<span class="hidden">' + tileValues[i] + '</span>'; 
-        tile.addEventListener('click', flipTile);
+        tile.innerHTML = '<span class="hidden">' + tileValues[i] + '</span>';
+
+        if(matchedTiles.includes(tileValues[i])){
+            setTilesMatched([tile]);
+            setTileFlipped(tile);
+        }else{
+            tile.addEventListener('click', flipTile);
+        }
         tiles.push(tile);
         gameBoard.appendChild(tile);
     }
-    console.log(gameBoard.children.length);
 }
 
 /* Game Logic */
@@ -107,17 +112,15 @@ const startGame = (numTiles) =>{
     currentGame.setNewGame(tileValues);
     flippedTiles.length = 0;
 
-    console.log(`generated new game with ${tileValues} tiles`);
+    console.log(`Starting new game with ${numTiles} tiles`);
 
-    setUI(tileValues);
+    setUI(tileValues,[]);
 }
 
 function flipTile() {
     if (flippedTiles.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) {
         return;
     }
-
-    console.log('hello, who is this: ', this);
     
     flippedTiles.push(this);
 
@@ -133,7 +136,7 @@ function checkForMatch() {
 
     if (tile1.dataset.value === tile2.dataset.value) {
         setTilesMatched([tile1, tile2]);
-        currentGame.addMatchedPair(tile1.dataset.value);
+        currentGame.addMatchedPair(parseFloat(tile1.dataset.value));
         if (currentGame.getMatchedPairs() === NUMBER_TILES/2) {
             handleGameOver(true);
         }
