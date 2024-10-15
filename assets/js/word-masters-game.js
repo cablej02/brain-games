@@ -449,10 +449,10 @@ const handleGameOver = (isWin) => {
  
     if(isWin){
         //make letters green
-        [...solution].forEach(letter => setLetterBgColor(letter,'green'));
-
+        console.log(currentGuessRowEl);
+        [...currentGuessRowEl.children].slice(1, -1).forEach(letterEl => setLetterElementBgColor(letterEl, 'green'));
+        //[...solution].forEach(letter => setLetterBgColor(letter,'green')); //TODO: remove this line probably.  Old way of doing it, but not sure which design I want to go with
         newGameModalTextEl.innerHTML = `Congratulations!<br>You Win!<br>Guesses: ${numGuesses}`
-        
     }else{
         newGameModalTextEl.innerHTML = `Nice try!<br>The word was:<br>${solution.toUpperCase()}<br>Guesses: ${numGuesses}`;
     }
