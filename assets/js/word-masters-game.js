@@ -487,6 +487,15 @@ newGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGame
 /* Game Initialization */
 wordList.loadWords().then(() => {
     keyboard.initialize();
+
+    const headerHeight = document.querySelector('header').offsetHeight;
+    const keyboardHeight = document.getElementById('keyboard-container').offsetHeight;
+
+    const availHeight = window.innerHeight - headerHeight - keyboardHeight - 10;
+    guessContainerEl.style.maxHeight = `${availHeight}px`;
+
+
+
     currentGame.loadGame();
     if(currentGame.getSolution() === null){
         startNewGame(SOLUTION_LENGTH);

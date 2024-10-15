@@ -1,3 +1,19 @@
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1500; /* Ensure it stays on top */
+}
+
+main {
+    padding-top: 70px; /* Adjust based on the height of your header */
+}
+
+#guess-container {
+    overflow-y: auto;
+}
+
 .square, .circle {
     font-family: monospace;
     flex: 1;
