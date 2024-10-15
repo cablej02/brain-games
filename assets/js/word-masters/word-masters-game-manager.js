@@ -196,3 +196,7 @@ const GameManager = (() => {
         handleGameOver
     }
 })();
+
+const handleKeyPress = (key) => {
+    GameManager.handleKeyPress(key);
+}
