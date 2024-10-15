@@ -190,6 +190,14 @@ const UI = (() => {
         }
     }
 
+    const setGuessContainerHeight = () => {
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const keyboardHeight = document.getElementById('keyboard-container').offsetHeight;
+    
+        const availHeight = window.innerHeight - headerHeight - keyboardHeight - 10;
+        guessContainerEl.style.maxHeight = `${availHeight}px`;
+    }
+
     const setUI = () => {
         guessContainerEl.innerHTML = '';
         keyboard.resetKeys();
@@ -251,6 +259,7 @@ const UI = (() => {
         displayNumCnMLetters,
         setGuessTextRed,
         setCurGuessTextWhite,
+        setGuessContainerHeight,
         setUI,
         guessContainerEl,
         cancelGameModal,

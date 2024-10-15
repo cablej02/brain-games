@@ -159,7 +159,7 @@ const GameManager = (() => {
         CurrentGame.setEmptyGame();
 
         //make letters unclickable
-        UI.getGuessContainerEl.querySelectorAll('.guess-row').forEach(row => {
+        UI.guessContainerEl.querySelectorAll('.guess-row').forEach(row => {
             [...row.children].forEach(child => {
                 child.classList.remove('pointer');
                 child.setAttribute('data-btn-state','disabled');
