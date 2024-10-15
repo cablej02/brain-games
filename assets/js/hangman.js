@@ -1,7 +1,8 @@
 //element selectors
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
-const guessesRemainingEl = document.getElementById('guesses-remaining'); // TODO with finding the way to show the guesses remaining
+const guessesRemainingEl = document.getElementById('guesses-remaining-txt'); // TODO with finding the way to show the guesses remaining
+const newGameBtnEl = document.getElementById('new-game-btn');
 
 //Anytime we start new game, we need to reset the keyboard
 //Create the spans for each letter in the alphabet of the word
@@ -61,20 +62,39 @@ const currentGame = (() => {
 
 //UI functions at the end
 //TODO: make sure this is working properly
-const displayCorrectLetter = (letter) => {
-    const span = document.createElement('span');
-    span.textContent = letter;
-    guessContainerEl.appendChild(span);
+const displayCorrectLetter = (index,letter) => {
+    //index === '0','1,'2','3','4','5'
+
+    //create the id
+    const id = `letter-${index}`;
+    //get the element from dom
+    const letterEl = document.getElementById(id);
+    //adjust the element
+    letterEl.textContent = letter.toUpperCase();
 }
 
 const displayGuessesRemaining = (guessesRemaining) => {
-    //TODO: update UI for guesses remaining =======
-    guessesRemainingEl.textContent = guessesRemaining;
+    guessesRemainingEl.textContent = `Guesses Remaining: ${guessesRemaining}`;
 }
 
+const createAndAppendNewLettersElements = (solWordLength) => {
+    for (let i = 0; i < solWordLength; i++){
+        //i = 0,1,2,3,4,5,6,7,8...
+        const letterEl = document.createElement('div')
+        letterEl.id = `letter-${i}`
+        letterEl.classList.add('letter');
+    
+        //Append to guess container
+        guessContainerEl.appendChild(letterEl)
+    }
+}
 
 const setUI = () => {
     //TODO: set full ui for new/loaded game at the end
+    guessContainerEl.innerHTML = '';
+
+    const solution = currentGame.getSolution();
+    createAndAppendNewLettersElements(solution.length);
 
 }
 
@@ -93,8 +113,10 @@ const handleKeyPress = (key) => {
             currentGame.addGuess(k);
             if (solution.includes(k)){
                 keyboard.setKeyColorGreen(k);
-                displayCorrectLetter(k);
-                
+                for(let i = 0; i < solution.length; i++){
+                    if(solution[i] === k) displayCorrectLetter(i,k);
+                }
+
                 //check if game is won
                 const correctGuesses = currentGame.getCorrectGuesses();
                 let winBool = true;
@@ -132,7 +154,6 @@ const generateDisplayWord = () =>{
 }
 
 const startNewGame = () =>{
-    console.log(Math.floor(Math.random()*6 + 5))
     let solution = wordList.getRandomWord(Math.floor(Math.random()*6 + 5));
     currentGame.setNewGame(solution, 5); //TODO: maybe put this in a static variable
     console.log(solution); //TODO: remove this eventually maybe MONDAY
@@ -146,6 +167,7 @@ const handleGameOver = (winBool) =>{
 
 //Event Listeners
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
+newGameBtnEl.addEventListener('click',startNewGame)
 
 //game initialization
 wordList.loadWords().then(() => {
