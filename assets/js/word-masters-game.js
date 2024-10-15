@@ -31,6 +31,7 @@ const currentGame = (() => {
     const yellowLetters = [];
     const greyLetters = [];
     const transparentLetters = [];
+    const disabledLetters = [];
     const saveGame = () => {
         const curGameHelper = {
             solution,
@@ -38,7 +39,8 @@ const currentGame = (() => {
             greenLetters,
             yellowLetters,
             greyLetters,
-            transparentLetters
+            transparentLetters,
+            disabledLetters
         }
         localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameHelper)) && console.log('Game saved');
     }
@@ -54,6 +56,7 @@ const currentGame = (() => {
                 yellowLetters.push(...data.yellowLetters);
                 greyLetters.push(...data.greyLetters);
                 transparentLetters.push(...data.transparentLetters);
+                disabledLetters.push(...data.disabledLetters);
             }
             saveGame();
         },
@@ -65,6 +68,7 @@ const currentGame = (() => {
             yellowLetters.length = 0;
             greyLetters.length = 0;
             transparentLetters.length = 0;
+            disabledLetters.length = 0;
             saveGame();
         },
         setEmptyGame:() => {
@@ -74,6 +78,7 @@ const currentGame = (() => {
             yellowLetters.length = 0;
             greyLetters.length = 0;
             transparentLetters.length = 0;
+            disabledLetters.length = 0;
             saveGame();
         },
         //TODO: This seems like it can be improved
@@ -113,6 +118,9 @@ const currentGame = (() => {
             saveGame()
             return 'transparent';
         },
+        addDisabledLetter: (letter) => {
+            if(!disabledLetters.includes(letter)) disabledLetters.push(letter);
+        },
         getLetterColor:(letter) => {
             if(greenLetters.includes(letter)) return 'green';
             if(yellowLetters.includes(letter)) return 'yellow';
@@ -135,7 +143,8 @@ const currentGame = (() => {
         getGreenLetters: () => [...greenLetters],
         getyellowLetters: () => [...yellowLetters],
         getGreyLetters: () => [...greyLetters],
-        getTransparentLetters: () => [...transparentLetters]
+        getTransparentLetters: () => [...transparentLetters],
+        getDisabledLetters: () => [...disabledLetters],
     }
 })();
 
@@ -193,13 +202,17 @@ const displayLetter = (id,letter) => {
     }
 }
 
-//TODO: maybe change how this is working.  pretty hacky
 const setCurrentGuessRowStateGuessed = () => {
     if(currentGuessRowEl){
         [...currentGuessRowEl.children].forEach(child => {
             if(child.dataset.letter){
-                child.classList.add('pointer');
-                child.setAttribute('data-btn-state','active')
+                if(currentGame.getDisabledLetters().includes(child.dataset.letter)){
+                    child.classList.remove('pointer');
+                    child.setAttribute('data-btn-state','disabled');
+                }else{
+                    child.classList.add('pointer');
+                    child.setAttribute('data-btn-state','active')
+                }
             }
         });
     }else{
@@ -207,7 +220,8 @@ const setCurrentGuessRowStateGuessed = () => {
     }
 }
 
-const disableLetter = (letter) => {
+const disableLetterClick = (letter) => {
+    console.log(`disabling letter: ${letter}`);
     const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
     letterEls.forEach(el => {
         el.setAttribute('data-btn-state','disabled');
@@ -385,7 +399,7 @@ const handleGuess = (guess) => {
             //change all letters to grey and disable them
             [...guess].forEach(letter => {
                 handleLetterColorChangeTransparent(letter);
-                disableLetter(letter);
+                handleDisableLetter(letter);
         })};
         displayNumCnMLetters(numCorrect,numMisplaced);
         setCurrentGuessRowStateGuessed();
@@ -410,6 +424,13 @@ const handleLetterColorChangeTransparent = (letter) => {
         const color = currentGame.setLetterColorTransparent(letter);
         setLetterBgColor(letter,color);
         keyboard.setKeyColorTransparent(letter);
+    }
+}
+
+const handleDisableLetter = (letter) => {
+    if(alphabet.includes(letter)){
+        currentGame.addDisabledLetter(letter);
+        disableLetterClick(letter);
     }
 }
 
@@ -443,10 +464,6 @@ const calcNumCnMLetters = (guess) => {
     }
 
     return [numCorrect, numMisplaced];
-}
-
-const getSolutionLetter = () => {
-    //TODO: add this as a hint to give a letter and make it always green
 }
 
 const getNewSolutionWord = (solutionLength) => {
