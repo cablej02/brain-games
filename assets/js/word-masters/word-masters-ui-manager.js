@@ -49,19 +49,19 @@ const UI = (() => {
         // Animate existing rows down
         anime({
             targets: existingRows[0],
-            translateY: [-50,0], // Move down
-            translateX: 0, // Move down
-            duration: 500, // Duration of animation
-            easing: 'easeOutCubic', // Easing function
+            translateY: [-50,0],
+            translateX: 0,
+            duration: 500,
+            easing: 'easeOutCubic',
         });
 
         // Animate the new row sliding in from the top
         anime({
             targets: currentGuessRowEl,
-            translateX: [-1000, 0], // Move from above to original position
-            opacity: [0, 1], // Fade in
-            duration: 500, // Duration of animation
-            easing: 'easeOutCubic', // Easing function
+            translateX: [-1000, 0],
+            opacity: [0, 1],
+            duration: 500,
+            easing: 'easeOutCubic',
         });
     }
 
@@ -106,7 +106,7 @@ const UI = (() => {
         letterEls.forEach(el => setLetterElementBgColor(el,color,true));
     }
 
-    const setLetterElementBgColor = (letterEl,color,sendAnimation) => {
+    const setLetterElementBgColor = (letterEl,color,animate) => {
         const colorHelper = {
             green: successColor,
             yellow: warningColor,
@@ -115,8 +115,8 @@ const UI = (() => {
         };
         const bsColor = colorHelper[color] || secondaryColor;
 
-        const dur = sendAnimation ? 400 : 0;
-        console.log(dur, letterEl.dataset.btnState, letterEl.btnState);
+        // If animate is not provided, default to true. Currently only preventing animation for curguessrow entry
+        const dur = animate ? 400 : 0;
 
         const animationProps = {
             targets: letterEl,
@@ -131,22 +131,6 @@ const UI = (() => {
         }
 
         anime(animationProps);
-
-
-        // TODO: Remove the old way
-        // const colorHelper = {
-        //     green: 'success',
-        //     yellow: 'warning',
-        //     grey: 'secondary',
-        //     transparent: 'transparent'
-        // };
-        // const bsColor = colorHelper[color] || 'secondary';
-        // letterEl.classList.forEach(className => {
-        //     if(className.startsWith('bg-')){
-        //         letterEl.classList.remove(className);
-        //     }
-        // })
-        // letterEl.classList.add(`bg-${bsColor}`);
     }
 
     const displayNumCnMLetters = (numCorrect,numMisplaced) => {
