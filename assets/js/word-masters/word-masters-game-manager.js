@@ -81,8 +81,7 @@ const GameManager = (() => {
         }
     }
 
-    const handleLetterColorChangeTransparent = (target) => {
-        const letter = target.textContent ? target.textContent.toLowerCase() : null;
+    const handleLetterColorChangeTransparent = (letter) => {
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.setLetterColorTransparent(letter);
             UI.setLetterBgColor(letter,color);

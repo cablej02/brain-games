@@ -266,7 +266,7 @@ const UI = (() => {
     });
     guessContainerEl.addEventListener('contextmenu', (event) => {
         event.preventDefault();
-        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChangeTransparent(event.target);
+        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChangeTransparent(event.target.dataset.letter);
     });
 
     showModalBtnEl.addEventListener('click', () => GameManager.handleModalBtnClick());
