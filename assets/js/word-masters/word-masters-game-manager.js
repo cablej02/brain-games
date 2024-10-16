@@ -41,6 +41,7 @@ const GameManager = (() => {
             handleGameOver(true);
         }else if(CurrentGame.getGuesses().includes(guess)){
             console.log('Duplicate guess:', guess);
+            UI.shakeCurrentGuessRow();
         }else if(wordList.isValidWord(guess)){
             console.log(`Valid word: ${guess}`);
             CurrentGame.addGuess(guess);
@@ -57,7 +58,7 @@ const GameManager = (() => {
             curGuess = '';
         }else{
             console.log(`Invalid word: ${guess}`);
-            //TODO: Display invalid word message/animation/something
+            UI.shakeCurrentGuessRow();
         }
     }
 

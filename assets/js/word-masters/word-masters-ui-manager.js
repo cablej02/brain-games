@@ -190,6 +190,17 @@ const UI = (() => {
         }
     }
 
+    const shakeCurrentGuessRow = () => {
+        if(currentGuessRowEl){
+            anime({
+                targets: currentGuessRowEl,
+                translateX: [-10,10,-10,8,-6,4,-3,2,0],
+                duration: 700,
+                easing: 'easeInOutQuad'
+            });
+        }
+    }
+
     const setGuessContainerHeight = () => {
         const headerHeight = document.querySelector('header').offsetHeight;
         const keyboardHeight = document.getElementById('keyboard-container').offsetHeight;
@@ -259,6 +270,7 @@ const UI = (() => {
         displayNumCnMLetters,
         setGuessTextRed,
         setCurGuessTextWhite,
+        shakeCurrentGuessRow,
         setGuessContainerHeight,
         setUI,
         guessContainerEl,
