@@ -6,6 +6,9 @@ const GameManager = (() => {
     let curGuess = '';
     const handleKeyPress = (key) => {
         const solution = CurrentGame.getSolution();
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
         if(solution === null) return;
         let k = key.toLowerCase();
         if (k === 'delete' || k === 'backspace') {
@@ -36,6 +39,7 @@ const GameManager = (() => {
             CurrentGame.addGuess(guess);
             UI.displayNumCnMLetters(guess.length,0);
             curGuess = '';
+
             handleGameOver(true);
         }else if(CurrentGame.getGuesses().includes(guess)){
             console.log('Duplicate guess:', guess);
@@ -50,6 +54,7 @@ const GameManager = (() => {
                     handleLetterColorChangeTransparent(letter);
                     handleDisableLetter(letter);
             })};
+
             UI.displayNumCnMLetters(numCorrect,numMisplaced);
             UI.setCurrentGuessRowStateGuessed();
             UI.displayNewEmptyRow(solWord.length);
