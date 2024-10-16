@@ -101,13 +101,12 @@ const UI = (() => {
         });
     }
 
-    //TODO: maybe change how this is working. May not work well with a different theme
     const setLetterBgColor = (letter,color) => {
         const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
-        letterEls.forEach(el => setLetterElementBgColor(el,color));
+        letterEls.forEach(el => setLetterElementBgColor(el,color,true));
     }
 
-    const setLetterElementBgColor = (letterEl,color) => {
+    const setLetterElementBgColor = (letterEl,color,sendAnimation) => {
         const colorHelper = {
             green: successColor,
             yellow: warningColor,
@@ -116,9 +115,12 @@ const UI = (() => {
         };
         const bsColor = colorHelper[color] || secondaryColor;
 
+        const dur = sendAnimation ? 400 : 0;
+        console.log(dur, letterEl.dataset.btnState, letterEl.btnState);
+
         const animationProps = {
             targets: letterEl,
-            duration: 300,
+            duration: dur,
             easing: 'easeInOutQuad'
         };
 

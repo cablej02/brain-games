@@ -14,7 +14,6 @@ const GameManager = (() => {
             curGuess = curGuess.slice(0, -1);
             UI.displayLetter(`r${rowId}l${letId}`, '');
             UI.setCurGuessTextWhite(rowId);
-            console.log(curGuess);
         } else if (k === 'enter') {
             if(curGuess.length === solution.length){
                 handleGuess(curGuess);
@@ -27,7 +26,6 @@ const GameManager = (() => {
             if(curGuess.length === solution.length) {
                 wordList.isValidWord(curGuess) ? UI.setCurGuessTextWhite() : UI.setGuessTextRed();
             }
-            console.log(curGuess);
         }
     }
 
