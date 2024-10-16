@@ -1,20 +1,27 @@
+.tile {
+    cursor: move;
+}
+.sortable-ghost {
+    opacity: 0.5;
+}
+
 /* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     
 } */
-main{
+/* main{
     display: flex;
     padding: 0 10px;
     align-items: center;
     justify-content: center;
-    /* min-height: 100vh; */
+   
     background-color: dark;
 }
 
 .container{
-    /* position: absolute; */
+ 
     width: 440px;
     margin-right: auto;
     margin-left: auto;
@@ -123,4 +130,4 @@ main{
         height: 55px;
         font-size: 17px;
     }
-}
+} */
