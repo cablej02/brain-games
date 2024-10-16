@@ -86,7 +86,6 @@ const wordList = (() => {
     return {
         loadWords,
         getRandomWord,
-        isValidWord,
-        validWords
+        isValidWord
     }
 })();
