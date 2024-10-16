@@ -56,15 +56,29 @@ const CurrentGame = (() => {
             saveGame();
         },
         //TODO: This seems like it can be improved
-        changeLetterColor:(letter) => {
+        changeLetterColor:(letter,index) => {
             if(greenLetters.includes(letter)){
-                greenLetters.splice(greenLetters.indexOf(letter), 1);
-                transparentLetters.push(letter);
-                saveGame();
-                return 'transparent';
+                console.log(`GREEN LETTER FOUND: ${letter} input index: ${index} curgreenLetters: ${greenLetters} index of letter in data letter: ${greenLetters.indexOf(letter)}`);
+                if(greenLetters.indexOf(letter) === parseInt(index)){
+                    console.log('BEFORE GREEN REMOVAL greenLetters:', greenLetters, 'removing:', letter, 'index:', index);
+                    greenLetters[index] = null;
+                    console.log('AFTER greenLetters:', greenLetters);
+                    transparentLetters.push(letter);
+                    saveGame();
+                    return 'transparent';
+                }else{
+                    console.log('BEFORE GREEN SHIFT greenLetters:', greenLetters, 'removing:', letter, 'index:', index);
+                    greenLetters[greenLetters.indexOf(letter)] = null;
+                    greenLetters[index] = letter;
+                    console.log('AFTER greenLetters:', greenLetters);
+                    saveGame();
+                    return 'green';
+                }                
             }else if(yellowLetters.includes(letter)){
                 yellowLetters.splice(yellowLetters.indexOf(letter), 1);
-                greenLetters.push(letter);
+                console.log('BEFORE YELLOW TO GREEN greenLetters:', greenLetters, 'adding:', letter, 'index:', index);
+                greenLetters[index] = letter;
+                console.log('AFTER greenLetters:', greenLetters);
                 saveGame();
                 return 'green';
             }else if(greyLetters.includes(letter)){
@@ -82,14 +96,21 @@ const CurrentGame = (() => {
                 saveGame();
                 return 'grey';
             }
-        },        
+        },
         setLetterColorTransparent: (letter) => {
-            if(greenLetters.includes(letter)) greenLetters.splice(greenLetters.indexOf(letter), 1);
+            //wipe it out of all arrays and make sure it's in/added to the transparentLetters array
+            if(greenLetters.includes(letter)) {
+                console.log('BEFORE TP SHIFT greenLetters:', greenLetters, 'removing:', letter);
+                greenLetters[greenLetters.indexOf(letter)] = '';
+                console.log('AFTER TP SHIFT greenLetters:', greenLetters);
+            }
             if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
             if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
-            if(transparentLetters.includes(letter)) return 'transparent';
-            transparentLetters.push(letter);
-            saveGame()
+
+            if(!transparentLetters.includes(letter)){
+                transparentLetters.push(letter);
+            }
+            saveGame();
             return 'transparent';
         },
         addDisabledLetter: (letter) => {

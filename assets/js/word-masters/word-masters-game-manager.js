@@ -65,15 +65,18 @@ const GameManager = (() => {
         }
     }
 
-    const handleLetterColorChange = (letter) => {
+    const handleLetterColorChange = (target) => {
+        const letter = target.textContent.toLowerCase();
+        const index = target.id.slice(-1);
         if(ALPHABET.includes(letter)){
-            const color = CurrentGame.changeLetterColor(letter);
-            UI.setLetterBgColor(letter,color);
+            const color = CurrentGame.changeLetterColor(letter,index);
+            UI.setLetterBgColor(letter,color,index);
             keyboard.setKeyColor(letter,color);
         }
     }
 
-    const handleLetterColorChangeTransparent = (letter) => {
+    const handleLetterColorChangeTransparent = (target) => {
+        const letter = target.textContent.toLowerCase();
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.setLetterColorTransparent(letter);
             UI.setLetterBgColor(letter,color);

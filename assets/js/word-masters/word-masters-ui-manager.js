@@ -101,9 +101,21 @@ const UI = (() => {
         });
     }
 
-    const setLetterBgColor = (letter,color) => {
-        const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
-        letterEls.forEach(el => setLetterElementBgColor(el,color,true));
+    const setLetterBgColor = (letter,color,greenIndex) => {
+        let letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
+    
+        letterEls.forEach(el => {
+            // Check if color is green and the last character of the id matches greenIndex
+            const columnIndex = parseInt(el.id.slice(-1)); 
+            
+            if (color === 'green' && columnIndex === greenIndex) {
+                setLetterElementBgColor(el, color, true);
+            } else if (color === 'green' && columnIndex !== greenIndex) {
+                setLetterElementBgColor(el, 'yellow', true);
+            }else{
+                setLetterElementBgColor(el, color, true);
+            }
+        });
     }
 
     const setLetterElementBgColor = (letterEl,color,animate) => {
@@ -210,11 +222,8 @@ const UI = (() => {
             displayNumCnMLetters(numCorrect,numMisplaced);
             setCurrentGuessRowStateGuessed();
         }
+
         const {greenLetters,yellowLetters,greyLetters,transparentLetters} = CurrentGame.getAllLetterColors();
-        greenLetters.forEach(letter => {
-            setLetterBgColor(letter,'green');
-            keyboard.setKeyColorGreen(letter);
-        });
         yellowLetters.forEach(letter => {
             setLetterBgColor(letter,'yellow');
             keyboard.setKeyColorYellow(letter)});
@@ -226,6 +235,12 @@ const UI = (() => {
             setLetterBgColor(letter,'transparent');
             keyboard.setKeyColorTransparent(letter)
         });
+        for(let i = 0; i < greenLetters.length; i++){
+            if(greenLetters[i] !== null && greenLetters[i] !== undefined && greenLetters[i] !== ''){
+                setLetterBgColor(greenLetters[i],'green',i);
+                keyboard.setKeyColorGreen(greenLetters[i]);
+            }
+        }
         
         displayNewEmptyRow(solLength);
     }
@@ -233,11 +248,11 @@ const UI = (() => {
     /* Event Listeners */
     bodyEl.addEventListener('keydown', (event) => GameManager.handleKeyPress(event.key));
     guessContainerEl.addEventListener('click', (event) => {
-        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChange(event.target.dataset.letter);
+        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChange(event.target);
     });
     guessContainerEl.addEventListener('contextmenu', (event) => {
         event.preventDefault();
-        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChangeTransparent(event.target.dataset.letter);
+        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChangeTransparent(event.target);
     });
 
     showModalBtnEl.addEventListener('click', () => GameManager.handleModalBtnClick());
