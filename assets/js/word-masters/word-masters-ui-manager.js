@@ -70,7 +70,14 @@ const UI = (() => {
         if(letterBoxEl){
             letterBoxEl.textContent = letter.toUpperCase();
             letterBoxEl.setAttribute('data-letter', letter.toLowerCase());
-            setLetterElementBgColor(letterBoxEl,CurrentGame.getLetterColor(letter.toLowerCase()));
+
+            let color = CurrentGame.getLetterColor(letter.toLowerCase());
+            if(color === 'green'){
+                if(CurrentGame.getGreenLetters().indexOf(letter.toLowerCase()) !== parseInt(id.slice(-1))){
+                    color = 'yellow';
+                }
+            }
+            setLetterElementBgColor(letterBoxEl,color,false);
         }
     }
 
