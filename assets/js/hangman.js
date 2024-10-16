@@ -29,8 +29,12 @@ const currentGame = (() => {
             clearGame();
         }
     }
-    const addGuess = (guess) => {
-        solution.includes(guess) ? correctGuesses.push(guess) : wrongGuesses.push(guess);
+    const addCorrectGuess = (index,letter) => {
+        correctGuesses[index] = letter;
+        saveData();
+    }
+    const addWrongGuess = (guess) => {
+        wrongGuesses.push(guess);
         saveData();
     }
     const setNewGame = (newSolution,newMaxGuesses) => {
@@ -48,7 +52,8 @@ const currentGame = (() => {
         saveData();
     }
     return{
-        addGuess,
+        addCorrectGuess,
+        addWrongGuess,
         setNewGame,
         clearGame,
         loadData,
@@ -60,11 +65,8 @@ const currentGame = (() => {
     }
 })();
 
-//UI functions at the end
-//TODO: make sure this is working properly
+/* UI Functions */
 const displayCorrectLetter = (index,letter) => {
-    //index === '0','1,'2','3','4','5'
-
     //create the id
     const id = `letter-${index}`;
     //get the element from dom
@@ -90,62 +92,83 @@ const createAndAppendNewLettersElements = (solWordLength) => {
 }
 
 const setUI = () => {
-    //TODO: set full ui for new/loaded game at the end
     guessContainerEl.innerHTML = '';
+    keyboard.resetKeys();
 
     const solution = currentGame.getSolution();
     createAndAppendNewLettersElements(solution.length);
 
+    const correctGuesses = currentGame.getCorrectGuesses();
+    for(let i = 0; i < correctGuesses.length; i++){
+        const letter = correctGuesses[i];
+        if(alphabet.includes(letter.toLowerCase())){
+            keyboard.setKeyColorGreen(letter);
+            displayCorrectLetter(i,letter);
+        }
+    }
+
+    const wrongGuesses = currentGame.getWrongGuesses();
+    wrongGuesses.forEach(letter => keyboard.disableKey(letter));
+    
+    displayGuessesRemaining(calcGuessesRemaining());
 }
 
-//Game Logic  STILL NEED WORK
-// TODO: HOW DO I CHECK IF I HAVE GUESSES LEFT
-// CHECK IF WON OR LOST
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
     let k = key.toLowerCase();
+    const solution = currentGame.getSolution();
     
-    //TODO: Fill in logic of this function
-    if (alphabet.includes(k)) {
-        const guesses = currentGame.getGuesses();
-        const solution = currentGame.getSolution();
-        if (!guesses.includes(k)) {
-            currentGame.addGuess(k);
-            if (solution.includes(k)){
-                keyboard.setKeyColorGreen(k);
-                for(let i = 0; i < solution.length; i++){
-                    if(solution[i] === k) displayCorrectLetter(i,k);
-                }
-
-                //check if game is won
-                const correctGuesses = currentGame.getCorrectGuesses();
-                let winBool = true;
-                for(let i = 0; i < solution.length; i++){
-                    if(!correctGuesses.includes(solution[i])){
-                        winBool = false;
-                        break;
+    if(solution){
+        if (alphabet.includes(k)) {
+            const guesses = currentGame.getGuesses();
+            
+            if (!guesses.includes(k)) {
+                if (solution.includes(k)){
+                    keyboard.setKeyColorGreen(k);
+                    for(let i = 0; i < solution.length; i++){
+                        if(solution[i] === k){
+                            currentGame.addCorrectGuess(i,k)
+                            displayCorrectLetter(i,k);
+                        }
                     }
-                }
-                console.log(generateDisplayWord());
 
-                if (winBool) handleGameOver(true);
-            } else {
-                keyboard.disableKey(k);
-                
-                // calc guesses remaining
-                const guessesRemaning = currentGame.getMaxGuesses() - currentGame.getWrongGuesses().length;
+                    //check if game is won
+                    const correctGuesses = currentGame.getCorrectGuesses();
+                    let winBool = true;
+                    for(let i = 0; i < solution.length; i++){
+                        if(!correctGuesses.includes(solution[i])){
+                            winBool = false;
+                            break;
+                        }
+                    }
+                    console.log(generateDisplayWord());
 
-                //TODO: update UI for guesses remaining
-                displayGuessesRemaining(guessesRemaning);
+                    if (winBool) handleGameOver(true);
+                } else {
+                    keyboard.disableKey(k);
 
-                if(guessesRemaning === 0){
-                    handleGameOver(false);
+                    currentGame.addWrongGuess(k);
+                    
+                    // calc guesses remaining
+                    const guessesRemaning = calcGuessesRemaining();
+
+                    //TODO: update UI for guesses remaining
+                    displayGuessesRemaining(guessesRemaning);
+
+                    if(guessesRemaning === 0){
+                        handleGameOver(false);
+                    }
                 }
             }
         }
     }
 }
+const calcGuessesRemaining = () => {
+    return currentGame.getMaxGuesses() - currentGame.getWrongGuesses().length;
+}
 
+
+//TODO: remove this, just printing to console or something, not informing UI I think?
 const generateDisplayWord = () =>{
     const solution = currentGame.getSolution();
     const guesses = currentGame.getGuesses();
@@ -162,7 +185,17 @@ const startNewGame = () =>{
 }
 
 const handleGameOver = (winBool) =>{
-    //TODO: this function 
+    const solution = currentGame.getSolution();
+    //const guesses = calcGuessesRemaining();
+    
+    //adjust data for game over
+    currentGame.clearGame();
+
+    if(winBool){
+        console.log(`You Win!`);
+    }else{
+        console.log(`You Lose! The word was: ${solution}`);
+    }
 }
 
 //Event Listeners
