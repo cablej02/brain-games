@@ -7,7 +7,7 @@ const keyboard = (() => {
     const mainEl = document.querySelector('main');
     const keyboardContainer = document.createElement('div');
     keyboardContainer.id = 'keyboard-container';
-    keyboardContainer.classList.add('container-fluid','text-center','p-3','position-fixed','bottom-0','w-100', 'bg-dark');
+    keyboardContainer.classList.add('container-fluid','text-center','position-fixed','bottom-0','w-100', 'bg-dark');
     keyboardContainer.style.zIndex = '1050';
     mainEl.appendChild(keyboardContainer);
 

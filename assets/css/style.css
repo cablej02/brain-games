@@ -17,7 +17,7 @@
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0); }
 }
-  
+
 .shake {
     animation: shake 0.5s ease;
 }
@@ -38,12 +38,12 @@
 
 /* Keyboard Styles */
 #keyboard-container{
-    padding-bottom: 10px;
+    padding: 0 10px 10px 10px;
 }
 .keyboard-row {
     gap: 0.3rem;
     margin-top: 0.3rem;
-}   
+}
 
 .key-btn {
     font-size: 1.3rem;
@@ -81,17 +81,14 @@
     .keyboard-row {
         gap: 0.2rem;
         margin-top: 0.2rem;
-        
-    }   
+    }
     .key-btn {
         font-size: 1.1rem;
         padding: 0.8rem 0.6rem;
     }
-    
     .big-key-btn {
         font-size: 0.7rem;
         padding: 0.8rem 0.6rem;
         /* flex-basis: 10px; */
     }
 }
-
