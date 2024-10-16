@@ -6,10 +6,11 @@ const GameManager = (() => {
     let curGuess = '';
     const handleKeyPress = (key) => {
         const solution = CurrentGame.getSolution();
-        if (document.activeElement) {
-            document.activeElement.blur();
-        }
+
         if(solution === null) return;
+
+        UI.unFocusAll();
+        
         let k = key.toLowerCase();
         if (k === 'delete' || k === 'backspace') {
             const rowId = CurrentGame.getGuesses().length;
@@ -34,6 +35,7 @@ const GameManager = (() => {
 
     const handleGuess = (guess) => {
         const solWord = CurrentGame.getSolution()
+        
         if(guess === solWord){
             console.log('Correct word:', guess);
             CurrentGame.addGuess(guess);
@@ -41,7 +43,11 @@ const GameManager = (() => {
             curGuess = '';
 
             handleGameOver(true);
-        }else if(CurrentGame.getGuesses().includes(guess)){
+            return;
+        }
+
+
+        if(CurrentGame.getGuesses().includes(guess)){
             console.log('Duplicate guess:', guess);
             UI.shakeCurrentGuessRow();
         }else if(wordList.isValidWord(guess)){

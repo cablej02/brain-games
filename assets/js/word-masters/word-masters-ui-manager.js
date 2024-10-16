@@ -252,6 +252,13 @@ const UI = (() => {
         displayNewEmptyRow(solLength);
     }
 
+    const unFocusAll = () => {
+        const focusedEl = document.activeElement;
+        if(focusedEl){
+            focusedEl.blur();
+        }
+    }
+
     /* Event Listeners */
     bodyEl.addEventListener('keydown', (event) => GameManager.handleKeyPress(event.key));
     guessContainerEl.addEventListener('click', (event) => {
@@ -280,6 +287,7 @@ const UI = (() => {
         setCurGuessTextWhite,
         shakeCurrentGuessRow,
         setGuessContainerHeight,
+        unFocusAll,
         setUI,
         guessContainerEl,
         cancelGameModal,
