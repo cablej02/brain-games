@@ -9,55 +9,46 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-        <header class="container-fluid py-3 d-flex justify-content-between align-items-center">
-            <h1 class="mx-auto display-2">BRAIN GAMES</h1>
-            <a href="#" class="btn btn-primary">Stats</a>
+        <header class="container-fluid py-3">
+            <h1 class="display-1 text-center fw-normal">BRAIN GAMES</h1>
         </header>
-
-        <main class='container container-home text-center'>
-            <div class="row justify-content-center m-3">
-                <div class="col-sm-3 card m-5 pt-3 bg-dark">
-                    <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="word scramble">
-                    <div class="card-body">
-                        <h5 class="card-title">Scramble Word!</h5>
-                        <p class="card-text">Rearrange a jumbled set of letters to form the correct word!</p>
-                        <a href="scramble-game.html" class="btn btn-primary">Start Game</a>
+        <main>
+            <div class="container-fluid container-home text-center">
+                <div class="row justify-content-center m-4 m-md-2">
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-2 card m-3 pt-3 bg-dark">
+                        <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="word scramble">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">Scramble Word!</h5>
+                            <p class="card-text">Rearrange a jumbled set of letters to form the correct word!</p>
+                            <a href="scramble-game.html" class="btn btn-success fw-bold mt-auto mx-auto" style="width: 40%;">Play!</a>
+                        </div>
+                    </div>
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-2 card m-3 pt-3 bg-dark">
+                        <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">Word Masters!</h5>
+                            <p class="card-text">Guess the hidden word only receiving the number of correct letters found each guess!</p>
+                            <a href="word-masters.html" class="btn btn-success fw-bold mt-auto mx-auto" style="width: 40%;">Play!</a>
+                        </div>
+                    </div>
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-2 card m-3 pt-3 bg-dark">
+                        <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">Hangman</h5>
+                            <p class="card-text">Guess the word before you get the hanged man</p>
+                            <a href="hangman.html" class="btn btn-success fw-bold mt-auto mx-auto" style="width: 40%;">Play!</a>
+                        </div>
+                    </div>
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-2 card m-3 pt-3 bg-dark">
+                        <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="Match Game">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">Match Game</h5>
+                            <p class="card-text">Match each pair of numbers together</p>
+                            <a href="matchGame.html" class="btn btn-success fw-bold mt-auto mx-auto" style="width: 40%;">Play!</a>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-sm-3 card m-5 pt-3 bg-dark">
-                    <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
-                    <div class="card-body">
-                        <h5 class="card-title">Wordle!</h5>
-                        <p class="card-text">Attempt to find a hidden word before you run out of guesses!</p>
-                        <a href="wordle.html" class="btn btn-primary">Start Game</a>
-                    </div>
-                </div>
-
-                <div class="col-sm-3 card m-5 pt-3 bg-dark">
-                    <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
-                    <div class="card-body">
-                        <h5 class="card-title">Word Masters!</h5>
-                        <p class="card-text">Guess the hidden word with feedback on the number of correct letters found!</p>
-                        <a href="word-masters.html" class="btn btn-primary">Start Game</a>
-                    </div>
-                </div>
-                <div class="col-sm-3 card m-5 pt-3 bg-dark">
-                    <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="wordle">
-                    <div class="card-body">
-                        <h5 class="card-title">Hangman</h5>
-                        <p class="card-text">Guess the word before you get the hanged man</p>
-                        <a href="hangman.html" class="btn btn-primary">Start Game</a>
-                    </div>
-                </div>
-                <div class="col-sm-3 card m-5 pt-3 bg-dark">
-                    <img src="./assets/images/wordscramble-image.png" class="card-img-top" alt="Match Game">
-                    <div class="card-body">
-                        <h5 class="card-title">Match Game</h5>
-                        <p class="card-text">Match each pair of numbers together</p>
-                        <a href="matchGame.html" class="btn btn-primary">Start Game</a>
-                    </div>
-                </div>
+            </div>
         </main>
 
         <script src="./assets/js/main.js"></script>

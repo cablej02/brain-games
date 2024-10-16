@@ -4,7 +4,7 @@
 }
 
 /* Header Styles */
-h1 {
+.header-text {
     left: 50%;
     transform: translateX(-50%);
 }
