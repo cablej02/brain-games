@@ -106,7 +106,7 @@ const UI = (() => {
     
         letterEls.forEach(el => {
             // Check if color is green and the last character of the id matches greenIndex
-            const columnIndex = parseInt(el.id.slice(-1)); 
+            const columnIndex = parseInt(el.id.slice(-1));
             
             if (color === 'green' && columnIndex === greenIndex) {
                 setLetterElementBgColor(el, color, true);

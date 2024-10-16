@@ -67,7 +67,7 @@ const GameManager = (() => {
 
     const handleLetterColorChange = (target) => {
         const letter = target.textContent.toLowerCase();
-        const index = target.id.slice(-1);
+        const index = parseInt(target.id.slice(-1));
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.changeLetterColor(letter,index);
             UI.setLetterBgColor(letter,color,index);
@@ -76,7 +76,7 @@ const GameManager = (() => {
     }
 
     const handleLetterColorChangeTransparent = (target) => {
-        const letter = target.textContent.toLowerCase();
+        const letter = target.textContent ? target.textContent.toLowerCase() : null;
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.setLetterColorTransparent(letter);
             UI.setLetterBgColor(letter,color);
