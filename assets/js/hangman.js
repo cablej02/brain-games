@@ -187,7 +187,7 @@ const startNewGame = () =>{
 const handleGameOver = (winBool) =>{
     const solution = currentGame.getSolution();
     //const guesses = calcGuessesRemaining();
-    
+
     //adjust data for game over
     currentGame.clearGame();
 
@@ -202,7 +202,7 @@ const handleGameOver = (winBool) =>{
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
 newGameBtnEl.addEventListener('click',startNewGame)
 
-//game initialization
+//game initialization    
 wordList.loadWords().then(() => {
     keyboard.initialize(false);
 
