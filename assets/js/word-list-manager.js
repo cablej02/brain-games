@@ -1,9 +1,10 @@
 const wordList = (() => {
     const validWords = {};
+    const solutionWords = {};
     const getRandomWord = (length = 5) => {
-        const validWordsByLength = validWords[length] || [];
-        if(validWordsByLength.length > 0){
-            return validWordsByLength[Math.floor(Math.random() * validWordsByLength.length)];
+        const solWordsByLength = solutionWords[length] || [];
+        if(solWordsByLength.length > 0){
+            return solWordsByLength[Math.floor(Math.random() * solWordsByLength.length)];
         }else{
             console.error(`No words of length ${length} found`)
             return null;
@@ -34,24 +35,58 @@ const wordList = (() => {
         }
 
         try{
-            const response = await fetch('assets/word-list/words.csv');
+            const response = await fetch('assets/word-list/scrabble_words.csv');
             const text = await response.text();
             let i = 0;
             text.split(',').map(word => {
-                if (!validWords[word.length]) {
-                    validWords[word.length] = [];
+                    if(word.length <= 10){
+                    if (!validWords[word.length]) {
+                        validWords[word.length] = [];
+                    }
+                    validWords[word.length].push(word);
+                    i++;
                 }
-                validWords[word.length].push(word);
+            });
+            console.log('Loaded valid words from file:', i);
+        } catch (error){
+            console.error('Error valids loading words:', error);
+        }
+
+        for(let i in solutionWords){
+            solutionWords[i] = [];
+        }
+
+        try{
+            const response_5_letters = await fetch('assets/word-list/sol_words_5_letters.csv');
+            const response_others = await fetch('assets/word-list/words.csv');
+            const text_5_letters = await response_5_letters.text();
+            const text_others = await response_others.text();
+            let i = 0;
+            text_5_letters.split(',').map(word => {
+                if (!solutionWords[word.length]) {
+                    solutionWords[word.length] = [];
+                }
+                solutionWords[word.length].push(word);
                 i++;
             });
-            console.log('Loaded words from file:', i);
+            text_others.split(',').map(word => {
+                if(word.length !== 5){
+                    if (!solutionWords[word.length]) {
+                        solutionWords[word.length] = [];
+                    }
+                    solutionWords[word.length].push(word);
+                    i++;
+                }
+            });
+            console.log('Loaded solution words from file:', i);
         } catch (error){
-            console.error('Error loading words:', error);
+            console.error('Error loading solution words:', error);
         }
     }
     return {
         loadWords,
         getRandomWord,
-        isValidWord
+        isValidWord,
+        validWords
     }
 })();
