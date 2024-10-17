@@ -10,21 +10,25 @@
     <link rel="stylesheet" href="assets/css/hangman-style.css">
 </head>
 <body>
-    <header class="container py-3 d-flex justify-content-between align-items-center">
-        <button id='new-game-btn' type="button" class="btn btn-primary">New Game</button>
-        <h1 class="mx-auto">Hangman</h1>
-        <a href="#" class="btn btn-dark">Stats</a>
-        <a href="index.html" class="btn btn-success">Home</a>
+    <header class="container-fluid d-flex justify-content-between align-items-center mt-3 bg-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <button id="new-game-btn" type="button" class="btn btn-success fw-bold">New</button>
+            <h1 class="header-text mx-auto text-center display-5 position-absolute">Hangman</h1>
+            <div class="d-flex gap-md-5 gap-sm-1">
+                <button class="btn btn-transparent border border-3 rounded-circle py-0 mx-1" style="font-size: 1.5em;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Find the letters in the hidden word before you run out of guesses!">?</button>
+                <a href="index.html" class="btn btn-transparent border border-3 rounded-circle home-btn"></a>
+            </div>
+        </div>
     </header>
     <main>
         <div id="guess-container" class="container d-flex justify-content-center mt-md-5 mt-sm-3">
-            <div id="guess-0" class="letter"></div>
+            <!-- <div id="guess-0" class="letter"></div>
             <div id="guess-1" class="letter"></div>
             <div id="guess-2" class="letter"></div>
             <div id="guess-3" class="letter"></div>
             <div id="guess-4" class="letter"></div>
             <div id="guess-5" class="letter"></div>
-            <div id="guess-6" class="letter"></div>
+            <div id="guess-6" class="letter"></div> -->
         </div>
         <p id="guesses-remaining-txt" class="h3 text-center mt-md-5 mt-sm-3">Guesses Remaining: #</p>
     </main>

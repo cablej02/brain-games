@@ -1,12 +1,8 @@
 //element selectors
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
-const guessesRemainingEl = document.getElementById('guesses-remaining-txt'); // TODO with finding the way to show the guesses remaining
+const guessesRemainingEl = document.getElementById('guesses-remaining-txt');
 const newGameBtnEl = document.getElementById('new-game-btn');
-
-//Anytime we start new game, we need to reset the keyboard
-//Create the spans for each letter in the alphabet of the word
-//When you start a new game, delete the old letter or word before it shows the new lines of guesses
 
 //game object
 const currentGame = (() => {
@@ -101,6 +97,9 @@ const setUI = () => {
     const correctGuesses = currentGame.getCorrectGuesses();
     for(let i = 0; i < correctGuesses.length; i++){
         const letter = correctGuesses[i];
+        if(letter === null || letter === undefined || letter === '') {
+            continue;
+        }
         if(alphabet.includes(letter.toLowerCase())){
             keyboard.setKeyColorGreen(letter);
             displayCorrectLetter(i,letter);
@@ -149,10 +148,8 @@ const handleKeyPress = (key) => {
 
                     currentGame.addWrongGuess(k);
                     
-                    // calc guesses remaining
                     const guessesRemaning = calcGuessesRemaining();
 
-                    //TODO: update UI for guesses remaining
                     displayGuessesRemaining(guessesRemaning);
 
                     if(guessesRemaning === 0){
@@ -166,7 +163,6 @@ const handleKeyPress = (key) => {
 const calcGuessesRemaining = () => {
     return currentGame.getMaxGuesses() - currentGame.getWrongGuesses().length;
 }
-
 
 //TODO: remove this, just printing to console or something, not informing UI I think?
 const generateDisplayWord = () =>{
