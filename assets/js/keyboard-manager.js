@@ -47,7 +47,10 @@ const keyboard = (() => {
 
     const resetKeys = () => {
         keyboardLayout.forEach(row => {
-            row.forEach(key => setKeyColor(key, 'grey'));
+            row.forEach(key => {
+                setKeyColor(key, 'grey');
+                document.getElementById(`key-${key.toLowerCase()}`).classList.remove('disabled');
+            });
         });
     }
 
