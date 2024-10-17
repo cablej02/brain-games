@@ -1,3 +1,6 @@
+//statics
+const MAX_GUESSES = 7;
+
 //element selectors
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
@@ -174,8 +177,8 @@ const generateDisplayWord = () =>{
 
 const startNewGame = () =>{
     let solution = wordList.getRandomWord(Math.floor(Math.random()*6 + 5));
-    currentGame.setNewGame(solution, 5); //TODO: maybe put this in a static variable
-    console.log(solution); //TODO: remove this eventually maybe MONDAY
+    currentGame.setNewGame(solution, MAX_GUESSES); //TODO: maybe put this in a static variable
+    console.log(solution); 
 
     setUI();
 }
