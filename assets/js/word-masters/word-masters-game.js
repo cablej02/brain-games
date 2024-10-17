@@ -61,27 +61,27 @@ const CurrentGame = (() => {
                 if(greenLetters.indexOf(letter) === parseInt(index)){
                     greenLetters[index] = null;
                     transparentLetters.push(letter);
-                    color = 'transparent';
+                    color = Color.TRANSPARENT;
                 }else{
                     greenLetters[greenLetters.indexOf(letter)] = null;
                     greenLetters[index] = letter;
-                    color = 'green';
+                    color = Color.GREEN;
                 }
             }else if(yellowLetters.includes(letter)){
                 yellowLetters.splice(yellowLetters.indexOf(letter), 1);
                 greenLetters[index] = letter;
-                color = 'green';
+                color = Color.GREEN;
             }else if(greyLetters.includes(letter)){
                 greyLetters.splice(greyLetters.indexOf(letter), 1);
                 yellowLetters.push(letter);
-                color = 'yellow';
+                color = Color.YELLOW;
             }else if(transparentLetters.includes(letter)){
                 transparentLetters.splice(transparentLetters.indexOf(letter), 1);
                 greyLetters.push(letter);
-                color = 'grey';
+                color = Color.GREY;
             }else{
                 greyLetters.push(letter);
-                color = 'grey';
+                color = Color.GREY;
             }
             saveGame();
             return color;
@@ -96,7 +96,7 @@ const CurrentGame = (() => {
                 transparentLetters.push(letter);
             }
             saveGame();
-            return 'transparent';
+            return Color.TRANSPARENT;
         },
         addDisabledLetter: (letter) => {
             if(!disabledLetters.includes(letter)) disabledLetters.push(letter);
