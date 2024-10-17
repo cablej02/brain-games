@@ -109,6 +109,7 @@ const submitBtnEl = document.getElementById('submit-btn');
 const newGameBtnEl = document.getElementById('new-game-btn');
 const resultEl = document.getElementById('result');
 const bodyEl = document.querySelector('body');
+const timerTextEl = document.getElementById('timer-text');
 
 const currentGame = (()=>{
     let solution = null;
@@ -141,9 +142,14 @@ const currentGame = (()=>{
         timeLeft = 0;
         saveData();
     }
+    const setTimeLeft = (newTimeLeft) => {
+        timeLeft = newTimeLeft;
+        saveData();
+    }
     return{
         getSolution: () => solution,
         getTimeLeft: () => timeLeft,
+        setTimeLeft,
         setNewGame,
         clearGame,
         loadData,
@@ -165,7 +171,12 @@ const getGuess = () => {
     for (let i = 0; i < tiles.length; i++) {    
         guess += tiles[i].innerText;
     }
-    return guess;
+    return guess.toLowerCase();
+}
+
+const setTimeLeftText = (timeLeft) => {
+    currentGame.setTimeLeft(timeLeft);
+    timerTextEl.innerHTML = `<span>Time Left: <b>${timeLeft}</b></span>`;
 }
 
 const setUI = (timeLeft) => {
@@ -180,16 +191,16 @@ const setUI = (timeLeft) => {
         const tile = document.createElement('span');
 
         //set new tile properties/classes/etc
-        tile.classList = 'tile bg-secondary rounded p-2 m-1'
-        tile.innerText = shuffledWord[i];
+        tile.classList = 'tile rounded p-2 m-1 fw-bold'
+        tile.innerText = shuffledWord[i].toUpperCase();
 
         //append tiles to tileContainer
         tileContainerEl.appendChild(tile);
+
+
     }
-
-
-    //TODO: set timeLeft
-
+    setTimeLeftText(timeLeft);
+    initTimer(timeLeft);
 }
 
 /* Game Logic */
@@ -201,6 +212,8 @@ const handleGuess = () => {
         resultEl.innerText = 'Try again!';
     }
 }
+
+
 const shuffle = () => {
     const solution = currentGame.getSolution();
     let shuffledSolWord = null;
@@ -223,17 +236,25 @@ const shuffle = () => {
     return shuffledSolWord;
 }
 
+let countdownInterval = null;
+const initTimer = (maxTime) => {
+    timeLeft = maxTime;
 
-// const initTimer = (maxTime) => {
-//     clearInterval(timeLeft);
-//     timeLeft = setInterval(() => {
-//     if(maxTime > 0){
-//         maxTime--;
-//         return timeText.innerText = maxTime;
-//     }
-//     endGame();
-//     }, 1000);
-// }
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+
+    countdownInterval = setInterval(() => {
+        if(timeLeft > 0){
+            timeLeft--;
+            setTimeLeftText(timeLeft);
+            return;
+        }
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        handleGameOver(false);
+    }, 1000);
+}
 
 const handleGameOver = (winBool) => {
     if(winBool){
@@ -262,6 +283,11 @@ bodyEl.addEventListener('keydown', (event) => {
 
 /* Initialize game */
 wordList.loadWords().then(() => {
+    currentGame.loadData();
 
-
+    if(currentGame.getSolution() === null){
+        startGame(SOLUTION_LENGTH);
+    }else{
+        setUI(currentGame.getTimeLeft());
+    }
 });

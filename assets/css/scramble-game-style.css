@@ -1,8 +1,24 @@
 .tile {
-    cursor: move;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 3rem;
+    width: 60px;
+    height: 85px;
+    text-align: center;
+    box-shadow: 0 10px 10px rgb(0, 0, 1);
+    background-color: blueviolet;
+    text-shadow: 3px 3px 3px rgb(28, 1, 32);
 }
 .sortable-ghost {
     opacity: 0.5;
+}
+
+#submit-btn {
+    background-color: var(--bs-success); 
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 10px 10px rgb(0, 0, 1);
 }
 
 /* *{
