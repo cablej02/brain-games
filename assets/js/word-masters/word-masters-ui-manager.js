@@ -210,7 +210,7 @@ const UI = (() => {
         const headerHeight = document.querySelector('header').offsetHeight;
         const keyboardHeight = document.getElementById('keyboard-container').offsetHeight;
     
-        const availHeight = window.innerHeight - headerHeight - keyboardHeight - 10;
+        const availHeight = window.innerHeight - headerHeight - keyboardHeight - 20;
         guessContainerEl.style.maxHeight = `${availHeight}px`;
     }
 
