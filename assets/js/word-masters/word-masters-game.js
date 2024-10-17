@@ -55,40 +55,36 @@ const CurrentGame = (() => {
             disabledLetters.length = 0;
             saveGame();
         },
-        //TODO: This seems like it can be improved
         changeLetterColor:(letter,index) => {
+            let color = '';
             if(greenLetters.includes(letter)){
                 if(greenLetters.indexOf(letter) === parseInt(index)){
                     greenLetters[index] = null;
                     transparentLetters.push(letter);
-                    saveGame();
-                    return 'transparent';
+                    color = 'transparent';
                 }else{
                     greenLetters[greenLetters.indexOf(letter)] = null;
                     greenLetters[index] = letter;
-                    saveGame();
-                    return 'green';
-                }                
+                    color = 'green';
+                }
             }else if(yellowLetters.includes(letter)){
                 yellowLetters.splice(yellowLetters.indexOf(letter), 1);
                 greenLetters[index] = letter;
-                saveGame();
-                return 'green';
+                color = 'green';
             }else if(greyLetters.includes(letter)){
                 greyLetters.splice(greyLetters.indexOf(letter), 1);
                 yellowLetters.push(letter);
-                saveGame();
-                return 'yellow';
+                color = 'yellow';
             }else if(transparentLetters.includes(letter)){
                 transparentLetters.splice(transparentLetters.indexOf(letter), 1);
                 greyLetters.push(letter);
-                saveGame();
-                return 'grey';
+                color = 'grey';
             }else{
                 greyLetters.push(letter);
-                saveGame();
-                return 'grey';
+                color = 'grey';
             }
+            saveGame();
+            return color;
         },
         setLetterColorTransparent: (letter) => {
             //wipe it out of all arrays and make sure it's in/added to the transparentLetters array
