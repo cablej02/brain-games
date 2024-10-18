@@ -1,7 +1,3 @@
-// STATICS
-const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
-const SOLUTION_LENGTH = 5;
-
 const GameManager = (() => {
     let curGuess = '';
     const handleKeyPress = (key) => {
@@ -71,14 +67,19 @@ const GameManager = (() => {
         }
     }
 
-    const handleLetterColorChange = (target) => {
-        const letter = target.textContent.toLowerCase();
-        const index = parseInt(target.id.slice(-1));
+    const handleLetterColorChange = (letter,index) => {
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.changeLetterColor(letter,index);
             UI.setLetterBgColor(letter,color,index);
             keyboard.setKeyColor(letter,color);
         }
+
+    }
+
+    const handleTargetColorChange = (target) => {
+        const letter = target.textContent.toLowerCase();
+        const index = parseInt(target.id.slice(-1));
+        handleLetterColorChange(letter,index);
     }
 
     const handleLetterColorChangeTransparent = (letter) => {
@@ -200,6 +201,7 @@ const GameManager = (() => {
     return {
         handleKeyPress,
         handleLetterColorChange,
+        handleTargetColorChange,
         handleLetterColorChangeTransparent,
         calcNumCnMLetters,
         handleModalBtnClick,

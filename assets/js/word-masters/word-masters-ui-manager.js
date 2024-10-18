@@ -262,7 +262,7 @@ const UI = (() => {
     /* Event Listeners */
     bodyEl.addEventListener('keydown', (event) => GameManager.handleKeyPress(event.key));
     guessContainerEl.addEventListener('click', (event) => {
-        if(event.target.dataset.btnState === 'active') GameManager.handleLetterColorChange(event.target);
+        if(event.target.dataset.btnState === 'active') GameManager.handleTargetColorChange(event.target);
     });
     guessContainerEl.addEventListener('contextmenu', (event) => {
         event.preventDefault();
