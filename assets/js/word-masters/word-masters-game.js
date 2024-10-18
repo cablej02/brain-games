@@ -7,23 +7,15 @@ const CurrentGame = (() => {
     const transparentLetters = [];
     const disabledLetters = [];
     const saveGame = () => {
-        const curGameHelper = {
-            solution,
-            guesses,
-            greenLetters,
-            yellowLetters,
-            greyLetters,
-            transparentLetters,
-            disabledLetters
-        }
-        localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameHelper)) && console.log('Game saved');
+        const curGameState = getCurrentGameState();
+        localStorage.setItem('wordMastersCurGame', JSON.stringify(curGameState));
     }
     const loadGame = () => {
         const data = JSON.parse(localStorage.getItem('wordMastersCurGame')) || null;
         
         if(data === null) CurrentGame.setEmptyGame();
         else{
-            solution= (data.solution);
+            solution = (data.solution);
             guesses.push(...data.guesses);
             greenLetters.push(...data.greenLetters);
             yellowLetters.push(...data.yellowLetters);
@@ -32,6 +24,7 @@ const CurrentGame = (() => {
             disabledLetters.push(...data.disabledLetters);
         }
         saveGame();
+        return data;
     }
     const setNewGame = (solWordLength) => {
         console.log('New Game:', solWordLength);
@@ -53,6 +46,18 @@ const CurrentGame = (() => {
         transparentLetters.length = 0;
         disabledLetters.length = 0;
         saveGame();
+    }
+    const getCurrentGameState = () => {
+        const curGameState = {
+            solution,
+            guesses,
+            greenLetters,
+            yellowLetters,
+            greyLetters,
+            transparentLetters,
+            disabledLetters
+        }
+        return curGameState;
     }
 
     const addGuess = (guess) => {

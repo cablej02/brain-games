@@ -1,13 +1,5 @@
 // STATICS
-const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
 const SOLUTION_LENGTH = 5;
-
-const Color = {
-    GREEN: 'green',
-    YELLOW: 'yellow',
-    GREY: 'grey',
-    TRANSPARENT: 'transparent'
-}
 
 const initGame = () => {
     wordList.loadWords().then(() => {
