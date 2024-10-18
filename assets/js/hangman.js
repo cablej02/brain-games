@@ -5,7 +5,19 @@ const MAX_GUESSES = 7;
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
 const guessesRemainingEl = document.getElementById('guesses-remaining-txt');
-const newGameBtnEl = document.getElementById('new-game-btn');
+
+//modal selectors
+const modalBtnEl = document.getElementById('modal-btn');
+
+const cancelGameModal = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModalEl = document.getElementById('cancel-game-modal');
+const cancelGameModalTextEl = document.getElementById('cancel-game-txt');
+const cancelGameModalBtnEl = document.getElementById('cancel-game-btn');
+
+const gameOverModal = new bootstrap.Modal(document.getElementById('game-over-modal'));
+const gameOverModalEl = document.getElementById('game-over-modal');
+const gameOverModalTextEl = document.getElementById('game-over-txt');
+const newGameModalBtnEl = document.getElementById('new-game-btn');
 
 //game object
 const currentGame = (() => {
@@ -175,6 +187,16 @@ const generateDisplayWord = () =>{
     return displayWord;
 }
 
+const handleModalBtnClick = () => {
+    //if no active game, start new game
+    if(currentGame.getSolution() === null){
+        startNewGame();
+    }else{
+        //if game is active, show cancel modal
+        cancelGameModal.show();
+    }
+}
+
 const startNewGame = () =>{
     let solution = wordList.getRandomWord(Math.floor(Math.random()*6 + 5));
     currentGame.setNewGame(solution, MAX_GUESSES); //TODO: maybe put this in a static variable
@@ -185,21 +207,32 @@ const startNewGame = () =>{
 
 const handleGameOver = (winBool) =>{
     const solution = currentGame.getSolution();
-    //const guesses = calcGuessesRemaining();
 
     //adjust data for game over
     currentGame.clearGame();
 
+    //show modal
     if(winBool){
-        console.log(`You Win!`);
+        gameOverModalTextEl.innerHTML = `Congratulations!<br>You Win!`;
     }else{
-        console.log(`You Lose! The word was: ${solution}`);
+        gameOverModalTextEl.innerHTML = `Nice try!<br><br>The word was: ${solution.toUpperCase()}`;
     }
+    gameOverModal.show();
 }
 
 //Event Listeners
 bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-newGameBtnEl.addEventListener('click',startNewGame)
+
+
+modalBtnEl.addEventListener('click', () => handleModalBtnClick());
+
+cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});
+cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
+
+newGameModalBtnEl.addEventListener('click', () => {startNewGame(),gameOverModal.hide()})
+gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
+
+
 
 //game initialization    
 wordList.loadWords().then(() => {
