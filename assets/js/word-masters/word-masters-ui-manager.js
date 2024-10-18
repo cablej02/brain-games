@@ -72,9 +72,9 @@ const UI = (() => {
             letterBoxEl.setAttribute('data-letter', letter.toLowerCase());
 
             let color = CurrentGame.getLetterColor(letter.toLowerCase());
-            if(color === 'green'){
+            if(color === Color.GREEN){
                 if(CurrentGame.getGreenLetters().indexOf(letter.toLowerCase()) !== parseInt(id.slice(-1))){
-                    color = 'yellow';
+                    color = Color.YELLOW;
                 }
             }
             setLetterElementBgColor(letterBoxEl,color,false);
@@ -115,10 +115,10 @@ const UI = (() => {
             // Check if color is green and the last character of the id matches greenIndex
             const columnIndex = parseInt(el.id.slice(-1));
             
-            if (color === 'green' && columnIndex === greenIndex) {
+            if (color === Color.GREEN && columnIndex === greenIndex) {
                 setLetterElementBgColor(el, color, true);
-            } else if (color === 'green' && columnIndex !== greenIndex) {
-                setLetterElementBgColor(el, 'yellow', true);
+            } else if (color === Color.GREEN && columnIndex !== greenIndex) {
+                setLetterElementBgColor(el, Color.YELLOW, true);
             }else{
                 setLetterElementBgColor(el, color, true);
             }
@@ -143,7 +143,7 @@ const UI = (() => {
             easing: 'easeInOutQuad'
         };
 
-        if (color === 'transparent') {
+        if (color === Color.TRANSPARENT) {
             animationProps.backgroundColor = [letterEl.style.backgroundColor, colorHelper.transparent];
         } else {
             animationProps.backgroundColor = [letterEl.style.backgroundColor, bsColor];
@@ -232,19 +232,19 @@ const UI = (() => {
 
         const {greenLetters,yellowLetters,greyLetters,transparentLetters} = CurrentGame.getAllLetterColors();
         yellowLetters.forEach(letter => {
-            setLetterBgColor(letter,'yellow');
+            setLetterBgColor(letter,Color.YELLOW);
             keyboard.setKeyColorYellow(letter)});
         greyLetters.forEach(letter => {
-            setLetterBgColor(letter,'grey');
+            setLetterBgColor(letter,Color.GREY);
             keyboard.setKeyColorGrey(letter)
         });
         transparentLetters.forEach(letter => {
-            setLetterBgColor(letter,'transparent');
+            setLetterBgColor(letter,Color.TRANSPARENT);
             keyboard.setKeyColorTransparent(letter)
         });
         for(let i = 0; i < greenLetters.length; i++){
             if(greenLetters[i] !== null && greenLetters[i] !== undefined && greenLetters[i] !== ''){
-                setLetterBgColor(greenLetters[i],'green',i);
+                setLetterBgColor(greenLetters[i],Color.GREEN,i);
                 keyboard.setKeyColorGreen(greenLetters[i]);
             }
         }
