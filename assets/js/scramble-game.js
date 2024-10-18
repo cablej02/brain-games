@@ -90,7 +90,27 @@ const setTimeLeftText = (timeLeft) => {
     timerTextEl.innerHTML = `<span>Time Left: <b>${timeLeft}</b></span>`;
 }
 
-const setUI = (timeLeft) => {
+const animateTilesRight = () => {
+    [...tileContainerEl.children].forEach(()=>{
+        anime({
+            targets: '.tile',
+            translateX: 2000,
+            easing: 'easeOutExpo',
+            duration: 700,
+        })
+
+    })
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const setUI = async (timeLeft) => {
+    if(tileContainerEl.children.length > 0){
+        animateTilesRight();
+        await delay(300);
+    }
     // clear out any existing tiles
     tileContainerEl.innerHTML = '';
 
@@ -108,9 +128,22 @@ const setUI = (timeLeft) => {
         //append tiles to tileContainer
         tileContainerEl.appendChild(tile);
     }
-    sortable.option('disabled', false);
+
+    [...tileContainerEl.children].forEach(tile => {
+        anime({
+            targets: '.tile',
+            translateX: [-window.innerWidth, 0], 
+            easing: 'easeOutExpo',
+            duration: 1200,
+        })
+    })
+    //pause for 1.2 seconds before enabling drag
     setTimeLeftText(timeLeft);
-    initTimer(timeLeft);
+
+    setTimeout(() => {
+        sortable.option('disabled', false);
+        initTimer(timeLeft);
+    }, 600);
 }
 
 /* Game Logic */
@@ -212,9 +245,6 @@ bodyEl.addEventListener('keydown', (event) => {
 });
 
 //event listeners for modal buttons
-bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
-
-
 modalBtnEl.addEventListener('click', () => handleModalBtnClick());
 
 cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});

@@ -12,18 +12,20 @@
     <link rel="stylesheet" href="./assets/css/scramble-game-style.css">
 </head>
 <body>
-    <header class="pt-3 pb-1">
-        <header class="container py-3 d-flex justify-content-between align-items-center">
-            <button id='modal-btn' type="button" class="btn btn-primary">New</button>
-            <h1 class="mx-auto display-5 fw-normal">Scramble Game</h1>
-            <a href="index.html" class="btn btn-success">Home</a>
-        </header>
+    <header class="container-fluid d-flex justify-content-between align-items-center mt-3 bg-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <button id="modal-btn" type="button" class="btn btn-success fw-bold">New</button>
+            <h1 class="header-text mx-auto text-center display-5 position-absolute">Scramble Game</h1>
+            <div class="d-flex gap-md-5 gap-sm-1">
+                <a href="index.html" class="btn btn-transparent border border-3 rounded-circle home-btn"></a>
+            </div>
+        </div>
     </header>
     <div class="modal" id="game-over-modal">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body d-inline-flex justify-content-center align-items-center flex-column">
-                    <p id="game-over-txt" class="text-center fw-bold fs-5">Congratulations!<br> You win!<br>Guesses: 60</p>
+                    <p id="game-over-txt" class="text-center fw-bold fs-5"></p>
                     <button id="new-game-btn" type="button" class="btn btn-success fw-bold" style="width: 40%">New Game</button>
                 </div>
             </div>
