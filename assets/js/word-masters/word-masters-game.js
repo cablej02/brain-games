@@ -66,11 +66,7 @@ const CurrentGame = (() => {
             if(greenLetters.indexOf(letter) === parseInt(index)){
                 color = setLetterColorTransparent(letter);
             }else{
-                //HANDLE GREEN SHIFT
-                greenLetters[greenLetters.indexOf(letter)] = null;
-                greenLetters[index] = letter;
-                color = Color.GREEN;
-                saveGame();
+                color = setLetterColorGreen(letter,index);
             }
         }else if(yellowLetters.includes(letter)){
             color = setLetterColorGreen(letter,index);
@@ -82,16 +78,12 @@ const CurrentGame = (() => {
         return color;
     }
     const setLetterColorGreen = (letter,index) => {
-        console.log('setLetterColorGreen',letter,index);
-        if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
-        if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
-        if(transparentLetters.includes(letter)) transparentLetters.splice(transparentLetters.indexOf(letter), 1);
+        clearLetterColor(letter);
 
         const currLetterAtIndex = greenLetters[index];
-        if(currLetterAtIndex !== null && currLetterAtIndex !== undefined && currLetterAtIndex !== ''){    
-            if(currLetterAtIndex !== letter){
-                GameManager.handleLetterColorChange(letter, index);
-            }
+        if(currLetterAtIndex !== null && currLetterAtIndex !== undefined && currLetterAtIndex !== ''){   
+            GameManager.resetLetterColor(currLetterAtIndex);
+            greenLetters[index] = letter;
         }else{
             greenLetters[index] = letter;
         }
@@ -99,36 +91,31 @@ const CurrentGame = (() => {
         return Color.GREEN;
     }
     const setLetterColorYellow = (letter) => {
-        if(greenLetters.includes(letter)) greenLetters[greenLetters.indexOf(letter)] = null;
-        if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
-        if(transparentLetters.includes(letter)) transparentLetters.splice(transparentLetters.indexOf(letter), 1);
+        clearLetterColor(letter);
         yellowLetters.push(letter);
         saveGame();
         return Color.YELLOW;
     }
     const setLetterColorGrey = (letter) => {
-        if(greenLetters.includes(letter)) greenLetters[greenLetters.indexOf(letter)] = null;
-        if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
-        if(transparentLetters.includes(letter)) transparentLetters.splice(transparentLetters.indexOf(letter), 1);
-        if(!greyLetters.includes(letter)){
-            greyLetters.push(letter);
-        }
+        clearLetterColor(letter);
+        greyLetters.push(letter);
         saveGame();
         return Color.GREY;
     }
     const setLetterColorTransparent = (letter) => {
-        if(greenLetters.includes(letter)) greenLetters[greenLetters.indexOf(letter)] = null;
-        if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
-        if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
-
-        if(!transparentLetters.includes(letter)){
-            transparentLetters.push(letter);
-        }
+        clearLetterColor(letter);
+        transparentLetters.push(letter);
         saveGame();
         return Color.TRANSPARENT;
     }
     const addDisabledLetter = (letter) => {
         if(!disabledLetters.includes(letter)) disabledLetters.push(letter);
+    }
+    const clearLetterColor = (letter) => {
+        if(greenLetters.includes(letter)) greenLetters[greenLetters.indexOf(letter)] = null;
+        if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
+        if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
+        if(transparentLetters.includes(letter)) transparentLetters.splice(transparentLetters.indexOf(letter), 1);
     }
     const getLetterColor = (letter) => {
         if(greenLetters.includes(letter)) return Color.GREEN;
@@ -153,6 +140,7 @@ const CurrentGame = (() => {
         addGuess,
         changeLetterColor,
         setLetterColorTransparent,
+        setLetterColorGrey,
         addDisabledLetter,
         getLetterColor,
         getAllLetterColors,

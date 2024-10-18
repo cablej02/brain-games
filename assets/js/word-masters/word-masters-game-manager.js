@@ -67,6 +67,14 @@ const GameManager = (() => {
         }
     }
 
+    const resetLetterColor = (letter) => {
+        if(ALPHABET.includes(letter)){
+            const color = CurrentGame.setLetterColorGrey(letter);
+            UI.setLetterBgColor(letter,color);
+            keyboard.setKeyColor(letter,color);
+        }
+    }
+
     const handleLetterColorChange = (letter,index) => {
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.changeLetterColor(letter,index);
@@ -200,6 +208,7 @@ const GameManager = (() => {
 
     return {
         handleKeyPress,
+        resetLetterColor,
         handleLetterColorChange,
         handleTargetColorChange,
         handleLetterColorChangeTransparent,
