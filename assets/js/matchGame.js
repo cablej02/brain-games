@@ -137,7 +137,7 @@ function checkForMatch() {
     if (tile1.dataset.value === tile2.dataset.value) {
         setTilesMatched([tile1, tile2]);
         currentGame.addMatchedPair(parseFloat(tile1.dataset.value));
-        if (currentGame.getMatchedPairs() === NUMBER_TILES/2) {
+        if (currentGame.getMatchedPairs().length === NUMBER_TILES/2) {
             handleGameOver(true);
         }
     } else {
@@ -152,10 +152,11 @@ function checkForMatch() {
 const handleGameOver = (isWin) => {
     if (isWin) {
         console.log('You win!');
+        launchConfetti();
     } else {
         console.log('You lose!');
     }
-    resetGame();
+    currentGame.setEmptyGame();
 }
 
 const newGameButton = document.getElementById('newGame');
