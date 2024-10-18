@@ -66,6 +66,19 @@ const currentGame = (() => {
 
 
 /* UI Functions */
+const initializeBoard = (numTiles) => {
+    console.log(`Initializing board with ${numTiles} tiles`)
+    for(let i = 0; i < numTiles; i++){
+        const tile = document.createElement('div');
+        tile.classList.add('tile');
+
+        tile.addEventListener('click', flipTile);
+
+        tiles.push(tile);
+        gameBoard.appendChild(tile);
+    }
+}
+
 const setTileFlipped = (tile) => {
     tile.classList.add('flipped');
     tile.querySelector('span').classList.remove('hidden');
@@ -80,24 +93,73 @@ const setTilesHidden = (tiles) => {
     });
 }
 
-const setUI = (tileValues,matchedTiles) => {
-    gameBoard.innerHTML = '';
-    tiles.length = 0;
+const resetTileClasses = (tile) => {
+    tile.classList.remove('flipped');
+    tile.classList.remove('matched');
+    tile.querySelector('span').classList.add('hidden');
+}
+
+const scatterTiles = () => {
+    tiles.forEach(tile => {
+        anime({
+            targets: tile,
+            translateX: () => anime.random(-500, 500),
+            translateY: () => anime.random(-500, 500),
+            rotate: () => anime.random(-720, 720),
+            duration: 2000,
+            easing: 'easeOutExpo',
+            
+        })
+    })
+}
+
+const resetTilePosition = () => {
+    tiles.forEach((tile,index) => {
+        anime({
+            targets: tile,
+            //reset from current positon to 0
+            translateX: 0,
+            translateY: 0,
+            rotate: 0,
+            delay: 20*index,
+            duration: 1000,
+            easing: 'easeOutExpo',
+        })
+    })
+}
+
+const animateMatchedTiles = (flippedTiles) => {
+    flippedTiles.forEach(tile => {
+        anime({
+            targets: tile,
+            scale: [.5,1],
+            opacity: [.5,1],
+            duration: 700,
+            easing: 'easeOutElastic',
+        })
+    })
+}
+
+const setUI = async (tileValues,matchedTiles,animate) => {
+    if(animate){
+        scatterTiles();
+        await new Promise(res => setTimeout(res, 2200));
+    }
     
     for (let i = 0; i < tileValues.length; i++) {
-        const tile = document.createElement('div');
-        tile.classList.add('tile');
-        tile.dataset.value = tileValues[i];
-        tile.innerHTML = '<span class="hidden">' + tileValues[i] + '</span>';
+        tiles[i].dataset.value = tileValues[i];
+        tiles[i].innerHTML = '<span class="hidden">' + tileValues[i] + '</span>';
 
         if(matchedTiles.includes(tileValues[i])){
-            setTilesMatched([tile]);
-            setTileFlipped(tile);
+            setTilesMatched([tiles[i]]);
+            setTileFlipped(tiles[i]);
         }else{
-            tile.addEventListener('click', flipTile);
+            resetTileClasses(tiles[i]);
         }
-        tiles.push(tile);
-        gameBoard.appendChild(tile);
+    }
+
+    if(animate){
+        resetTilePosition();
     }
 }
 
@@ -139,6 +201,7 @@ function checkForMatch() {
 
     if (tile1.dataset.value === tile2.dataset.value) {
         setTilesMatched([tile1, tile2]);
+        animateMatchedTiles([tile1, tile2]);
         currentGame.addMatchedPair(parseFloat(tile1.dataset.value));
         if (currentGame.getMatchedPairs().length === NUMBER_TILES/2) {
             handleGameOver(true);
@@ -156,18 +219,18 @@ const handleModalBtnClick = () => {
     if(currentGame.getTileValues().length !== 0){
         cancelGameModal.show();
     } else {
-        startGame(NUMBER_TILES);
+        startGame();
     }
 }
 
-const startGame = (numTiles) =>{
-    const tileValues = generateBoard(numTiles);
+const startGame = (animate = true) =>{
+    const tileValues = generateBoard(NUMBER_TILES);
     currentGame.setNewGame(tileValues);
     flippedTiles.length = 0;
 
-    console.log(`Starting new game with ${numTiles} tiles`);
+    console.log(`Starting new game`);
 
-    setUI(tileValues,[]);
+    setUI(tileValues,[],animate);
 }
 
 const handleGameOver = (isWin) => {
@@ -187,17 +250,17 @@ modalBtnEl.addEventListener('click', () => handleModalBtnClick());
 cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});
 cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
 
-newGameModalBtnEl.addEventListener('click', () => {startGame(NUMBER_TILES),gameOverModal.hide()})
+newGameModalBtnEl.addEventListener('click', () => {startGame(),gameOverModal.hide()})
 gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
 
-
-
 const initGame = () => {
+    initializeBoard(NUMBER_TILES);
+
     const [tileValues,matchedPairs] = currentGame.loadGame();
     if (tileValues.length === 0) {
-        startGame(NUMBER_TILES);
+        startGame(false);
     } else {
-        setUI(tileValues,matchedPairs);
+        setUI(tileValues,matchedPairs,false);
     }
 }
 
