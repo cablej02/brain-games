@@ -4,6 +4,19 @@ const gameBoard = document.getElementById('game-board');
 const tiles = [];
 const flippedTiles = [];
 
+//Modal selectors
+const modalBtnEl = document.getElementById('modal-btn');
+
+const cancelGameModal = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModalEl = document.getElementById('cancel-game-modal');
+const cancelGameModalTextEl = document.getElementById('cancel-game-txt');
+const cancelGameModalBtnEl = document.getElementById('cancel-game-btn');
+
+const gameOverModal = new bootstrap.Modal(document.getElementById('game-over-modal'));
+const gameOverModalEl = document.getElementById('game-over-modal');
+const gameOverModalTextEl = document.getElementById('game-over-txt');
+const newGameModalBtnEl = document.getElementById('new-game-btn');
+
 const currentGame = (() => {
     const tileValues = [];
     const matchedPairs = [];
@@ -107,16 +120,6 @@ const generateBoard = (numTiles) => {
     return tileValues;
 }
 
-const startGame = (numTiles) =>{
-    const tileValues = generateBoard(numTiles);
-    currentGame.setNewGame(tileValues);
-    flippedTiles.length = 0;
-
-    console.log(`Starting new game with ${numTiles} tiles`);
-
-    setUI(tileValues,[]);
-}
-
 function flipTile() {
     if (flippedTiles.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) {
         return;
@@ -149,18 +152,45 @@ function checkForMatch() {
     flippedTiles.length = 0;
 }
 
-const handleGameOver = (isWin) => {
-    if (isWin) {
-        console.log('You win!');
-        launchConfetti();
+const handleModalBtnClick = () => {
+    if(currentGame.getTileValues().length !== 0){
+        cancelGameModal.show();
     } else {
-        console.log('You lose!');
+        startGame(NUMBER_TILES);
     }
-    currentGame.setEmptyGame();
 }
 
-const newGameButton = document.getElementById('newGame');
-newGameButton.addEventListener('click', () => startGame(NUMBER_TILES));
+const startGame = (numTiles) =>{
+    const tileValues = generateBoard(numTiles);
+    currentGame.setNewGame(tileValues);
+    flippedTiles.length = 0;
+
+    console.log(`Starting new game with ${numTiles} tiles`);
+
+    setUI(tileValues,[]);
+}
+
+const handleGameOver = (isWin) => {
+
+    currentGame.setEmptyGame();
+    if (isWin) {
+        gameOverModalTextEl.textContent = 'You win!';
+    } else {
+        gameOverModalTextEl.textContent = 'Nice Try Bucko!';
+    }
+
+    gameOverModal.show();
+}
+
+modalBtnEl.addEventListener('click', () => handleModalBtnClick());
+
+cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});
+cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
+
+newGameModalBtnEl.addEventListener('click', () => {startGame(NUMBER_TILES),gameOverModal.hide()})
+gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
+
+
 
 const initGame = () => {
     const [tileValues,matchedPairs] = currentGame.loadGame();
