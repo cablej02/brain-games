@@ -1,4 +1,3 @@
-
 const SOLUTION_LENGTH = 5;
 const MAX_TIME = 30;
 
@@ -8,6 +7,20 @@ const newGameBtnEl = document.getElementById('new-game-btn');
 const resultEl = document.getElementById('result');
 const bodyEl = document.querySelector('body');
 const timerTextEl = document.getElementById('timer-text');
+
+//modal selectors
+const modalBtnEl = document.getElementById('modal-btn');
+
+const cancelGameModal = new bootstrap.Modal(document.getElementById('cancel-game-modal'));
+const cancelGameModalEl = document.getElementById('cancel-game-modal');
+const cancelGameModalTextEl = document.getElementById('cancel-game-txt');
+const cancelGameModalBtnEl = document.getElementById('cancel-game-btn');
+
+const gameOverModal = new bootstrap.Modal(document.getElementById('game-over-modal'));
+const gameOverModalEl = document.getElementById('game-over-modal');
+const gameOverModalTextEl = document.getElementById('game-over-txt');
+const newGameModalBtnEl = document.getElementById('new-game-btn');
+
 
 const currentGame = (()=>{
     let solution = null;
@@ -94,15 +107,16 @@ const setUI = (timeLeft) => {
 
         //append tiles to tileContainer
         tileContainerEl.appendChild(tile);
-
-
     }
+    sortable.option('disabled', false);
     setTimeLeftText(timeLeft);
     initTimer(timeLeft);
 }
 
 /* Game Logic */
 const handleGuess = () => {
+    if(currentGame.getSolution() === null) return;
+
     const guess = getGuess();
     if(guess === currentGame.getSolution()){
         handleGameOver(true);
@@ -110,7 +124,6 @@ const handleGuess = () => {
         resultEl.innerText = 'Try again!';
     }
 }
-
 
 const shuffle = () => {
     const solution = currentGame.getSolution();
@@ -134,33 +147,52 @@ const shuffle = () => {
     return shuffledSolWord;
 }
 
-let countdownInterval = null;
+let counter = null;
 const initTimer = (maxTime) => {
     timeLeft = maxTime;
 
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
+    if (counter) {
+        clearInterval(counter);
     }
 
-    countdownInterval = setInterval(() => {
+    counter = setInterval(() => {
         if(timeLeft > 0){
             timeLeft--;
             setTimeLeftText(timeLeft);
             return;
         }
-        clearInterval(countdownInterval);
-        countdownInterval = null;
+        clearInterval(counter);
+        counter = null;
         handleGameOver(false);
     }, 1000);
 }
 
-const handleGameOver = (winBool) => {
-    if(winBool){
-        resultEl.innerText = 'You win!';
+const handleModalBtnClick = () => {
+    //if no active game, start new game
+    if(currentGame.getSolution() === null){
+        startGame();
     }else{
-        resultEl.innerText = 'You lose!';
+        //if game is active, show cancel modal
+        cancelGameModal.show();
     }
+}
+
+
+const handleGameOver = (winBool) => {
+    const solution = currentGame.getSolution();
+    clearInterval(counter);
     currentGame.clearGame();
+
+    //Make items not draggable
+    sortable.option('disabled', true);
+
+    if(winBool){
+        gameOverModalTextEl.innerHTML = `Congratulations!<br>You Win!`;
+    }else{
+        gameOverModalTextEl.innerHTML = `Nice try!<br><br>The word was: ${solution.toUpperCase()}`;
+    }
+
+    gameOverModal.show();
 }
 
 const startGame = (SOLUTION_LENGTH) => {
@@ -178,6 +210,19 @@ bodyEl.addEventListener('keydown', (event) => {
         handleGuess();
     }
 });
+
+//event listeners for modal buttons
+bodyEl.addEventListener('keydown', (event) => handleKeyPress(event.key));
+
+
+modalBtnEl.addEventListener('click', () => handleModalBtnClick());
+
+cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),handleGameOver(false)});
+cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
+
+newGameModalBtnEl.addEventListener('click', () => {startGame(),gameOverModal.hide()})
+gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
+
 
 /* Initialize game */
 wordList.loadWords().then(() => {
