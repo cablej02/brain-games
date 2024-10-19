@@ -141,17 +141,12 @@ const CurrentGame = (() => {
         addGuess,
         changeLetterColor,
         setLetterColorTransparent,
-        setLetterColorGrey,
         addDisabledLetter,
         getLetterColor,
         getAllLetterColors,
-
         getSolution: () => solution,
         getGuesses: () => [...guesses],
         getGreenLetter: (letter) => greenLetters.get(letter),
-        getyellowLetters: () => [...yellowLetters],
-        getGreyLetters: () => [...greyLetters],
-        getTransparentLetters: () => [...transparentLetters],
-        getDisabledLetters: () => [...disabledLetters],
+        isLetterDisabled: (letter) => disabledLetters.includes(letter),
     }
 })();

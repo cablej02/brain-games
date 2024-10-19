@@ -87,7 +87,7 @@ const UI = (() => {
         if(currentGuessRowEl){
             [...currentGuessRowEl.children].forEach(child => {
                 if(child.dataset.letter){
-                    if(CurrentGame.getDisabledLetters().includes(child.dataset.letter)){
+                    if(CurrentGame.isLetterDisabled(child.dataset.letter)){
                         child.classList.remove('pointer');
                         child.setAttribute('data-btn-state','disabled');
                     }else{
@@ -246,7 +246,6 @@ const UI = (() => {
         greenLetters.forEach(([letter,index]) => {
             if(letter !== null && letter !== undefined && letter !== ''){
                 setLetterBgColor(letter,Color.GREEN,index);
-                console.log(`Setting green letter: ${letter} at index: ${index}`);
                 keyboard.setKeyColorGreen(letter);
             }
         });

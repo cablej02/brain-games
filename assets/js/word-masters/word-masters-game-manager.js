@@ -67,14 +67,6 @@ const GameManager = (() => {
         }
     }
 
-    const resetLetterColor = (letter) => {
-        if(ALPHABET.includes(letter)){
-            const color = CurrentGame.setLetterColorGrey(letter);
-            UI.setLetterBgColor(letter,color);
-            keyboard.setKeyColor(letter,color);
-        }
-    }
-
     const handleLetterColorChange = (letter,index) => {
         if(ALPHABET.includes(letter)){
             const color = CurrentGame.changeLetterColor(letter,index);
@@ -206,7 +198,6 @@ const GameManager = (() => {
                     solutionLetterCount[guessedLetter]--;
                 }
             }
-            console.log(guessRow);
             guessString += guessRow.join('') + '\n';
         }
         guessString = guessString.trim();
@@ -228,7 +219,6 @@ const GameManager = (() => {
     }
 
     const handleGameOver = (isWin) => {
-        console.log('Game Over');
         const numGuesses = CurrentGame.getGuesses().length;
         const solution = CurrentGame.getSolution();
         curShareString = createShareString(solution, CurrentGame.getGuesses());
@@ -263,7 +253,6 @@ const GameManager = (() => {
 
     return {
         handleKeyPress,
-        resetLetterColor,
         handleLetterColorChange,
         handleTargetColorChange,
         handleLetterColorChangeTransparent,
