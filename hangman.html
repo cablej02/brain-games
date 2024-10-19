@@ -6,6 +6,7 @@
     <title>Hangman</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/hangman-style.css">
 </head>
@@ -40,17 +41,21 @@
                     </div>
                 </div>
             </div>
+        </div class="mt-5">
+            <p id="guesses-remaining-txt" class="h3 text-center mt-5">Guesses Remaining: #</p>
+            <div id="guess-container" class="container d-flex justify-content-center mt-5">
+                <!-- <div id="guess-0" class="letter"></div>
+                <div id="guess-1" class="letter"></div>
+                <div id="guess-2" class="letter"></div>
+                <div id="guess-3" class="letter"></div>
+                <div id="guess-4" class="letter"></div>
+                <div id="guess-5" class="letter"></div>
+                <div id="guess-6" class="letter"></div> -->
+            </div>
+        <!-- <div class="mt-5 invisible">A</div> -->
+        <div class="container d-flex justify-content-center align-items-end" style="height:30vh">
+            <div id="guessed-letter" class="text-center fs-1 fw-semibold" style="height:70px; width:70px; opacity: 0">A</div>
         </div>
-        <div id="guess-container" class="container d-flex justify-content-center mt-md-5 mt-sm-3">
-            <!-- <div id="guess-0" class="letter"></div>
-            <div id="guess-1" class="letter"></div>
-            <div id="guess-2" class="letter"></div>
-            <div id="guess-3" class="letter"></div>
-            <div id="guess-4" class="letter"></div>
-            <div id="guess-5" class="letter"></div>
-            <div id="guess-6" class="letter"></div> -->
-        </div>
-        <p id="guesses-remaining-txt" class="h3 text-center mt-md-5 mt-sm-3">Guesses Remaining: #</p>
     </main>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/word-list-manager.js"></script>

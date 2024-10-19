@@ -5,6 +5,12 @@ const MAX_GUESSES = 7;
 const bodyEl = document.querySelector('body');
 const guessContainerEl = document.getElementById('guess-container');
 const guessesRemainingEl = document.getElementById('guesses-remaining-txt');
+const guessedLetterEl = document.getElementById('guessed-letter')
+
+//Bootstrap Colors
+const rootStyles = getComputedStyle(document.documentElement);
+const successColor = rootStyles.getPropertyValue('--bs-success').trim();
+const dangerColor = rootStyles.getPropertyValue('--bs-danger').trim();
 
 //modal selectors
 const modalBtnEl = document.getElementById('modal-btn');
@@ -19,7 +25,14 @@ const gameOverModalEl = document.getElementById('game-over-modal');
 const gameOverModalTextEl = document.getElementById('game-over-txt');
 const newGameModalBtnEl = document.getElementById('new-game-btn');
 
-//game object
+//game object as an Immediately Invoked Function Expression
+// const game = {
+//     solution: null,
+//     correctGuesses: [],
+//     wrongGuesses: [],
+//     maxGuesses: null,
+// }
+
 const currentGame = (() => {
     let solution = null;
     const correctGuesses = [];
@@ -72,7 +85,7 @@ const currentGame = (() => {
         getWrongGuesses: () => [...wrongGuesses],
         getCorrectGuesses: () => [...correctGuesses],
         getGuesses: () => [...correctGuesses, ...wrongGuesses],
-        getMaxGuesses: () => maxGuesses
+        getMaxGuesses: () => maxGuesses,
     }
 })();
 
@@ -84,6 +97,7 @@ const displayCorrectLetter = (index,letter) => {
     const letterEl = document.getElementById(id);
     //adjust the element
     letterEl.textContent = letter.toUpperCase();
+    return letterEl;
 }
 
 const displayGuessesRemaining = (guessesRemaining) => {
@@ -100,6 +114,40 @@ const createAndAppendNewLettersElements = (solWordLength) => {
         //Append to guess container
         guessContainerEl.appendChild(letterEl)
     }
+}
+
+const animateSolutionLetter = (letterEl) => {
+    anime({
+        targets: letterEl,
+        scale: [0, 1],
+        duration: 1000,
+        easing: 'easeOutElastic'
+    })
+}
+
+const animateCorrectGuessLetter = () => {
+    guessedLetterEl.style.color = successColor;
+    anime({
+        targets: guessedLetterEl,
+        opacity: [1,0],
+        translateY: [0,-150],
+        scale: [5,0],
+        duration: 1000,
+        easing: 'easeInExpo',
+    })
+}
+
+const animateWrongGuessLetter = () => {
+    guessedLetterEl.style.color = dangerColor;
+    anime({
+        targets: guessedLetterEl,
+        opacity: [1,0],
+        translateX: [-10,10,-10,7,-4,2,0,0,0,0,0,0,0,0,0],
+        translateY: [0,150],
+        scale: [5,0],
+        duration: 1000,
+        easing: 'easeInExpo',
+    })
 }
 
 const setUI = () => {
@@ -129,7 +177,7 @@ const setUI = () => {
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
-    let k = key.toLowerCase();
+    const k = key.toLowerCase();
     const solution = currentGame.getSolution();
     
     if(solution){
@@ -139,10 +187,13 @@ const handleKeyPress = (key) => {
             if (!guesses.includes(k)) {
                 if (solution.includes(k)){
                     keyboard.setKeyColorGreen(k);
+                    guessedLetterEl.textContent = k.toUpperCase();
+                    animateCorrectGuessLetter();
                     for(let i = 0; i < solution.length; i++){
                         if(solution[i] === k){
                             currentGame.addCorrectGuess(i,k)
-                            displayCorrectLetter(i,k);
+                            const letterEl = displayCorrectLetter(i,k);
+                            animateSolutionLetter(letterEl);
                         }
                     }
 
@@ -159,6 +210,9 @@ const handleKeyPress = (key) => {
 
                     if (winBool) handleGameOver(true);
                 } else {
+                    guessedLetterEl.textContent = k.toUpperCase();
+                    animateWrongGuessLetter();
+
                     keyboard.disableKey(k);
 
                     currentGame.addWrongGuess(k);

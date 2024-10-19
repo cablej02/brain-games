@@ -1,3 +1,6 @@
+main{
+    font-family: monospace;
+}
 .letter{
     border-bottom: 3px white solid;
     font-size: 2em;
