@@ -74,7 +74,8 @@ const UI = (() => {
 
             let color = CurrentGame.getLetterColor(letter.toLowerCase());
             if(color === Color.GREEN){
-                if(CurrentGame.getGreenLetters().indexOf(letter.toLowerCase()) !== parseInt(id.slice(-1))){
+                const letterPos = CurrentGame.getGreenLetter(letter.toLowerCase());
+                if(letterPos !== parseInt(id.slice(-1))){
                     color = Color.YELLOW;
                 }
             }
@@ -242,12 +243,13 @@ const UI = (() => {
             setLetterBgColor(letter,Color.TRANSPARENT);
             keyboard.setKeyColorTransparent(letter)
         });
-        for(let i = 0; i < greenLetters.length; i++){
-            if(greenLetters[i] !== null && greenLetters[i] !== undefined && greenLetters[i] !== ''){
-                setLetterBgColor(greenLetters[i],Color.GREEN,i);
-                keyboard.setKeyColorGreen(greenLetters[i]);
+        greenLetters.forEach(([letter,index]) => {
+            if(letter !== null && letter !== undefined && letter !== ''){
+                setLetterBgColor(letter,Color.GREEN,index);
+                console.log(`Setting green letter: ${letter} at index: ${index}`);
+                keyboard.setKeyColorGreen(letter);
             }
-        }
+        });
         
         displayNewEmptyRow(solLength);
     }

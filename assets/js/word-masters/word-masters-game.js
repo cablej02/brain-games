@@ -1,7 +1,7 @@
 const CurrentGame = (() => {
     let solution = null;
     const guesses = [];
-    const greenLetters = [];
+    const greenLetters = new Map();
     const yellowLetters = [];
     const greyLetters = [];
     const transparentLetters = [];
@@ -17,7 +17,10 @@ const CurrentGame = (() => {
         else{
             solution = (data.solution);
             guesses.push(...data.guesses);
-            greenLetters.push(...data.greenLetters);
+            greenLetters.clear();
+            Object.entries(data.greenLetters).forEach(([letter, pos]) => {
+                greenLetters.set(letter, Number(pos));
+            });
             yellowLetters.push(...data.yellowLetters);
             greyLetters.push(...data.greyLetters);
             transparentLetters.push(...data.transparentLetters);
@@ -29,7 +32,7 @@ const CurrentGame = (() => {
     const setNewGame = (newSolutionWord) => {
         solution = newSolutionWord;
         guesses.length = 0;
-        greenLetters.length = 0;
+        greenLetters.clear();
         yellowLetters.length = 0;
         greyLetters.length = 0;
         transparentLetters.length = 0;
@@ -39,7 +42,7 @@ const CurrentGame = (() => {
     const setEmptyGame = () => {
         solution = null;
         guesses.length = 0;
-        greenLetters.length = 0;
+        greenLetters.clear();
         yellowLetters.length = 0;
         greyLetters.length = 0;
         transparentLetters.length = 0;
@@ -47,10 +50,11 @@ const CurrentGame = (() => {
         saveGame();
     }
     const getCurrentGameState = () => {
+        const greenLettersObj = Object.fromEntries(greenLetters);
         const curGameState = {
             solution,
             guesses,
-            greenLetters,
+            greenLetters: greenLettersObj,
             yellowLetters,
             greyLetters,
             transparentLetters,
@@ -66,8 +70,8 @@ const CurrentGame = (() => {
     
     const changeLetterColor =(letter,index) => {
         let color = '';
-        if(greenLetters.includes(letter)){
-            if(greenLetters.indexOf(letter) === parseInt(index)){
+        if(greenLetters.has(letter)){
+            if(greenLetters.get(letter) === parseInt(index)){
                 color = setLetterColorTransparent(letter);
             }else{
                 color = setLetterColorGreen(letter,index);
@@ -83,14 +87,7 @@ const CurrentGame = (() => {
     }
     const setLetterColorGreen = (letter,index) => {
         clearLetterColor(letter);
-
-        const currLetterAtIndex = greenLetters[index];
-        if(currLetterAtIndex !== null && currLetterAtIndex !== undefined && currLetterAtIndex !== ''){   
-            GameManager.resetLetterColor(currLetterAtIndex);
-            greenLetters[index] = letter;
-        }else{
-            greenLetters[index] = letter;
-        }
+        greenLetters.set(letter, index);
         saveGame();
         return Color.GREEN;
     }
@@ -116,13 +113,13 @@ const CurrentGame = (() => {
         if(!disabledLetters.includes(letter)) disabledLetters.push(letter);
     }
     const clearLetterColor = (letter) => {
-        if(greenLetters.includes(letter)) greenLetters[greenLetters.indexOf(letter)] = null;
+        greenLetters.delete(letter);
         if(yellowLetters.includes(letter)) yellowLetters.splice(yellowLetters.indexOf(letter), 1);
         if(greyLetters.includes(letter)) greyLetters.splice(greyLetters.indexOf(letter), 1);
         if(transparentLetters.includes(letter)) transparentLetters.splice(transparentLetters.indexOf(letter), 1);
     }
     const getLetterColor = (letter) => {
-        if(greenLetters.includes(letter)) return Color.GREEN;
+        if(greenLetters.has(letter)) return Color.GREEN;
         if(yellowLetters.includes(letter)) return Color.YELLOW;
         if(transparentLetters.includes(letter)|| letter === '') return Color.TRANSPARENT;
         if(greyLetters.includes(letter)) return Color.GREY;
@@ -131,7 +128,7 @@ const CurrentGame = (() => {
     }
     const getAllLetterColors = () => {
         return {
-            greenLetters: [...greenLetters],
+            greenLetters: Array.from(greenLetters.entries()),
             yellowLetters: [...yellowLetters],
             greyLetters: [...greyLetters],
             transparentLetters: [...transparentLetters]
@@ -151,7 +148,7 @@ const CurrentGame = (() => {
 
         getSolution: () => solution,
         getGuesses: () => [...guesses],
-        getGreenLetters: () => [...greenLetters],
+        getGreenLetter: (letter) => greenLetters.get(letter),
         getyellowLetters: () => [...yellowLetters],
         getGreyLetters: () => [...greyLetters],
         getTransparentLetters: () => [...transparentLetters],
