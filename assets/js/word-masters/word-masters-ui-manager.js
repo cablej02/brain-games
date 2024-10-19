@@ -14,6 +14,7 @@ const UI = (() => {
     const newGameModalEl = document.getElementById('new-game-modal');
     const newGameModalTextEl = document.getElementById('game-over-txt');
     const newGameModalBtnEl = document.getElementById('new-game-btn');
+    const shareBtnEl = document.getElementById('share-btn');
 
     // Bootstrap colors
     const rootStyles = getComputedStyle(document.documentElement);
@@ -272,8 +273,9 @@ const UI = (() => {
     showModalBtnEl.addEventListener('click', () => GameManager.handleModalBtnClick());
     cancelGameModalBtnEl.addEventListener('click', () => {cancelGameModal.hide(),GameManager.handleGameOver(false)});
     cancelGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => cancelGameModalBtnEl.focus(),300));
-    newGameModalBtnEl.addEventListener('click', () => {GameManager.startNewGame(SOLUTION_LENGTH),newGameModal.hide()}); //TODO: add slider to select word length
+    newGameModalBtnEl.addEventListener('click', () => {GameManager.startNewGame(GameManager.getNewSolutionWord(SOLUTION_LENGTH)),newGameModal.hide()}); //TODO: add slider to select word length
     newGameModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGameModalBtnEl.focus(),300));
+    shareBtnEl.addEventListener('click', () => GameManager.copyShareString());
 
     return{
         displayNewEmptyRow,

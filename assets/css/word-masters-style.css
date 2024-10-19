@@ -14,6 +14,20 @@ main {
     overflow-y: auto;
 }
 
+.copy-notification {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1rem;
+    position: relative;
+    top: 2px;
+}
+
+.show-notification {
+visibility: visible;
+opacity: 1;
+}
+
 .square, .circle {
     font-family: monospace;
     flex: 1;

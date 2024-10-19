@@ -26,9 +26,8 @@ const CurrentGame = (() => {
         saveGame();
         return data;
     }
-    const setNewGame = (solWordLength) => {
-        console.log('New Game:', solWordLength);
-        solution = GameManager.getNewSolutionWord(solWordLength);
+    const setNewGame = (newSolutionWord) => {
+        solution = newSolutionWord;
         guesses.length = 0;
         greenLetters.length = 0;
         yellowLetters.length = 0;

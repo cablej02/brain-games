@@ -26,11 +26,17 @@
         <div class="modal-content">
           <div class="modal-body d-inline-flex justify-content-center align-items-center flex-column">
             <p id="game-over-txt" class="text-center fw-bold fs-5">Congratulations!<br> You win!<br>Guesses: 60</p>
-            <button id="new-game-btn" type="button" class="btn btn-success fw-bold" style="width: 40%">New Game</button>
+            <div class="d-inline-flex flex-row justify-content-end w-100">
+                <span id="copy-notification" class="copy-notification ms-auto mb-1">👍Copied!👍</span>
+            </div>
+            <div class="d-inline-flex flex-row justify-content-between" style="width:100%">
+                <button id="new-game-btn" type="button" class="btn btn-success fw-bold" style="width: 40%">New</button>
+                <button id="share-btn" type="button" class="btn btn-primary fw-bold" style="width: 30%">Share</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>      
     <div class="modal" id="cancel-game-modal">
       <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
@@ -41,7 +47,6 @@
         </div>
       </div>
     </div>
-
     <main>
       <div id="guess-container" class="container-fluid py-3 px-10">
         <!-- <div class="row justify-content-center">

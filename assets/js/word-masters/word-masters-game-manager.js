@@ -166,17 +166,72 @@ const GameManager = (() => {
     const handleModalBtnClick = () => {
         const solution = CurrentGame.getSolution();
         if(solution === null){
-            startNewGame(SOLUTION_LENGTH)
+            startNewGame(getNewSolutionWord(SOLUTION_LENGTH));
         }else{
             UI.cancelGameModalTextEl.textContent = `Are you sure you want to end the current game?`;
             UI.cancelGameModal.show();
         }
     }
 
+    let curShareString = '';
+    const createShareString = (solution, guesses) => {
+        const urlString = URL_BASE + encodeSolutionWord(solution);
+        let guessString = '';
+        for(let i = guesses.length-1 ; i >= 0 ; i--){
+            const guess = guesses[i];
+            let guessRow = [];
+
+            // Fill object with solution letter counts
+            const solutionLetterCount = {};
+            for (let j = 0; j < solution.length; j++) {
+                solutionLetterCount[solution[j]] = (solutionLetterCount[solution[j]] || 0) + 1;
+            }
+
+            for (let j = 0; j < guess.length; j++) {
+                const guessedLetter = guess[j];
+                if (solution[j] === guessedLetter) {
+                    guessRow[j] = '🟩';
+                    solutionLetterCount[guessedLetter]--; 
+                } else {
+                    guessRow[j] = '⬛';
+                }
+            }
+
+            // Loop again to misplaced letters
+            for (let j = 0; j < guess.length; j++) {
+                const guessedLetter = guess[j];
+
+                if (solution[j] !== guessedLetter && solution.includes(guessedLetter) && solutionLetterCount[guessedLetter] > 0) {
+                    guessRow[j] = '🟨';
+                    solutionLetterCount[guessedLetter]--;
+                }
+            }
+            console.log(guessRow);
+            guessString += guessRow.join('') + '\n';
+        }
+        guessString = guessString.trim();
+
+        return `I won in ${guesses.length} guess! Think you can do better?\n` + guessString + '\n\n ' + urlString;
+    }
+
+    const copyShareString = () => {
+        if (!navigator.clipboard) {
+            return;
+        }
+        navigator.clipboard.writeText(curShareString).then(() => {
+            const notification = document.getElementById('copy-notification');
+            notification.classList.add('show-notification');
+            setTimeout(() => {
+                notification.classList.remove('show-notification');
+            }, 3000);
+        });
+    }
+
     const handleGameOver = (isWin) => {
         console.log('Game Over');
         const numGuesses = CurrentGame.getGuesses().length;
         const solution = CurrentGame.getSolution();
+        curShareString = createShareString(solution, CurrentGame.getGuesses());
         CurrentGame.setEmptyGame();
 
         //make letters unclickable
@@ -199,8 +254,8 @@ const GameManager = (() => {
         UI.newGameModal.show();
     }
 
-    const startNewGame = (solutionLength) => {
-        CurrentGame.setNewGame(solutionLength);
+    const startNewGame = (newSolutionWord) => {
+        CurrentGame.setNewGame(newSolutionWord);
         curGuess = '';
 
         UI.setUI();
@@ -216,7 +271,9 @@ const GameManager = (() => {
         handleModalBtnClick,
         getNewSolutionWord,
         startNewGame,
-        handleGameOver
+        handleGameOver,
+        getCurShareString: () => curShareString,
+        copyShareString
     }
 })();
 
