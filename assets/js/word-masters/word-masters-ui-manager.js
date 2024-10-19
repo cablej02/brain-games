@@ -101,7 +101,6 @@ const UI = (() => {
     }
 
     const disableLetterClick = (letter) => {
-        console.log(`disabling letter: ${letter}`);
         const letterEls = guessContainerEl.querySelectorAll(`[data-letter="${letter}"]`);
         letterEls.forEach(el => {
             el.setAttribute('data-btn-state','disabled');

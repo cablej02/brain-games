@@ -28,8 +28,8 @@ const initGame = () => {
             }
         }else{
             CurrentGame.loadGame();
-            if(CurrentGame.getSolution() === null){
-                GameManager.startNewGame(SOLUTION_LENGTH);
+            if(CurrentGame.getSolution() === null || CurrentGame.getSolution().length !== SOLUTION_LENGTH){
+                GameManager.startNewGame(GameManager.getNewSolutionWord(SOLUTION_LENGTH));
             }else{
                 UI.setUI();
             }
