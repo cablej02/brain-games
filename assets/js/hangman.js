@@ -11,6 +11,7 @@ const guessedLetterEl = document.getElementById('guessed-letter')
 const rootStyles = getComputedStyle(document.documentElement);
 const successColor = rootStyles.getPropertyValue('--bs-success').trim();
 const dangerColor = rootStyles.getPropertyValue('--bs-danger').trim();
+const bodyColor = rootStyles.getPropertyValue('--bs-body').trim();
 
 //modal selectors
 const modalBtnEl = document.getElementById('modal-btn');
@@ -101,7 +102,14 @@ const displayCorrectLetter = (index,letter) => {
 }
 
 const displayGuessesRemaining = (guessesRemaining) => {
-    guessesRemainingEl.textContent = `Guesses Remaining: ${guessesRemaining}`;
+    if (guessesRemaining === 1) {
+        guessesRemainingEl.style.color = dangerColor;
+    } else if(guessesRemaining === 0){
+        guessesRemainingEl.style.color = dangerColor;
+    } else {
+        guessesRemainingEl.style.color = bodyColor;
+    }
+    guessesRemainingEl.textContent = guessesRemaining;
 }
 
 const createAndAppendNewLettersElements = (solWordLength) => {
@@ -115,6 +123,17 @@ const createAndAppendNewLettersElements = (solWordLength) => {
         guessContainerEl.appendChild(letterEl)
     }
 }
+
+// const animateGuessesRemaining = () => {
+//     console.log(guessesRemainingEl);
+//     anime({
+//         targets: guessesRemainingEl,
+//         scale: [1, 5],
+//         translateX: [-10, 10, -10, 7, -4, 2, 0],
+//         duration: 1000,
+//         easing: 'easeOutElastic',
+//     })
+// }
 
 const animateSolutionLetter = (letterEl) => {
     anime({
