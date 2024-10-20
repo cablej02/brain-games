@@ -13,12 +13,12 @@ Navigate to each game through the home screen.
 ### Scramble Game
 Drag and drop letters to form the hidden word before time runs out.
 
-![New scramble game](./assets/images/Screenshots/scramble_game_ss.png)
+![New scramble game](./assets/images/screenshots/scramble_game_ss.png)
 
 ### Word Masters
 Play Word Masters by guessing five letter words to find the hidden word.  After each guess, you will be informed how many letters were correct(in green on the left), and how many letters were misplaced but still included in the solution word(in yellow on the right). Work to identify which letters in your guess were correct or misplaced.  Keep notes by tapping on letters in guessed words to change their color.
 
-![Word masters game completed](./assets/images/Screenshots/word_masters_ss.png)
+![Word masters game completed](./assets/images/screenshots/word_masters_ss.png)
 
 ### Hangman
 Play Hangman by selecting letters using the onscreen keyboard or your computer's keyboard to try to find the solution word.  Complete the word before you run out of guesses!
@@ -28,7 +28,7 @@ Play Hangman by selecting letters using the onscreen keyboard or your computer's
 ### Memory Match
 Flip tiles to find and match those with shared symbols.
 
-![Memory match game half completed](./assets/images/Screenshots/memory_match_ss.png)
+![Memory match game half completed](./assets/images/screenshots/memory_match_ss.png)
 
 ## Credits
 
