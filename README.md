@@ -1,63 +1,50 @@
 # Brain Games
 
+https://cablej02.github.io/brain-games/
+
 ## Description
 
-What was your motivation?
 The motivation behind this project was to create an engaging way to help people improve their vocabulary and word-recognition skills. We wanted to make learning fun while offering a challenging yet lighthearted game that anyone can enjoy.
-
-Why did you build this project?
-We built this project to provide a fun, educational experience that encourages players to think quickly and creatively with words. The game is designed to be both a mental workout and a relaxing pastime for all ages.
-
-What problem does it solve?
-This game offers a playful solution to the challenge of learning and practicing new words. It provides players with an opportunity to improve their spelling, vocabulary, and critical thinking skills, all while having fun during their downtime.
-
-What did you learn?  
-
-
-## Installation
-
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+Navigate to each game through the home screen.
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+### Scramble Game
+Drag and drop letters to form the hidden word before time runs out.
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+![New scramble game](./assets/images/Screenshots/scramble_game_ss.png)
+
+### Word Masters
+Play Word Masters by guessing five letter words to find the hidden word.  After each guess, you will be informed how many letters were correct(in green on the left), and how many letters were misplaced but still included in the solution word(in yellow on the right). Work to identify which letters in your guess were correct or misplaced.  Keep notes by tapping on letters in guessed words to change their color.
+
+![Word masters game completed](./assets/images/Screenshots/word_masters_ss.png)
+
+### Hangman
+Play Hangman by selecting letters using the onscreen keyboard or your computer's keyboard to try to find the solution word.  Complete the word before you run out of guesses!
+
+![hangman game almost complete](./assets/images/screenshots/hangman_ss.png)
+
+### Memory Match
+Flip tiles to find and match those with shared symbols.
+
+![Memory match game half completed](./assets/images/Screenshots/memory_match_ss.png)
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+### Collaborators:
+- [Nattan Aguia Trujillo](https://github.com/nattanaguiat)
+- [Jordan Lorts](https://github.com/JL-Code1)
+- [Mauricio Martinez](https://github.com/mauriciomdlg)
+- [Jason Cable](https://github.com/cablej02)
 
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
+### External Libraries Used
+- [Bootstrap](https://getbootstrap.com/) - Used for styling, modals, and tooltips
+- [Anime.js](anime.js ) - Used for animation effects.
+- [Sortable.js](SortableJS ) - Used for drag-and-drop sorting functionality.
 
-If you followed tutorials, include links to those here as well.
+## Future Development
 
-## License
-
-The last section of a high-quality README file is the license. This lets other developers know what they can and cannot do with your project. If you need help choosing a license, refer to [https://choosealicense.com/](https://choosealicense.com/).
-
----
-
-🏆 The previous sections are the bare minimum, and your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
-
-## Badges
-
-![badmath](https://img.shields.io/github/languages/top/lernantino/badmath)
-
-Badges aren't necessary, per se, but they demonstrate street cred. Badges let other developers know that you know what you're doing. Check out the badges hosted by [shields.io](https://shields.io/). You may not understand what they all represent now, but you will in time.
-
-## Features
-
-If your project has a lot of features, list them here.
-
-## How to Contribute
-
-If you created an application or package and would like other developers to contribute it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
-
-## Tests
-
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.
+- Global statistics to track games played, games won, and other metrics for each game
+- Different modes and features like dailies, challenge modes, and hints
+- Additional artwork and styling

@@ -1,4 +1,5 @@
 const NUMBER_TILES = 16;
+const ICON_MAP = ['☀','⚓','☣','☔','⚡','⛅','☢','⚔']
 
 const gameBoard = document.getElementById('game-board');
 const tiles = [];
@@ -148,7 +149,7 @@ const setUI = async (tileValues,matchedTiles,animate) => {
     
     for (let i = 0; i < tileValues.length; i++) {
         tiles[i].dataset.value = tileValues[i];
-        tiles[i].innerHTML = '<span class="hidden">' + tileValues[i] + '</span>';
+        tiles[i].innerHTML = '<span class="hidden">' + ICON_MAP[tileValues[i]-1] + '</span>';
 
         if(matchedTiles.includes(tileValues[i])){
             setTilesMatched([tiles[i]]);
