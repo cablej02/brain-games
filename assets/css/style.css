@@ -3,28 +3,55 @@
     --bs-warning-rgb: 153, 134, 45;
 }
 
-/* Header Styles */
+/* Home Page Styles*/
+.header-home{
+    position:fixed;
+    top: 0;
+    z-index: 10;
+    background-color: var(--bs-dark);
+    text-shadow: 3px 3px 5px #000;
+}
+.hero-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    overflow: hidden;
+}
+.hero-image {
+    margin-top: 100px;
+    height: 40vh;
+    width: 100%;
+    object-fit: contain;
+    position: fixed;
+}
+.artist_credit{
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    padding: 0.5rem;
+    font-size: 0.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 11;
+}
+.content_home{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 0.5rem;
+    text-decoration: none;
+    z-index: 5;
+}
+
+/* Global Header Styles */
 .header-text {
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Shake animation */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-}
-
-.shake {
-    animation: shake 0.5s ease;
-}
-
 .tooltip {
     --bs-tooltip-bg: #505050;
-    --bs-tooltip-color: #ffffff;
+    --bs-tooltip-color: var(--bs-body-color);
 }
 
 .home-btn{
@@ -59,7 +86,7 @@
     touch-action: manipulation;
     font-family: monospace;
 }
-@media (max-width: 576px) {
+@media screen and (max-width: 576px) {
     .keyboard-row {
         gap: 0.3rem;
         margin-top: 0.3rem;
@@ -77,7 +104,8 @@
     }
 }
 
-@media (max-width: 400px) {
+@media screen and (max-width: 400px) {
+
     .keyboard-row {
         gap: 0.2rem;
         margin-top: 0.2rem;
