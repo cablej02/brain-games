@@ -111,6 +111,7 @@ const CurrentGame = (() => {
     }
     const addDisabledLetter = (letter) => {
         if(!disabledLetters.includes(letter)) disabledLetters.push(letter);
+        saveGame();
     }
     const clearLetterColor = (letter) => {
         greenLetters.delete(letter);

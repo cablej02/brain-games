@@ -52,9 +52,11 @@ const GameManager = (() => {
             const [numCorrect,numMisplaced] = calcNumCnMLetters(guess);
             if(numCorrect === 0 && numMisplaced === 0){
                 //change all letters to grey and disable them
+                console.log(`No correct or misplaced letters: ${guess}`);
                 [...guess].forEach(letter => {
                     handleLetterColorChangeTransparent(letter);
                     handleDisableLetter(letter);
+                    console.log(`Disabled letter: ${letter}`);
             })};
 
             UI.displayNumCnMLetters(numCorrect,numMisplaced);
@@ -92,6 +94,7 @@ const GameManager = (() => {
 
     const handleDisableLetter = (letter) => {
         if(ALPHABET.includes(letter)){
+            console.log(`Disabling letter: ${letter}`);
             CurrentGame.addDisabledLetter(letter);
             UI.disableLetterClick(letter);
         }
