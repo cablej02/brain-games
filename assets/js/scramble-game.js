@@ -4,7 +4,6 @@ const MAX_TIME = 30;
 const tileContainerEl = document.getElementById('tile-container');
 const submitBtnEl = document.getElementById('submit-btn');
 const newGameBtnEl = document.getElementById('new-game-btn');
-const resultEl = document.getElementById('result');
 const bodyEl = document.querySelector('body');
 const timerTextEl = document.getElementById('timer-text');
 
@@ -154,7 +153,14 @@ const handleGuess = () => {
     if(guess === currentGame.getSolution()){
         handleGameOver(true);
     }else{
-        resultEl.innerText = 'Try again!';
+        anime({
+            targets: '.tile',
+            translateX: [-7,7],
+            easing: 'easeInOutSine',
+            duration: 100,
+            direction: 'alternate',
+            loop: 5,
+        });
     }
 }
 
