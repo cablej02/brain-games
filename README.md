@@ -40,8 +40,8 @@ Flip tiles to find and match those with shared symbols.
 
 ### External Libraries Used
 - [Bootstrap](https://getbootstrap.com/) - Used for styling, modals, and tooltips
-- [Anime.js](anime.js ) - Used for animation effects.
-- [Sortable.js](SortableJS ) - Used for drag-and-drop sorting functionality.
+- [Anime.js](https://github.com/juliangarnier/anime) - Used for animation effects.
+- [Sortable.js](https://github.com/SortableJS/Sortable) - Used for drag-and-drop sorting functionality.
 
 ## Future Development
 
