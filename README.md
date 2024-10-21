@@ -42,6 +42,7 @@ Flip tiles to find and match those with shared symbols.
 - [Bootstrap](https://getbootstrap.com/) - Used for styling, modals, and tooltips
 - [Anime.js](https://github.com/juliangarnier/anime) - Used for animation effects.
 - [Sortable.js](https://github.com/SortableJS/Sortable) - Used for drag-and-drop sorting functionality.
+- [Wordnik](https://github.com/wordnik/wordlist) - Used for word list
 
 ## Future Development
 

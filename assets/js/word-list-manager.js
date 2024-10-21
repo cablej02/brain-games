@@ -95,7 +95,7 @@ const wordList = (() => {
         
         try {
             if(config.loadValidWords){
-                const validWordsResponse = await fetch('assets/word-list/scrabble_words.csv');
+                const validWordsResponse = await fetch('assets/word-list/wordnik.csv');
                 const validWordsText = await validWordsResponse.text();
                 const validWordsCount = processWords(validWordsText,validWords, word => word.length >= config.wordLengthMin && word.length <= config.wordLengthMax);
                 console.log(`Loaded ${validWordsCount} valid words from file`);
@@ -108,7 +108,7 @@ const wordList = (() => {
                 solWordsCount += processWords(sol5Text,solutionWords);
             }
             if(config.loadOtherSolutionWords){
-                const solOthersResponse = await fetch('assets/word-list/words.csv');
+                const solOthersResponse = await fetch('assets/word-list/sol_words_others.csv');
                 const solOthersText = await solOthersResponse.text();
                 solWordsCount += processWords(solOthersText,solutionWords, word => word.length !== 5 && word.length >= config.wordLengthMin && word.length <= config.wordLengthMax);
             }
