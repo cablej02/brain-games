@@ -7,7 +7,7 @@
 .header-home{
     position:fixed;
     top: 0;
-    z-index: 10;
+    z-index: 11;
     background-color: var(--bs-dark);
     text-shadow: 3px 3px 5px #000;
 }
@@ -25,16 +25,16 @@
     width: 100%;
     object-fit: contain;
     position: fixed;
-    z-index: 1 ;
 }
 .artist_credit{
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    left: 50%;
+    transform: translateX(100px);
     padding: 0.5rem;
     font-size: 0.5rem;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 11;
+    z-index: 9;
 }
 .grid-home{
     display: grid;
@@ -108,6 +108,11 @@
     font-family: monospace;
 }
 @media (max-width: 576px) {
+    .artist_credit{
+        left:auto;
+        transform: none;
+        right: 10px;
+    }
     .grid-home{
         grid-template-columns: repeat(2, 190px);
         gap: 8px;

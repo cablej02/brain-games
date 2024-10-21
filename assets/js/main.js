@@ -16,7 +16,6 @@ const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Too
 const heroImage = document.querySelector('.hero-image');
 document.addEventListener('scroll', function () {
     const scrollPosition = window.pageYOffset;
-    console.log(scrollPosition);
     heroImage.style.transform = `scale(${1 + scrollPosition / 1000})`;
 });
 
