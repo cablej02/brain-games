@@ -261,7 +261,7 @@ gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGam
 
 
 /* Initialize game */
-wordList.loadWords().then(() => {
+wordList.loadWords(GAME_TYPE.SCRAMBLE).then(() => {
     currentGame.loadData();
 
     if(currentGame.getSolution() === null){

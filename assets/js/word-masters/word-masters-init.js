@@ -11,7 +11,7 @@ const decodeSolutionWord = (word) => {
 }
 
 const initGame = () => {
-    wordList.loadWords().then(() => {
+    wordList.loadWords(GAME_TYPE.WORD_MASTERS).then(() => {
         keyboard.initialize();
         UI.setGuessContainerHeight();
 

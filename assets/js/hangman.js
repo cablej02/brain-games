@@ -308,7 +308,7 @@ gameOverModalEl.addEventListener('shown.bs.modal', () => setTimeout(() => newGam
 
 
 //game initialization    
-wordList.loadWords().then(() => {
+wordList.loadWords(GAME_TYPE.HANGMAN).then(() => {
     keyboard.initialize(false);
 
     currentGame.loadData();
