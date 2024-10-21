@@ -197,6 +197,7 @@ const initTimer = (maxTime) => {
     counter = setInterval(() => {
         if(timeLeft > 0){
             timeLeft--;
+            currentGame.setTimeLeft(timeLeft);
             setTimeLeftText(timeLeft);
             return;
         }
