@@ -20,7 +20,7 @@ const gameOverModalEl = document.getElementById('game-over-modal');
 const gameOverModalTextEl = document.getElementById('game-over-txt');
 const newGameModalBtnEl = document.getElementById('new-game-btn');
 
-
+// game object
 const currentGame = (()=>{
     let solution = null;
     let timeLeft = 0;
@@ -73,7 +73,7 @@ const sortable = new Sortable(tileContainerEl, {
     ghostClass: 'sortable-ghost'  // Class for the dragging item
 });
 
-
+// get guess
 const getGuess = () => {
     let guess = ''
     const tiles = document.querySelectorAll('.tile');
@@ -163,7 +163,7 @@ const handleGuess = () => {
         });
     }
 }
-
+// shuffle function
 const shuffle = () => {
     const solution = currentGame.getSolution();
     let shuffledSolWord = null;
@@ -186,6 +186,8 @@ const shuffle = () => {
     return shuffledSolWord;
 }
 
+
+//timer function
 let counter = null;
 const initTimer = (maxTime) => {
     timeLeft = maxTime;
@@ -217,7 +219,7 @@ const handleModalBtnClick = () => {
     }
 }
 
-
+//handle game over
 const handleGameOver = (winBool) => {
     const solution = currentGame.getSolution();
     clearInterval(counter);
@@ -234,7 +236,7 @@ const handleGameOver = (winBool) => {
 
     gameOverModal.show();
 }
-
+//start new gamegit
 const startGame = (SOLUTION_LENGTH) => {
     const randomWord = wordList.getRandomWord(SOLUTION_LENGTH);
     const timeLeft = currentGame.setNewGame(randomWord, MAX_TIME);
