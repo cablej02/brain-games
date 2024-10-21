@@ -56,7 +56,6 @@ const GameManager = (() => {
                 [...guess].forEach(letter => {
                     handleLetterColorChangeTransparent(letter);
                     handleDisableLetter(letter);
-                    console.log(`Disabled letter: ${letter}`);
             })};
 
             UI.displayNumCnMLetters(numCorrect,numMisplaced);
@@ -222,9 +221,9 @@ const GameManager = (() => {
     }
 
     const handleGameOver = (isWin) => {
-        const numGuesses = CurrentGame.getGuesses().length;
+        const guesses = CurrentGame.getGuesses();
         const solution = CurrentGame.getSolution();
-        curShareString = createShareString(solution, CurrentGame.getGuesses());
+        curShareString = createShareString(solution, guesses);
         CurrentGame.setEmptyGame();
 
         //make letters unclickable
@@ -239,9 +238,9 @@ const GameManager = (() => {
             //make letters green
             [...UI.getCurrentGuessRowEl().children].slice(1, -1).forEach(letterEl => UI.setLetterElementBgColor(letterEl, 'green'));
             //[...solution].forEach(letter => setLetterBgColor(letter,'green')); //TODO: remove this line probably.  Old way of doing it, but not sure which design I want to go with
-            UI.newGameModalTextEl.innerHTML = `Congratulations!<br>You Win!<br>Guesses: ${numGuesses}`
+            UI.newGameModalTextEl.innerHTML = `Congratulations!<br>You Win!<br>Guesses: ${guesses.length}`
         }else{
-            UI.newGameModalTextEl.innerHTML = `Nice try!<br>The word was:<br>${solution.toUpperCase()}<br>Guesses: ${numGuesses}`;
+            UI.newGameModalTextEl.innerHTML = `Nice try!<br>The word was:<br>${solution.toUpperCase()}<br>Guesses: ${guesses.length}`;
         }
 
         UI.newGameModal.show();
