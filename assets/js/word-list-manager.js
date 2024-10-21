@@ -61,7 +61,7 @@ const wordList = (() => {
                 wordLengthMax: 5
             }
         }else{
-            console.warning(`Invalid game name: ${gameType}.  Loading all words.`);
+            console.warn(`Invalid game name: ${gameType}.  Loading all words.`);
             return {
                 loadValidWords: true,
                 load5LetterSolutionWords: true,
