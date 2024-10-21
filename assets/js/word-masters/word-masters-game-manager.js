@@ -205,7 +205,7 @@ const GameManager = (() => {
         }
         guessString = guessString.trim();
 
-        return `I won in ${guesses.length} guess! Think you can do better?\n` + guessString + '\n\n ' + urlString;
+        return `I won in ${guesses.length} guesses! Think you can do better?\n` + guessString + '\n\n ' + urlString;
     }
 
     const copyShareString = () => {
