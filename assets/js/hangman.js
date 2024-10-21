@@ -207,7 +207,7 @@ const handleKeyPress = (key) => {
                 if (solution.includes(k)){               
                     keyboard.setKeyColorGreen(k);
                     guessedLetterEl.textContent = k.toUpperCase();
-                    animateCorrectGuessLetter();                         // Set the text content on lines and popup correct letter on screen
+                    animateCorrectGuessLetter();                         // Set the text content on lines and popup correct letter on screen with animation
                     for(let i = 0; i < solution.length; i++){            // Loop over the solution word to add the letter on the correct index of the solution word
                         if(solution[i] === k){                           
                             currentGame.addCorrectGuess(i,k)             // Adding guesses to the correctGuesses Array on the currentGame and save
@@ -228,7 +228,7 @@ const handleKeyPress = (key) => {
                     console.log(generateDisplayWord());
 
                     if (winBool) handleGameOver(true);
-                } else {                                                    // Animation of incorrect guesses poping up on screen with animation
+                } else {                                                    // Animation of incorrect guesses poping up on screen on red
                     guessedLetterEl.textContent = k.toUpperCase();
                     animateWrongGuessLetter();
 
