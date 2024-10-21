@@ -85,7 +85,6 @@ const getGuess = () => {
 }
 
 const setTimeLeftText = (timeLeft) => {
-    currentGame.setTimeLeft(timeLeft);
     timerTextEl.innerHTML = `<span>Time Left: <b>${timeLeft}</b></span>`;
 }
 
@@ -137,6 +136,7 @@ const setUI = async (timeLeft) => {
         })
     })
     //pause for 1.2 seconds before enabling drag
+    currentGame.setTimeLeft(timeLeft);
     setTimeLeftText(timeLeft);
 
     setTimeout(() => {
