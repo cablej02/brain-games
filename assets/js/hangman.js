@@ -197,27 +197,27 @@ const setUI = () => {
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 const handleKeyPress = (key) => {
     const k = key.toLowerCase();
-    const solution = currentGame.getSolution();   // Checking if there is an active game
+    const solution = currentGame.getSolution();   
     
-    if(solution){                                 // In case the solution word includes the letter picked by player
+    if(solution){                                  
         if (alphabet.includes(k)) {
             const guesses = currentGame.getGuesses();
             
-            if (!guesses.includes(k)) {                  // For the correct guesses, set color green on keybord to the letter on keyboard
+            if (!guesses.includes(k)) {                  
                 if (solution.includes(k)){               
                     keyboard.setKeyColorGreen(k);
                     guessedLetterEl.textContent = k.toUpperCase();
-                    animateCorrectGuessLetter();                         // Set the text content on lines and popup correct letter on screen with animation
-                    for(let i = 0; i < solution.length; i++){            // Loop over the solution word to add the letter on the correct index of the solution word
+                    animateCorrectGuessLetter();                         
+                    for(let i = 0; i < solution.length; i++){            
                         if(solution[i] === k){                           
-                            currentGame.addCorrectGuess(i,k)             // Adding guesses to the correctGuesses Array on the currentGame and save
+                            currentGame.addCorrectGuess(i,k)             
                             const letterEl = displayCorrectLetter(i,k);
-                            animateSolutionLetter(letterEl);              // Displaying correct letter and animating the appearance over the lines
+                            animateSolutionLetter(letterEl);              
                         }
                     }
 
                     
-                    const correctGuesses = currentGame.getCorrectGuesses();   // Checking if the game is won
+                    const correctGuesses = currentGame.getCorrectGuesses();   
                     let winBool = true;
                     for(let i = 0; i < solution.length; i++){
                         if(!correctGuesses.includes(solution[i])){
@@ -228,19 +228,19 @@ const handleKeyPress = (key) => {
                     console.log(generateDisplayWord());
 
                     if (winBool) handleGameOver(true);
-                } else {                                                    // Animation of incorrect guesses poping up on screen on red
+                } else {                                                    
                     guessedLetterEl.textContent = k.toUpperCase();
                     animateWrongGuessLetter();
 
-                    keyboard.disableKey(k);                                  // Disable letter from keyboard
+                    keyboard.disableKey(k);                                  
 
-                    currentGame.addWrongGuess(k);                            // Adding wrong guesses to the wrongGuesses Array in currentGame and save
+                    currentGame.addWrongGuess(k);                            
                     
-                    const guessesRemaning = calcGuessesRemaining();          // Calculating the guesses remaining 
+                    const guessesRemaning = calcGuessesRemaining();         
 
-                    displayGuessesRemaining(guessesRemaning);                // Updating guesses remaining and showing them to player
+                    displayGuessesRemaining(guessesRemaning);                
 
-                    if(guessesRemaning === 0){                               // When there is no more guesses the game i over
+                    if(guessesRemaning === 0){                               
                         handleGameOver(false);
                     }
                 }
